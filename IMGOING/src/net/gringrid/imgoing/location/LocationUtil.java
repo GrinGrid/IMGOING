@@ -1,8 +1,8 @@
 package net.gringrid.imgoing.location;
 
-
 import java.io.IOException;
 import java.io.InputStream;
+
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.List;
@@ -35,44 +35,79 @@ public class LocationUtil implements LocationListener{
 	private final boolean DEBUG = false;
 	
 	private Context mContext;
+	private LocationManager locationManager;
+	private Location location;
+	private String provider;
+	private static LocationUtil instance;
 	
-	public LocationUtil(Context context){
+	
+	private String currentLocationName;
+	
+	
+	private LocationUtil(Context context){
 		mContext = context;
+		init();
+		getCurrentLocation();
+		locationManager.requestLocationUpdates(provider, 0, 0, this);
 	}
 	
-	public void getCurrentLocation(){
-		LocationManager lm = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
-		
+	public static LocationUtil getInstance(Context context){
+		if ( instance == null ){
+			instance = new LocationUtil(context);
+		}else{
+			instance.init();
+			instance.getCurrentLocation();
+			instance.locationManager.requestLocationUpdates(instance.provider, 0, 0, instance);
+		}
+		return instance;
+	}
+	
+	private void init(){
+		locationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
 		Criteria criteria = new Criteria();
-		Location location = null;
-		double latitude;
-		double longitude;
-		
-		criteria.setAccuracy(Criteria.ACCURACY_FINE);
-		String providerName = lm.getBestProvider(criteria, true);
-		
-		Log.d("jiho", "gps is enable? : "+lm.isProviderEnabled(LocationManager.GPS_PROVIDER));
-		Log.d("jiho", "network is enable? : "+lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER));
-		Log.d("jiho", providerName);
-		
 		
 		// 우선순위 GPS > NETWORK
-		if ( lm.isProviderEnabled(LocationManager.GPS_PROVIDER ) ){
-			location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-			//lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, this);
-		}else if ( lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER) ){
-			location = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-			//lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5000, 10, this);
+		if ( locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER ) ){
+			Log.d("jiho", "GPS Enabled");
+			criteria.setAccuracy(Criteria.ACCURACY_FINE);
+			location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+		}else if ( locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER) ){
+			Log.d("jiho", "NETWORK Enabled");
+			criteria.setAccuracy(Criteria.ACCURACY_COARSE);
+			location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 		}
 		
-		//location = lm.getLastKnownLocation(providerName);
+		provider = locationManager.getBestProvider(criteria, false);
+		Log.d("jiho", "init provider : "+provider);
+		
+	}
+	
+	
+	public void getCurrentLocation(){
+		
 		if ( location == null ){
 			Toast.makeText(mContext, "GPS가 꺼져있거나 위치를 찾을 수 없습니다.",Toast.LENGTH_LONG).show();
 			return;
 		}else{
-			latitude = location.getLatitude();
-			longitude = location.getLongitude();
+			onLocationChanged(location);
+			//currentLocationName = getLocationName(location);
+			Log.d("jiho", "currentLocationName : "+currentLocationName);
 		}
+	}
+	
+	/**
+	 * 경도/위도로 장소명을 얻어온다.
+	 * @param location
+	 * @return
+	 */
+	public String getLocationName(Location location){
+		String locationName = null;
+		
+		double latitude;
+		double longitude;
+		
+		latitude = location.getLatitude();
+		longitude = location.getLongitude();
 		
 		if ( DEBUG ){
 			Log.d("jiho", "location getLatitude : "+latitude);
@@ -98,6 +133,7 @@ public class LocationUtil implements LocationListener{
 					Log.d("jiho", "adr.getSubLocality() : "+adr.getSubLocality());
 					Log.d("jiho", "adr.getUrl : "+adr.getUrl());
 				}
+				locationName = adr.getAddressLine(0);
 				Toast.makeText(mContext, "Adr not null, "+adr.getAddressLine(0),Toast.LENGTH_SHORT).show();
 			}
 		}else{
@@ -111,6 +147,7 @@ public class LocationUtil implements LocationListener{
 			try {
 				retLocation = ret.getJSONArray("results").getJSONObject(0);
 			    location_string = retLocation.getString("formatted_address");
+			    locationName = location_string;
 			    Toast.makeText(mContext, "Adr null : "+location_string,Toast.LENGTH_SHORT).show();
 			    Log.d("jiho", "Adr null, "+"formattted address:" + location_string);
 			} catch (JSONException e1) {
@@ -118,10 +155,9 @@ public class LocationUtil implements LocationListener{
 
 			}
 		}
+		
+		return locationName;
 	}
-	
-	
-	
 	
 	/**
 	 * Geocoder 클래스의 getFromLocation이 null일경우 HTTP를 통해 얻어온다.
@@ -163,17 +199,17 @@ public class LocationUtil implements LocationListener{
         }
         return jsonObject;
     }	
-
-	
-	
-	
 	
 	
 	@Override
 	public void onLocationChanged(Location location) {
-		Log.d("jiho", "onLocationChanged");
+		Log.d("jiho", "==============================================");
+		Log.d("jiho", "onLocationChanged provider  : "+provider);
 		Log.d("jiho", "location.getLatitude() : "+location.getLatitude());
 		Log.d("jiho", "location.getgetLongitude() : "+location.getLongitude());
+		Log.d("jiho", "getLocationName : "+getLocationName(location));
+		Log.d("jiho", "==============================================");
+		stopUpdate();
 	}
 
 	@Override
@@ -189,5 +225,9 @@ public class LocationUtil implements LocationListener{
 	@Override
 	public void onProviderDisabled(String provider) {
 		Log.d("jiho", "onProviderEnabled");		
+	}
+	
+	public void stopUpdate() {
+		locationManager.removeUpdates(this);
 	}
 }

@@ -13,18 +13,14 @@ public class ResponseLocationServiceReceiver extends BroadcastReceiver {
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		// TODO Auto-generated method stub
+		
 		Bundle mBundle = new Bundle();
 		mBundle = intent.getExtras();
-		Log.d("jiho", "RESULT_DATA : "+mBundle.get("RESULT_DATA"));
-		LocationUtil locationUtil = new LocationUtil(context);
-		locationUtil.getCurrentLocation();
-		/*
-		LayoutInflater mInflater = LayoutInflater.from(context);
-		MainActivity activity = (Activity)context;
-		activity.findViewById(R.id.id_tv_hello);
-		*/
 		
+		if ( mBundle.get("MODE").equals("START") ){
+			LocationUtil.getInstance(context);
+		}else if ( mBundle.get("MODE").equals("STOP") ){
+			Log.d("jiho", "activeTaskKey");
+		}
 	}
-
 }

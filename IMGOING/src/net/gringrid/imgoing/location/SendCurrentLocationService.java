@@ -39,7 +39,7 @@ public class SendCurrentLocationService extends IntentService {
 			    //vi.vibrate(500);
 			    
 				Intent localIntent = new Intent(Constants.BROADCAST_ACTION)
-				.putExtra("RESULT_DATA", "RESULT234022");
+				.putExtra("MODE", "START");
 				
 				LocalBroadcastManager.getInstance(this).sendBroadcast(localIntent);
 			} catch (InterruptedException e) {
@@ -56,6 +56,10 @@ public class SendCurrentLocationService extends IntentService {
 	public void onDestroy() {
 		Log.d("jiho", "onDestroy");
 		isSendLocation = false;
+		Intent localIntent = new Intent(Constants.BROADCAST_ACTION)
+		.putExtra("MODE", "STOP");
+		
+		LocalBroadcastManager.getInstance(this).sendBroadcast(localIntent);
 	};
 	
 	Handler sendBroadcastHandler = new Handler(){
