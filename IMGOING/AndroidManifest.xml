@@ -8,11 +8,41 @@
         android:minSdkVersion="8"
         android:targetSdkVersion="8" />
 
+    <!-- GCM 메시지를 받기 위한 권한을 설정한다. (다른 안드로이드 어플리케이션과 구분 되도록함) 4.04 이상은 필요없음 -->
+	<permission 
+	    android:name="net.gringrid.imgoing.permission.C2D_MESSAGE" 
+	    android:protectionLevel="signature" />
+	
+	<uses-permission android:name="net.gringrid.imgoing.permission.C2D_MESSAGE" /> 
+	
+	
+	<!-- 메시지를 등록/수신 할 수 있게 한다. -->
+	<uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+	<!-- 응용서버에 Registration ID를 전달 할 수 있게 한다. -->
+	<uses-permission android:name="android.permission.INTERNET" /> 
+	<!-- 구글 계정을 받을 수 있게 한다. 4.04 이상은 필요없음. -->
+	<uses-permission android:name="android.permission.GET_ACCOUNTS" />
+	<!-- 대기 모드일때 메시지를 수신 할 수 있도록 프로세서를 유지한다. -->
+	<uses-permission android:name="android.permission.WAKE_LOCK" />
+	
+	
+	<!-- 진동권한 -->
+	<uses-permission android:name="android.permission.VIBRATE"/>
+	
+	
+	<!-- 현재위치 권한 -->
+	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+	
+	<!-- 전화번호 READ 권한 -->
+	<uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    
+    
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
+        
         <activity
             android:name="net.gringrid.imgoing.MainActivity"
             android:label="@string/app_name" >
@@ -21,7 +51,27 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
+        </activity>       
+        
+		<receiver 
+			android:name="com.google.android.gcm.GCMBroadcastReceiver"
+		    android:permission="com.google.android.c2dm.permission.SEND" >
+		  <intent-filter>
+		    <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+		    <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+		    <category android:name="net.gringrid.imgoing" />
+		  </intent-filter>
+		</receiver>
+				
+		<service android:name=".GCMIntentService" />        
+        
+		<service 
+		    android:name=".location.SendCurrentLocationService"
+		    android:exported="false"
+		    />
+		
+		<activity android:name="JoinActivity"></activity>
+		
     </application>
 
 </manifest>

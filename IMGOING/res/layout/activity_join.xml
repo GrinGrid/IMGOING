@@ -14,23 +14,40 @@
         android:layout_height="wrap_content"
         android:text="@string/hello_world" />
 	
-	<Button
-	    android:id="@+id/id_bt_start_service"
+
+	<EditText
+	    android:id="@+id/id_et_email"
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
 	    android:layout_below="@id/id_tv_hello"
-	    android:text="Start Service" />
-	<Button
-	    android:id="@+id/id_bt_stop_service"
+	    android:inputType="textEmailAddress" />
+	
+	<EditText
+	    android:id="@+id/id_et_phone_number"
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
-	    android:layout_below="@id/id_bt_start_service"
-	    android:text="STOP Service" />	
-	<Button
-	    android:id="@+id/id_bt_join"
+	    android:layout_below="@id/id_et_email"
+	    android:inputType="textEmailAddress" />
+	
+	<EditText
+	    android:id="@+id/id_et_password"
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
-	    android:layout_below="@id/id_bt_stop_service"
-	    android:text="JOIN" />		    
+	    android:layout_below="@id/id_et_phone_number"
+	    android:inputType="textPassword" />
+	
+	<EditText
+	    android:id="@+id/id_et_repassword"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_below="@id/id_et_password"
+	    android:inputType="textPassword" />
+
+	<Button
+	    android:id="@+id/id_bt_submit"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_below="@id/id_et_repassword"
+	    android:text="Submit" />
 	
 </RelativeLayout>
