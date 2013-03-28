@@ -19,7 +19,6 @@ public class GCMIntentService extends GCMBaseIntentService{
 	@Override
 	protected void onError(Context context, String errorId) {
 		Log.d("jiho", "errorId : "+errorId);
-		
 	}
 
 	@Override

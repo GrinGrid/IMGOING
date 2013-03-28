@@ -3,6 +3,7 @@ package net.gringrid.imgoing.util;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 public class DBHelper extends SQLiteOpenHelper{
 
@@ -23,7 +24,7 @@ public class DBHelper extends SQLiteOpenHelper{
 	 * 다를경우 : onCreate -> onUpgrade 실행
 	 * 같을경우 : onOpen 실행
 	 */
-	private static final int DATABASE_VERSION = 1;
+	private static final int DATABASE_VERSION = 4;
 	
 	
 	/**
@@ -36,19 +37,22 @@ public class DBHelper extends SQLiteOpenHelper{
 				"email 			TEXT NOT NULL, "+
 				"phone_number 	TEXT, "+
 				"passowrd 		TEXT, "+
-				"PRIMARY KEY (player_cd, start_cd)"+				
+				"PRIMARY KEY (email)"+				
 				")";
 	
 	private static final String TABLE_MESSAGE 		=  
 			"CREATE TABLE MESSAGE ("+
 				"no	    			INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL, "+
-				"sender 			TEXT, "+
-				"receiver			TEXT, "+
-				"time				TEXT, "+
-				"latitude	 		TEXT, "+
-				"longitude	 		TEXT, "+
-				"location_name		TEXT, "+
-				"near_metro_name	TEXT  "+
+				"sender 			TEXT NOT NULL, "+
+				"receiver			TEXT NOT NULL, "+
+				"send_time			TEXT NULL, "+
+				"receive_time		TEXT NULL, "+
+				"latitude	 		TEXT NULL, "+				
+				"longitude	 		TEXT NULL, "+
+				"interval			TEXT NULL, "+
+				"provider			TEXT NULL, "+
+				"location_name		TEXT NULL, "+
+				"near_metro_name	TEXT NULL  "+
 				")";
 	
 	/**
@@ -92,7 +96,12 @@ public class DBHelper extends SQLiteOpenHelper{
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		// TODO Auto-generated method stub
+		
+		Log.d("jiho", "===================================");
+		Log.d("jiho", "DB onUpgrade");
+		Log.d("jiho", "TABLE_USER SCHEMA : "+TABLE_USER);
+		Log.d("jiho", "TABLE_MESSAGE SCHEMA : "+TABLE_MESSAGE);
+		Log.d("jiho", "===================================");
 		 
 		db.execSQL("DROP TABLE IF EXISTS USER");
 		db.execSQL("DROP TABLE IF EXISTS MESSAGE");

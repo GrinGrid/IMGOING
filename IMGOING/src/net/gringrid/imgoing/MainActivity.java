@@ -2,6 +2,7 @@ package net.gringrid.imgoing;
 
 import net.gringrid.imgoing.location.ResponseLocationServiceReceiver;
 import net.gringrid.imgoing.location.SendCurrentLocationService;
+import net.gringrid.imgoing.util.DBHelper;
 
 import com.google.android.gcm.GCMRegistrar;
 
@@ -21,6 +22,9 @@ import android.widget.Button;
 public class MainActivity extends Activity implements OnClickListener {
 
 	private Intent mCurrentLocationServiceIntent = null;
+	// 앱 실행시 DB instance 생성
+	private DBHelper dbHelper = null;
+	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +52,12 @@ public class MainActivity extends Activity implements OnClickListener {
 	// 초기화
 	public void init(){
 		
+    	// DB확인
+    	dbHelper = DBHelper.getInstance(this);
+    	if ( dbHelper == null ){
+    		Log.e("jiho", "DB Error!!");
+    	}
+    	
 		// GCM서버에 단말정보를 세팅한다.
 		GCMRegistrar.checkDevice(this);
 		GCMRegistrar.checkManifest(this);		
@@ -61,6 +71,8 @@ public class MainActivity extends Activity implements OnClickListener {
 	}
 	
 	private void regEvent() {
+		
+		// 서비스 시작 버튼
 		View view = findViewById(R.id.id_bt_start_service);
 		if ( view != null ){
 			view.setOnClickListener(this);
@@ -68,11 +80,21 @@ public class MainActivity extends Activity implements OnClickListener {
 				view.setClickable(false);
 			}
 		}
+		
+		// 서비스 정지 버튼
 		view = findViewById(R.id.id_bt_stop_service);
 		if ( view != null ){
 			view.setOnClickListener(this);
 		}
+		
+		// 가입 버튼
 		view = findViewById(R.id.id_bt_join);
+		if ( view != null ){
+			view.setOnClickListener(this);
+		}
+		
+		// 메시지 목록보기
+		view = findViewById(R.id.id_bt_message);
 		if ( view != null ){
 			view.setOnClickListener(this);
 		}
@@ -102,6 +124,7 @@ public class MainActivity extends Activity implements OnClickListener {
 	@Override
 	public void onClick(View v) {
 		
+		Intent intent = null;
 		
 		switch ( v.getId() ){
 		case R.id.id_bt_start_service:		
@@ -130,7 +153,12 @@ public class MainActivity extends Activity implements OnClickListener {
 			break;
 			
 		case R.id.id_bt_join:
-			Intent intent = new Intent(this, JoinActivity.class);
+			intent = new Intent(this, JoinActivity.class);
+			startActivity(intent);			
+			break;
+			
+		case R.id.id_bt_message:
+			intent = new Intent(this, MessageActivity.class);
 			startActivity(intent);			
 			break;
 		}

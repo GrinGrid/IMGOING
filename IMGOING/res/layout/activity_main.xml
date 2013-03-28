@@ -31,6 +31,12 @@
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
 	    android:layout_below="@id/id_bt_stop_service"
-	    android:text="JOIN" />		    
+	    android:text="JOIN" />	
+	<Button
+	    android:id="@+id/id_bt_message"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_below="@id/id_bt_join"
+	    android:text="Message" />		    	    
 	
 </RelativeLayout>

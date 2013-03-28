@@ -8,6 +8,9 @@ import java.io.Reader;
 import java.util.List;
 import java.util.Locale;
 
+import net.gringrid.imgoing.dao.MessageDao;
+import net.gringrid.imgoing.vo.MessageVO;
+
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -32,7 +35,7 @@ import android.widget.Toast;
 
 public class LocationUtil implements LocationListener{
 	
-	private final boolean DEBUG = false;
+	private final boolean DEBUG = true;
 	
 	private Context mContext;
 	private LocationManager locationManager;
@@ -45,19 +48,21 @@ public class LocationUtil implements LocationListener{
 	
 	
 	private LocationUtil(Context context){
+		Log.d("jiho", "************ CONSTRUCTOR");
 		mContext = context;
 		init();
 		getCurrentLocation();
-		locationManager.requestLocationUpdates(provider, 0, 0, this);
+		locationManager.requestLocationUpdates(provider, 5000, 0, this);
 	}
-	
+	 
 	public static LocationUtil getInstance(Context context){
+		Log.d("jiho", "************ getInstance()");
 		if ( instance == null ){
 			instance = new LocationUtil(context);
 		}else{
 			instance.init();
 			instance.getCurrentLocation();
-			instance.locationManager.requestLocationUpdates(instance.provider, 0, 0, instance);
+			instance.locationManager.requestLocationUpdates(instance.provider, 5000, 0, instance);
 		}
 		return instance;
 	}
@@ -89,9 +94,9 @@ public class LocationUtil implements LocationListener{
 			Toast.makeText(mContext, "GPS가 꺼져있거나 위치를 찾을 수 없습니다.",Toast.LENGTH_LONG).show();
 			return;
 		}else{
-			onLocationChanged(location);
+			//onLocationChanged(location);
 			//currentLocationName = getLocationName(location);
-			Log.d("jiho", "currentLocationName : "+currentLocationName);
+			//Log.d("jiho", "currentLocationName : "+currentLocationName);
 		}
 	}
 	
@@ -116,12 +121,14 @@ public class LocationUtil implements LocationListener{
 		
 		Geocoder geocoder = new Geocoder(mContext, Locale.getDefault());
 		List<Address> addresses = null;
+		
 		try {
 			addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 		if ( addresses != null ){ 
 			for ( Address adr : addresses ){
 				if ( DEBUG ){
@@ -155,6 +162,7 @@ public class LocationUtil implements LocationListener{
 
 			}
 		}
+		
 		
 		return locationName;
 	}
@@ -203,12 +211,30 @@ public class LocationUtil implements LocationListener{
 	
 	@Override
 	public void onLocationChanged(Location location) {
-		Log.d("jiho", "==============================================");
-		Log.d("jiho", "onLocationChanged provider  : "+provider);
-		Log.d("jiho", "location.getLatitude() : "+location.getLatitude());
-		Log.d("jiho", "location.getgetLongitude() : "+location.getLongitude());
-		Log.d("jiho", "getLocationName : "+getLocationName(location));
-		Log.d("jiho", "==============================================");
+		Log.d("jiho", "onLocationChanged");
+		if ( DEBUG ){
+			Log.d("jiho", "==============================================");
+			Log.d("jiho", "onLocationChanged provider  : "+provider);
+			Log.d("jiho", "location.getLatitude() : "+location.getLatitude());
+			Log.d("jiho", "location.getgetLongitude() : "+location.getLongitude());
+			Log.d("jiho", "getLocationName : "+getLocationName(location));
+			Log.d("jiho", "==============================================");
+		}
+		MessageDao messageDAO = new MessageDao(mContext);
+		MessageVO messageVO = new MessageVO();
+		
+		messageVO.sender = "nisdlan@hotmail.com";
+		messageVO.receiver = "grigrng@gmail.com";
+		messageVO.send_time = "";
+		messageVO.receive_time = "";
+		messageVO.latitude = Double.toString(location.getLatitude());
+		messageVO.longitude	= Double.toString(location.getLongitude());
+		messageVO.interval = "";
+		messageVO.provider = provider;
+		messageVO.location_name = getLocationName(location);
+		messageVO.near_metro_name = "";
+				
+		messageDAO.insert(messageVO);
 		stopUpdate();
 	}
 
