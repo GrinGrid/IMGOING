@@ -7,4 +7,6 @@ public final class Constants {
 	public static final String LOCATION_SERVICE = "net.gringrid.imgoing.location.SendCurrentLocationService";
 	public static final String test = "TEST";
 	public static final String test3 = "TEST";
+	public static final String test2 = "TEST";
+	public static final String test4 = "TEST";
 }
