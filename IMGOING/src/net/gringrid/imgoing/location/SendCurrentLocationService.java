@@ -34,7 +34,7 @@ public class SendCurrentLocationService extends IntentService {
 		while(isSendLocation){
 			try {
 				
-				Thread.sleep(5000);
+				Thread.sleep(50000);
 				//Vibrator vi = (Vibrator)getSystemService(this.VIBRATOR_SERVICE);
 			    //vi.vibrate(500);
 			    
