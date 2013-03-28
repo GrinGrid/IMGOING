@@ -35,7 +35,7 @@ import android.widget.Toast;
 
 public class LocationUtil implements LocationListener{
 	
-	private final boolean DEBUG = true;
+	private final boolean DEBUG = false;
 	
 	private Context mContext;
 	private LocationManager locationManager;
@@ -52,7 +52,7 @@ public class LocationUtil implements LocationListener{
 		mContext = context;
 		init();
 		getCurrentLocation();
-		locationManager.requestLocationUpdates(provider, 5000, 0, this);
+		//locationManager.requestLocationUpdates(provider, 5000, 0, this);
 	}
 	 
 	public static LocationUtil getInstance(Context context){
@@ -62,7 +62,7 @@ public class LocationUtil implements LocationListener{
 		}else{
 			instance.init();
 			instance.getCurrentLocation();
-			instance.locationManager.requestLocationUpdates(instance.provider, 5000, 0, instance);
+			instance.locationManager.requestLocationUpdates(instance.provider, 10000, 0, instance);
 		}
 		return instance;
 	}
@@ -106,7 +106,7 @@ public class LocationUtil implements LocationListener{
 	 * @return
 	 */
 	public String getLocationName(Location location){
-		String locationName = null;
+		String locationName = "";
 		
 		double latitude;
 		double longitude;
@@ -118,7 +118,7 @@ public class LocationUtil implements LocationListener{
 			Log.d("jiho", "location getLatitude : "+latitude);
 			Log.d("jiho", "location getLongitude : "+longitude);
 		}
-		
+		/*
 		Geocoder geocoder = new Geocoder(mContext, Locale.getDefault());
 		List<Address> addresses = null;
 		
@@ -163,7 +163,7 @@ public class LocationUtil implements LocationListener{
 			}
 		}
 		
-		
+		*/
 		return locationName;
 	}
 	
@@ -220,21 +220,23 @@ public class LocationUtil implements LocationListener{
 			Log.d("jiho", "getLocationName : "+getLocationName(location));
 			Log.d("jiho", "==============================================");
 		}
-		MessageDao messageDAO = new MessageDao(mContext);
-		MessageVO messageVO = new MessageVO();
-		
-		messageVO.sender = "nisdlan@hotmail.com";
-		messageVO.receiver = "grigrng@gmail.com";
-		messageVO.send_time = "";
-		messageVO.receive_time = "";
-		messageVO.latitude = Double.toString(location.getLatitude());
-		messageVO.longitude	= Double.toString(location.getLongitude());
-		messageVO.interval = "";
-		messageVO.provider = provider;
-		messageVO.location_name = getLocationName(location);
-		messageVO.near_metro_name = "";
-				
-		messageDAO.insert(messageVO);
+		if ( location != null ){
+			MessageDao messageDAO = new MessageDao(mContext);
+			MessageVO messageVO = new MessageVO();
+			
+			messageVO.sender = "nisdlan@hotmail.com";
+			messageVO.receiver = "grigrng@gmail.com";
+			messageVO.send_time = "";
+			messageVO.receive_time = "";
+			messageVO.latitude = Double.toString(location.getLatitude());
+			messageVO.longitude	= Double.toString(location.getLongitude());
+			messageVO.interval = "";
+			messageVO.provider = provider;
+			messageVO.location_name = getLocationName(location);
+			messageVO.near_metro_name = "";
+					
+			messageDAO.insert(messageVO);
+		}
 		stopUpdate();
 	}
 

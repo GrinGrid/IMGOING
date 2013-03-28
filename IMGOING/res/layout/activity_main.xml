@@ -15,22 +15,16 @@
         android:text="@string/hello_world" />
 	
 	<Button
-	    android:id="@+id/id_bt_start_service"
+	    android:id="@+id/id_bt_location_control"
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
 	    android:layout_below="@id/id_tv_hello"
-	    android:text="Start Service" />
-	<Button
-	    android:id="@+id/id_bt_stop_service"
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
-	    android:layout_below="@id/id_bt_start_service"
-	    android:text="STOP Service" />	
+	    android:text="Location Control" />
 	<Button
 	    android:id="@+id/id_bt_join"
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
-	    android:layout_below="@id/id_bt_stop_service"
+	    android:layout_below="@id/id_bt_location_control"
 	    android:text="JOIN" />	
 	<Button
 	    android:id="@+id/id_bt_message"

@@ -1,0 +1,257 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin">
+    
+	<!-- Main Menu Start -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="100"
+        android:orientation="horizontal"
+        android:background="#000000" 
+        >
+        <LinearLayout
+            android:layout_width="0dp"
+	        android:layout_height="match_parent"
+	        android:layout_weight="1"
+	        android:gravity="center" 
+            >
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/location_control" 
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="0dp"
+	        android:layout_height="match_parent"
+	        android:layout_weight="1" 
+	        android:gravity="center" 
+	        
+            >
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/location_list" 
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="0dp"
+	        android:layout_height="match_parent"
+	        android:layout_weight="1"
+	        android:gravity="center" 
+            >
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/config" 
+                />
+        </LinearLayout>
+    </LinearLayout>
+    <!-- Main Menu end -->
+    
+    
+    <!-- Menu Indicator Start -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="20" 
+        >
+        
+    </LinearLayout>
+    <!-- Menu Indicator End -->
+    
+    
+    <!-- Body Start -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="680"
+        android:orientation="horizontal"
+        android:weightSum="480"
+        >
+        
+        
+        <!-- Left Body Start -->
+        <LinearLayout
+            android:layout_width="0dp"
+        	android:layout_height="match_parent"
+        	android:layout_weight="160"
+        	android:orientation="vertical"
+        	android:weightSum="680"
+        	android:background="@drawable/location_control_body_bg"
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+	        	android:layout_height="0dp"
+	        	android:layout_weight="50"
+	        	android:gravity="center"
+                >
+                <ImageView
+                    android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:src="@drawable/friend_icon" 
+                    />
+                <TextView
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:layout_marginLeft="10px"
+	                android:text="친구목록" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+	        	android:layout_height="0dp"
+	        	android:layout_weight="630"
+                >
+                <TextView
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:textColor="#FFFFFF"
+	                android:text="리스트" />
+            </LinearLayout>
+        </LinearLayout>
+        <!-- Left Body End -->
+        
+        
+        <!-- Right Body Start -->
+        <LinearLayout
+            android:layout_width="0dp"
+        	android:layout_height="match_parent"
+        	android:layout_weight="320"
+        	android:layout_marginLeft="10px"
+        	android:orientation="vertical"
+        	android:weightSum="680"
+        	android:background="@drawable/location_control_body_bg"
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+	        	android:layout_height="0dp"
+	        	android:layout_weight="50"
+	        	android:gravity="center"
+                >
+                <ImageView
+                    android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:src="@drawable/clock_icon" 
+                    />
+                <TextView
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:layout_marginLeft="10px"
+	                android:text="시간설정" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+	        	android:layout_height="0dp"
+	        	android:layout_weight="200"
+	        	android:gravity="center"
+                >
+                <TextView
+	                android:layout_width="0dp"
+	                android:layout_height="match_parent"
+	                android:gravity="center_vertical|right"
+	                android:layout_weight="3"
+	                android:textSize="30dp"
+	                android:text="05" />
+                <TextView
+	                android:layout_width="0dp"
+	                android:layout_height="match_parent"
+	                android:layout_weight="1"
+	                android:gravity="center_vertical"
+	                android:paddingTop="16dp"
+	                android:text="min" />
+                <LinearLayout 
+                    android:layout_width="0dp"
+	                android:layout_height="match_parent"
+	                android:layout_weight="3"
+	                android:orientation="vertical"
+	                android:gravity="center_vertical"
+	                android:paddingLeft="10dp"
+                    >
+                    <ImageButton 
+                        android:layout_width="wrap_content"
+	                	android:layout_height="wrap_content"
+	                	android:src="@drawable/number_control_up"
+                        />
+                    <ImageButton 
+                        android:layout_width="wrap_content"
+	                	android:layout_height="wrap_content"
+	                	android:src="@drawable/number_control_down"
+                        />
+                </LinearLayout>
+                
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+	        	android:layout_height="0dp"
+	        	android:layout_weight="150"
+	        	android:gravity="center"
+                >
+                <TextView
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:textSize="12dp"
+	                android:text="05분 단위로 Choi jiho님에게 \nLee inhee님의 위치가 전송됩니다.\n시작하시겠습니까?" />
+            </LinearLayout>
+            
+            <LinearLayout
+                android:layout_width="match_parent"
+	        	android:layout_height="0dp"
+	        	android:layout_weight="250"
+                >
+                <LinearLayout
+                    android:layout_width="0dp"
+	        		android:layout_height="match_parent"
+	        		android:layout_weight="1">
+                </LinearLayout>
+				<Button
+				    android:id="@+id/id_bt_control"
+				    android:layout_width="0dp"
+	        		android:layout_height="wrap_content"
+	        		android:layout_weight="3"
+	        		android:background="@drawable/start_bt"
+	        		android:textColor="#FFFFFF"
+	        		android:textStyle="bold"
+	        		android:text="Start" />
+				<LinearLayout
+                    android:layout_width="0dp"
+	        		android:layout_height="match_parent"
+	        		android:layout_weight="1">
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+	        	android:layout_height="0dp"
+	        	android:layout_weight="30"
+                >
+                <LinearLayout
+                    android:layout_width="0dp"
+	        		android:layout_height="match_parent"
+	        		android:layout_weight="1">
+                </LinearLayout>
+				<LinearLayout
+                    android:layout_width="0dp"
+	        		android:layout_height="match_parent"
+	        		android:layout_weight="1">
+                </LinearLayout>
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:src="@drawable/buboo" 
+                    />
+            </LinearLayout>
+        </LinearLayout>
+        <!-- Right Body End -->
+        
+        
+    </LinearLayout>
+    <!-- Body End -->
+    
+</LinearLayout>

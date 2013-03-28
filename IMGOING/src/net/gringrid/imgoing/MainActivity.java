@@ -72,17 +72,8 @@ public class MainActivity extends Activity implements OnClickListener {
 	
 	private void regEvent() {
 		
-		// 서비스 시작 버튼
-		View view = findViewById(R.id.id_bt_start_service);
-		if ( view != null ){
-			view.setOnClickListener(this);
-			if ( isLocationServiceRunning() ){
-				view.setClickable(false);
-			}
-		}
-		
-		// 서비스 정지 버튼
-		view = findViewById(R.id.id_bt_stop_service);
+		// 위치관리 버튼
+		View view = findViewById(R.id.id_bt_location_control);
 		if ( view != null ){
 			view.setOnClickListener(this);
 		}
@@ -127,29 +118,9 @@ public class MainActivity extends Activity implements OnClickListener {
 		Intent intent = null;
 		
 		switch ( v.getId() ){
-		case R.id.id_bt_start_service:		
-			Log.d("jiho", "id_bt_start_service clicked!!");
-			
-			mCurrentLocationServiceIntent = new Intent(this, SendCurrentLocationService.class);
-			mCurrentLocationServiceIntent.putExtra("TEST_DATA", "TEST03923");
-			this.startService(mCurrentLocationServiceIntent);
-			
-			v.setClickable(false);
-			break;
-		
-		case R.id.id_bt_stop_service:		
-			Log.d("jiho", "id_bt_stop_service clicked!!");			
-						
-			//mCurrentLocationServiceIntent.putExtra("TEST_DATA", "STOP");
-			//this.stopService(mCurrentLocationServiceIntent);
-			
-			if ( isLocationServiceRunning() ){
-				this.stopService(new Intent(this, SendCurrentLocationService.class));
-			}
-			
-			Button id_bt_start_service = (Button)findViewById(R.id.id_bt_start_service);
-			id_bt_start_service.setClickable(true);
-
+		case R.id.id_bt_location_control:		
+			intent = new Intent(this, LocationControlActivity.class);
+			startActivity(intent);			
 			break;
 			
 		case R.id.id_bt_join:
