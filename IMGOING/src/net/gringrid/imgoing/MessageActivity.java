@@ -36,12 +36,18 @@ public class MessageActivity extends Activity implements OnClickListener {
 		Vector<MessageVO> message_data = new Vector<MessageVO>();
 		MessageDao messageDao = new MessageDao(this);
 		Cursor cursor = messageDao.queryMessageAll();
+		
+		int index_no = cursor.getColumnIndex("no");
+		int index_latitude = cursor.getColumnIndex("latitude");
+		int index_longitude = cursor.getColumnIndex("longitude");
+		int index_location_name = cursor.getColumnIndex("location_name");
+		
 		while (cursor.moveToNext()){
 			MessageVO messageVO = new MessageVO();
-			messageVO.no = cursor.getInt(0);
-			messageVO.latitude = cursor.getString(5);
-			messageVO.longitude = cursor.getString(6);
-			messageVO.location_name = cursor.getString(9);
+			messageVO.no = cursor.getInt(index_no);
+			messageVO.latitude = cursor.getString(index_latitude);
+			messageVO.longitude = cursor.getString(index_longitude);
+			messageVO.location_name = cursor.getString(index_location_name);
 			
 			message_data.add(messageVO);
 		}

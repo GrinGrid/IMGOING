@@ -19,8 +19,6 @@ public class JoinActivity extends Activity implements OnClickListener{
 		init();
 		regEvent();
 		
-		
-
 	}
 
 

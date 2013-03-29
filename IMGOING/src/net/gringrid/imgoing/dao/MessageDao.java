@@ -86,7 +86,6 @@ public class MessageDao {
 		stmt.bindString(10, vo.near_metro_name);
 		
 		
-		
 		try {
 			stmt.execute();	
 		} catch (Exception e) {
