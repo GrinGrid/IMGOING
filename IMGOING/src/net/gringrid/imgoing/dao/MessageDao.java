@@ -4,7 +4,9 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
+import android.util.Log;
 import net.gringrid.imgoing.location.LocationUtil;
+import net.gringrid.imgoing.location.Util;
 import net.gringrid.imgoing.util.DBHelper;
 import net.gringrid.imgoing.vo.MessageVO;
 import net.gringrid.imgoing.vo.UserVO;
@@ -13,7 +15,7 @@ public class MessageDao {
 
 	private DBHelper dbHelper = null;
 	private SQLiteDatabase mDB = null;
-	
+	private Context mContext;
 	
 	// 단건 입력
 	private static final String SQL_INSERT =
@@ -52,6 +54,21 @@ public class MessageDao {
 					",near_metro_name "+
 					"FROM MESSAGE");
 	
+	// 보낸목록 
+	private static final String SQL_SEND_LIST = 
+			String.format("SELECT "+
+					"receiver "+
+					"FROM MESSAGE "+
+					"WHERE sender = ? "+
+					"GROUP BY receiver");
+	
+	// 한사람에 대한 메시지 송신목
+	private static final String SQL_SEND_LIST_FOR_ONE = 
+			String.format("SELECT "+
+					"* "+
+					"FROM MESSAGE "+
+					"WHERE receiver = ? ");
+	 
 	// 전체삭제
 	private static final String SQL_DELETE_ALL = 
 			"DELETE FROM MESSAGE";
@@ -61,6 +78,7 @@ public class MessageDao {
 	 * @param context
 	 */
 	public MessageDao(Context context) {
+		mContext = context;
 		dbHelper = DBHelper.getInstance(context);		
 	}
 	
@@ -112,36 +130,40 @@ public class MessageDao {
 		return cursor;
 	}
 	
+	/**
+	 * 보낸 메시지 목록 조회 
+	 */
+	public Cursor querySendList(){
+		Cursor cursor = null;
+		mDB = dbHelper.getDB();
+		cursor = mDB.rawQuery(SQL_SEND_LIST, new String[]{ Util.getMyPhoneNymber(mContext) });
 
+		if(cursor != null){
+			cursor.moveToFirst();
+		}
+		return cursor;
+	}
+	
+	/**
+	 * 특정인에게 보낸 메시지 목록 조회 
+	 */
+	public Cursor querySendListForOne(String receiver){
+		Cursor cursor = null;
+		mDB = dbHelper.getDB();
+		cursor = mDB.rawQuery(SQL_SEND_LIST_FOR_ONE, new String[]{ receiver });
+
+		if(cursor != null){
+			cursor.moveToFirst();
+		}
+		return cursor;
+	}
+	
+	
 	public void deleteAll() { 
 		mDB = dbHelper.getDB();
 
 		mDB.execSQL(SQL_DELETE_ALL);		
 	}
 	
-	
-	/**
-	 * 사용자 정보 단건 조회
-	 * @param vo
-	 
-	public UserVO getOne(){
-		
-		UserVO leguVO = new UserVO();
-		
-		mDB = dbHelper.getDB();
-		Cursor cursor = null;
-				
-		cursor = mDB.rawQuery(SQL_SELECT_ONE);
-		
-		if ( cursor.moveToFirst() ){
-			leguVO.email = cursor.getString(0);
-			leguVO.phone_number = cursor.getString(1);
-			leguVO.password = cursor.getString(2);
-			}
-		
-		return leguVO;
-				
-	}
-	*/
 }
 

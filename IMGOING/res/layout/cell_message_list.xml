@@ -16,11 +16,19 @@
         android:text="sender"/>
     
     <TextView
-        android:id="@+id/id_tv_send_time"
+        android:id="@+id/id_tv_receiver"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_toRightOf="@id/id_tv_sender"
+        android:text="receiver"/>
+    
+    <TextView
+        android:id="@+id/id_tv_send_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@id/id_tv_receiver"
         android:text="send_time"/>
     
 	<TextView

@@ -63,8 +63,8 @@ public class MainActivity extends Activity implements OnClickListener {
 			GCMRegistrar.register(this, "877042154251");
 		}else{
 			Preference.GCM_REGISTRATION_ID = regId;
-			Log.d("jiho", "oncreated regId = "+regId);
-			Log.d("jiho", "already registered.");
+			//Log.d("jiho", "oncreated regId = "+regId);
+			//Log.d("jiho", "already registered.");
 		}
 	}
 	

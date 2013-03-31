@@ -30,6 +30,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class LocationControlActivity extends Activity implements OnClickListener, OnItemClickListener{
 
@@ -229,6 +230,10 @@ public class LocationControlActivity extends Activity implements OnClickListener
 		case R.id.id_bt_control:
 			// 시작버튼 Click 했을 경우.
 			if ( CURRENT_BUTTON == START ){
+				if ( receiverPhoneNumber == null ){
+					Toast.makeText(this, "위치를 전송할 사람을 선택하세요.", Toast.LENGTH_SHORT).show();
+					return;
+				}
 				mCurrentLocationServiceIntent = new Intent(this, SendCurrentLocationService.class);
 				mCurrentLocationServiceIntent.putExtra("RECEIVER", receiverPhoneNumber);
 				mCurrentLocationServiceIntent.putExtra("INTERVAL", currentTime);

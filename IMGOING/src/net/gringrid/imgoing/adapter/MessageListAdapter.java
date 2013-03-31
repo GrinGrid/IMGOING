@@ -72,6 +72,7 @@ public class MessageListAdapter extends BaseAdapter{
 		{
 			RelativeLayout id_rl_cell = (RelativeLayout)view.findViewById(R.id.id_rl_cell);
 			TextView id_tv_sender = (TextView)view.findViewById(R.id.id_tv_sender);
+			TextView id_tv_receiver = (TextView)view.findViewById(R.id.id_tv_receiver);
 			TextView id_tv_send_time = (TextView)view.findViewById(R.id.id_tv_send_time);
 			TextView id_tv_provider = (TextView)view.findViewById(R.id.id_tv_provider);
 			TextView id_tv_latitude = (TextView)view.findViewById(R.id.id_tv_latitude);
@@ -85,6 +86,7 @@ public class MessageListAdapter extends BaseAdapter{
 			}
 			
 			id_tv_sender.setText(item.sender);
+			id_tv_receiver.setText(item.receiver);
 			id_tv_send_time.setText(item.send_time);
 			id_tv_provider.setText(item.provider);
 			id_tv_latitude.setText(item.latitude);

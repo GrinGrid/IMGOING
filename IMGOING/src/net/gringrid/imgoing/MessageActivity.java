@@ -18,12 +18,17 @@ import android.database.Cursor;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
+import android.widget.TextView;
 
-public class MessageActivity extends Activity implements OnClickListener {
+public class MessageActivity extends Activity implements OnClickListener, OnItemClickListener{
 
 	private ListView messageList;
 	MessageListAdapter messageListAdapter;
+	Vector<MessageVO> message_data = new Vector<MessageVO>();
+	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -34,12 +39,21 @@ public class MessageActivity extends Activity implements OnClickListener {
 		regEvent();
 		
 		
-		Vector<MessageVO> message_data = new Vector<MessageVO>();
-		MessageDao messageDao = new MessageDao(this);
-		Cursor cursor = messageDao.queryMessageAll();
 		
+		MessageDao messageDao = new MessageDao(this);
+		//Cursor cursor = messageDao.queryMessageAll();
+		Cursor cursor = messageDao.querySendList();
+		int index_receiver = cursor.getColumnIndex("receiver"); 
+		do{
+			MessageVO messageVO = new MessageVO();
+			messageVO.receiver = cursor.getString(index_receiver);
+			
+			message_data.add(messageVO);
+		}while(cursor.moveToNext());
+		/*
 		int index_no = cursor.getColumnIndex("no");
 		int index_sender = cursor.getColumnIndex("sender"); 
+		int index_receiver = cursor.getColumnIndex("receiver"); 
 		int index_send_time = cursor.getColumnIndex("send_time"); 
 		int index_latitude = cursor.getColumnIndex("latitude");
 		int index_longitude = cursor.getColumnIndex("longitude");
@@ -50,6 +64,7 @@ public class MessageActivity extends Activity implements OnClickListener {
 			MessageVO messageVO = new MessageVO();
 			messageVO.no = cursor.getInt(index_no);
 			messageVO.sender = cursor.getString(index_sender);
+			messageVO.receiver = cursor.getString(index_receiver);
 			messageVO.send_time = cursor.getString(index_send_time);
 			messageVO.latitude = cursor.getString(index_latitude);
 			messageVO.longitude = cursor.getString(index_longitude);
@@ -58,10 +73,11 @@ public class MessageActivity extends Activity implements OnClickListener {
 			
 			message_data.add(messageVO);
 		}
-				
+		*/		
 		messageList = (ListView)findViewById(R.id.id_lv_message);
 		
 		if ( messageList != null ){
+			messageList.setOnItemClickListener(this);
 			messageListAdapter = new MessageListAdapter(this);
 			messageList.setAdapter(messageListAdapter);
 			messageListAdapter.setAll(message_data);
@@ -115,6 +131,46 @@ public class MessageActivity extends Activity implements OnClickListener {
 			startActivity(intent);
 			break;
 		}
+		
+	}
+
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+		//querySendListForOne
+		// TODO Auto-generated method stub
+		
+		String receiver = message_data.get(position).receiver;
+		
+		message_data.clear();
+		message_data = new Vector<MessageVO>();
+		MessageDao messageDao = new MessageDao(this);
+		Cursor cursor = messageDao.querySendListForOne(receiver);
+		
+		int index_no = cursor.getColumnIndex("no");
+		int index_sender = cursor.getColumnIndex("sender"); 
+		int index_receiver = cursor.getColumnIndex("receiver"); 
+		int index_send_time = cursor.getColumnIndex("send_time"); 
+		int index_latitude = cursor.getColumnIndex("latitude");
+		int index_longitude = cursor.getColumnIndex("longitude");
+		int index_provider = cursor.getColumnIndex("provider");
+		int index_location_name = cursor.getColumnIndex("location_name");
+		
+		do{
+			MessageVO messageVO = new MessageVO();
+			messageVO.no = cursor.getInt(index_no);
+			messageVO.sender = cursor.getString(index_sender);
+			messageVO.receiver = cursor.getString(index_receiver);
+			messageVO.send_time = cursor.getString(index_send_time);
+			messageVO.latitude = cursor.getString(index_latitude);
+			messageVO.longitude = cursor.getString(index_longitude);
+			messageVO.provider = cursor.getString(index_provider);
+			messageVO.location_name = cursor.getString(index_location_name);
+			
+			message_data.add(messageVO);	
+		
+		}while(cursor.moveToNext());
+		messageListAdapter.setAll(message_data);
+		
 		
 	}
 }
