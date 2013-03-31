@@ -5,4 +5,5 @@ public class UserVO {
 	public String phone_number;
 	public String password;
 	public String repassword;
+	public String gcm_reg_id;
 }

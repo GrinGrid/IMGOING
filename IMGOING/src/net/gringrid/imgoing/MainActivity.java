@@ -30,7 +30,6 @@ public class MainActivity extends Activity implements OnClickListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		Log.d("jiho", "onCreate");
 		
 		init();
 		regEvent();
@@ -39,13 +38,11 @@ public class MainActivity extends Activity implements OnClickListener {
 
 	@Override
 	protected void onStart() {
-		Log.d("jiho", "onStart");
 		super.onStart();
 	}
 	
 	@Override
 	protected void onResume() {
-		Log.d("jiho", "onResume");
 		super.onResume();
 	}
 
@@ -65,6 +62,7 @@ public class MainActivity extends Activity implements OnClickListener {
 		if ( regId.equals("") ){
 			GCMRegistrar.register(this, "877042154251");
 		}else{
+			Preference.GCM_REGISTRATION_ID = regId;
 			Log.d("jiho", "oncreated regId = "+regId);
 			Log.d("jiho", "already registered.");
 		}

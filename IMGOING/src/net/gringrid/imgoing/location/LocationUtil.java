@@ -5,19 +5,27 @@ import java.io.InputStream;
 
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 import net.gringrid.imgoing.dao.MessageDao;
 import net.gringrid.imgoing.vo.MessageVO;
+import net.gringrid.imgoing.vo.UserVO;
 
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -37,93 +45,228 @@ public class LocationUtil implements LocationListener{
 	
 	private final boolean DEBUG = false;
 	
+	private static LocationUtil instance;
+	
 	private Context mContext;
+	
+	// 현재위치 관련
 	private LocationManager locationManager;
 	private Location location;
 	private String provider;
-	private static LocationUtil instance;
 	
+	// 전송정보 
+	public String receiver;	// 수신자 
+	public int interval;	// 전송간격 
 	
-	private String currentLocationName;
+	// 현재위치 업데이트 조건 (60초에 한번씩 100m이상 이동시)
+	private static final int properInterval = 1000 * 60 * 1; 	// 1분
+	private static final int propertMeters = 100; 		 		// 100m
+	private static final int TWO_MINUTES = 1000 * 60 * 2;		// 2분 
 	
+	// 현재위치 전송 시작 여부 
+	private boolean isStarted = false;
 	
+	/**
+	 * 생성자 SINGLETON
+	 * @param context
+	 */
 	private LocationUtil(Context context){
-		Log.d("jiho", "************ CONSTRUCTOR");
+		
 		mContext = context;
 		init();
-		getCurrentLocation();
-		//locationManager.requestLocationUpdates(provider, 5000, 0, this);
+		
 	}
-	 
+
+	/**
+	 * LocationUtil의 instance를 반환한다. SINGLETON
+	 * @param context
+	 * @return instance
+	 */
 	public static LocationUtil getInstance(Context context){
-		Log.d("jiho", "************ getInstance()");
+		
 		if ( instance == null ){
 			instance = new LocationUtil(context);
-		}else{
-			instance.init();
-			instance.getCurrentLocation();
-			instance.locationManager.requestLocationUpdates(instance.provider, 10000, 0, instance);
 		}
+		
 		return instance;
 	}
 	
+	
+	/**
+	 * 초기화 ( LocationManager, Location, Provider )
+	 * Location 지속적 update
+	 */
 	private void init(){
+	
 		locationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
-		Criteria criteria = new Criteria();
+		//Criteria criteria = new Criteria();
 		
-		// 우선순위 GPS > NETWORK
+		//provider = locationManager.getBestProvider(criteria, false);
+		//Log.d("jiho", "init provider : "+provider);
+		
+		//locationManager.requestLocationUpdates(provider, properInterval, propertMeters, this);
+	}
+
+	
+	
+	/**
+	 * 최신 location을 얻어와 DB에 저장하고 서버로 전송한다.
+	 */
+	public void sendLocation(){
+		
+		// 중지 했다가 다시 실행할 경우 locationUpdate다시 세팅 
+		if ( isStarted == false ){
+			setLocationUpdater();
+			isStarted = true;
+		}
+		
+		if ( DEBUG ){
+			Log.d("jiho", "==============================================");
+			Log.d("jiho", "onLocationChanged provider  : "+location.getProvider());
+			Log.d("jiho", "location.getLatitude() : "+location.getLatitude());
+			Log.d("jiho", "location.getgetLongitude() : "+location.getLongitude());
+			Log.d("jiho", "getLocationName : "+getLocationName(location.getLatitude(), location.getLongitude()));
+			Log.d("jiho", "==============================================");
+		}
+		
+		
+		long time = System.currentTimeMillis(); 
+		SimpleDateFormat dayTime = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+		String send_time = dayTime.format(new Date(time));
+		
+		if ( location != null ){
+			location = locationManager.getLastKnownLocation(location.getProvider());
+			
+			// DB에 저장
+			MessageDao messageDAO = new MessageDao(mContext);
+			MessageVO messageVO = new MessageVO();
+			int resultCd = 0;
+			
+			messageVO.sender = Util.getMyPhoneNymber(mContext);
+			messageVO.receiver = this.receiver;
+			messageVO.send_time = send_time;
+			messageVO.receive_time = "";
+			messageVO.latitude = Double.toString(location.getLatitude());
+			messageVO.longitude	= Double.toString(location.getLongitude());
+			messageVO.interval = Integer.toString(interval);
+			messageVO.provider = location.getProvider();
+			messageVO.location_name = getLocationName(location.getLatitude(), location.getLongitude());
+			messageVO.near_metro_name = "";
+					
+			resultCd = messageDAO.insert(messageVO);
+			
+			if ( resultCd == 0 ){
+				Log.d("jiho", "insert success!");
+			}else{
+				Log.d("jiho", "[ERROR] insert fail!");
+			}
+			
+			// 서버로 전송
+			requestHttp(messageVO);
+		}else{
+			Log.d("jiho", "!!!!!!!!!! Location is null !!!!!!!!!!!");
+		}
+		
+	}
+	
+	
+	/**
+	 * Geocoder 클래스의 getFromLocation이 null일경우 HTTP를 통해 얻어온다.
+	 * @param lat
+	 * @param lng
+	 * @return
+	 */
+	public JSONObject requestHttp(MessageVO messageVO) {
+
+		HttpPost httpPost = new HttpPost("http://choijiho.com/gringrid/imgoing/message_send.php");
+        HttpClient client = new DefaultHttpClient();
+        List < NameValuePair > nameValuePairs = new ArrayList < NameValuePair > (4);
+        
+        nameValuePairs.add(new BasicNameValuePair("sender", messageVO.sender));
+        nameValuePairs.add(new BasicNameValuePair("receiver_phone_number", messageVO.receiver));
+        nameValuePairs.add(new BasicNameValuePair("latitude", messageVO.latitude));
+        nameValuePairs.add(new BasicNameValuePair("longitude", messageVO.longitude));
+        
+        HttpResponse response;
+        
+        StringBuilder stringBuilder = new StringBuilder();
+
+        try {        	
+        	httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+            response = client.execute(httpPost);
+ 
+            HttpEntity entity = response.getEntity();            
+            InputStream stream = entity.getContent();
+            
+            // 한글을 위해
+            Reader reader=new InputStreamReader(stream);
+         
+            int b;
+            while ((b = reader.read()) != -1) {
+                stringBuilder.append((char) b);
+            }
+            Log.d("jiho", "stringBuilder : "+stringBuilder);
+        } catch (ClientProtocolException e) {
+            } catch (IOException e) {
+        }
+
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject = new JSONObject(stringBuilder.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonObject;
+    }
+	
+	/**
+	 * 장소 업데이트터를 세팅한다.
+	 */
+	private void setLocationUpdater(){
+		Log.d("jiho", "setLocationUpdater");
+		if ( locationManager == null ){
+			return;
+		}
+		
 		if ( locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER ) ){
 			Log.d("jiho", "GPS Enabled");
-			criteria.setAccuracy(Criteria.ACCURACY_FINE);
-			location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-		}else if ( locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER) ){
+			//criteria.setAccuracy(Criteria.ACCURACY_FINE);
+			locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, properInterval, propertMeters, this);
+		}
+		if ( locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER) ){
 			Log.d("jiho", "NETWORK Enabled");
-			criteria.setAccuracy(Criteria.ACCURACY_COARSE);
-			location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+			//criteria.setAccuracy(Criteria.ACCURACY_COARSE);
+			//location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+			locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, properInterval, propertMeters, this);
 		}
-		
-		provider = locationManager.getBestProvider(criteria, false);
-		Log.d("jiho", "init provider : "+provider);
 		
 	}
 	
-	
-	public void getCurrentLocation(){
-		
-		if ( location == null ){
-			Toast.makeText(mContext, "GPS가 꺼져있거나 위치를 찾을 수 없습니다.",Toast.LENGTH_LONG).show();
-			return;
-		}else{
-			//onLocationChanged(location);
-			//currentLocationName = getLocationName(location);
-			//Log.d("jiho", "currentLocationName : "+currentLocationName);
-		}
-	}
 	
 	/**
 	 * 경도/위도로 장소명을 얻어온다.
 	 * @param location
-	 * @return
+	 * @return 장소
 	 */
-	public String getLocationName(Location location){
+	public String getLocationName(double latitude, double longitude){
+		
+		// 네트워크 사용 가능여부 체크 
+		if ( Util.isNetworkConnectionAvailable(mContext) == false ){
+			return "[Error] Network is not available.";
+		}
+		
 		String locationName = "";
-		
-		double latitude;
-		double longitude;
-		
-		latitude = location.getLatitude();
-		longitude = location.getLongitude();
 		
 		if ( DEBUG ){
 			Log.d("jiho", "location getLatitude : "+latitude);
 			Log.d("jiho", "location getLongitude : "+longitude);
 		}
-		/*
+		
 		Geocoder geocoder = new Geocoder(mContext, Locale.getDefault());
 		List<Address> addresses = null;
 		
 		try {
-			addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+			addresses = geocoder.getFromLocation(latitude, longitude, 1);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -163,8 +306,8 @@ public class LocationUtil implements LocationListener{
 			}
 		}
 		
-		*/
 		return locationName;
+		
 	}
 	
 	/**
@@ -206,56 +349,96 @@ public class LocationUtil implements LocationListener{
             e.printStackTrace();
         }
         return jsonObject;
-    }	
+    }
+
 	
 	
 	@Override
-	public void onLocationChanged(Location location) {
-		Log.d("jiho", "onLocationChanged");
-		if ( DEBUG ){
-			Log.d("jiho", "==============================================");
-			Log.d("jiho", "onLocationChanged provider  : "+provider);
-			Log.d("jiho", "location.getLatitude() : "+location.getLatitude());
-			Log.d("jiho", "location.getgetLongitude() : "+location.getLongitude());
-			Log.d("jiho", "getLocationName : "+getLocationName(location));
-			Log.d("jiho", "==============================================");
+	public void onLocationChanged(Location newLocation) {
+		
+		Log.d("jiho", "["+newLocation.getProvider()+"] onLocationChanged");
+		
+		if ( isBetterLocation(newLocation, location)){
+			this.location = newLocation;
 		}
-		if ( location != null ){
-			MessageDao messageDAO = new MessageDao(mContext);
-			MessageVO messageVO = new MessageVO();
-			
-			messageVO.sender = "nisdlan@hotmail.com";
-			messageVO.receiver = "grigrng@gmail.com";
-			messageVO.send_time = "";
-			messageVO.receive_time = "";
-			messageVO.latitude = Double.toString(location.getLatitude());
-			messageVO.longitude	= Double.toString(location.getLongitude());
-			messageVO.interval = "";
-			messageVO.provider = provider;
-			messageVO.location_name = getLocationName(location);
-			messageVO.near_metro_name = "";
-					
-			messageDAO.insert(messageVO);
-		}
-		stopUpdate();
+		
 	}
 
 	@Override
 	public void onStatusChanged(String provider, int status, Bundle extras) {
-		Log.d("jiho", "onStatusChanged");
+		Log.d("jiho", provider+"onStatusChanged");
 	}
 
 	@Override
 	public void onProviderEnabled(String provider) {
-		Log.d("jiho", "onProviderEnabled");		
+		locationManager.removeUpdates(this);
+		setLocationUpdater();		
+		Log.d("jiho", provider+" onProviderEnabled");
 	}
 
 	@Override
 	public void onProviderDisabled(String provider) {
-		Log.d("jiho", "onProviderEnabled");		
+		locationManager.removeUpdates(this);
+		setLocationUpdater();
+		Log.d("jiho", provider+" onProviderDisabled");		
 	}
 	
-	public void stopUpdate() {
+	public void stopLocationUpdate(){
 		locationManager.removeUpdates(this);
+		isStarted = false;
+	}
+	
+	/** Determines whether one Location reading is better than the current Location fix
+	  * @param location  The new Location that you want to evaluate
+	  * @param currentBestLocation  The current Location fix, to which you want to compare the new one
+	  */
+	protected boolean isBetterLocation(Location location, Location currentBestLocation) {
+	    if (currentBestLocation == null) {
+	        // A new location is always better than no location
+	        return true;
+	    }
+
+	    // Check whether the new location fix is newer or older
+	    long timeDelta = location.getTime() - currentBestLocation.getTime();
+	    boolean isSignificantlyNewer = timeDelta > TWO_MINUTES;
+	    boolean isSignificantlyOlder = timeDelta < -TWO_MINUTES;
+	    boolean isNewer = timeDelta > 0;
+
+	    // If it's been more than two minutes since the current location, use the new location
+	    // because the user has likely moved
+	    if (isSignificantlyNewer) {
+	        return true;
+	    // If the new location is more than two minutes older, it must be worse
+	    } else if (isSignificantlyOlder) {
+	        return false;
+	    }
+
+	    // Check whether the new location fix is more or less accurate
+	    int accuracyDelta = (int) (location.getAccuracy() - currentBestLocation.getAccuracy());
+	    boolean isLessAccurate = accuracyDelta > 0;
+	    boolean isMoreAccurate = accuracyDelta < 0;
+	    boolean isSignificantlyLessAccurate = accuracyDelta > 200;
+
+	    // Check if the old and new location are from the same provider
+	    boolean isFromSameProvider = isSameProvider(location.getProvider(),
+	            currentBestLocation.getProvider());
+
+	    // Determine location quality using a combination of timeliness and accuracy
+	    if (isMoreAccurate) {
+	        return true;
+	    } else if (isNewer && !isLessAccurate) {
+	        return true;
+	    } else if (isNewer && !isSignificantlyLessAccurate && isFromSameProvider) {
+	        return true;
+	    }
+	    return false;
+	}
+	
+	/** Checks whether two providers are the same */
+	private boolean isSameProvider(String provider1, String provider2) {
+	    if (provider1 == null) {
+	      return provider2 == null;
+	    }
+	    return provider1.equals(provider2);
 	}
 }

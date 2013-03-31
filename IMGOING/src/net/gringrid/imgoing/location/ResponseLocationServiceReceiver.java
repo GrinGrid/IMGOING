@@ -11,16 +11,29 @@ import android.view.LayoutInflater;
 
 public class ResponseLocationServiceReceiver extends BroadcastReceiver {
 
+	private LocationUtil locationUtil;
+	
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		
 		Bundle mBundle = new Bundle();
 		mBundle = intent.getExtras();
 		
+		// 위치전송 시작 
 		if ( mBundle.get("MODE").equals("START") ){
-			LocationUtil.getInstance(context);
+			Log.d("jiho", "onReceive");
+			locationUtil = LocationUtil.getInstance(context);
+			locationUtil.receiver = mBundle.getString("RECEIVER");
+			locationUtil.interval = mBundle.getInt("INTERVAL"); 
+			locationUtil.sendLocation();
+			
+		// 위치전송 종료 	
 		}else if ( mBundle.get("MODE").equals("STOP") ){
-			Log.d("jiho", "activeTaskKey");
+			
+			locationUtil = LocationUtil.getInstance(context);
+			locationUtil.stopLocationUpdate();
+			Log.d("jiho", "STOP");
+			
 		}
 	}
 }

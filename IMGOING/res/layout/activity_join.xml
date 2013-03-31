@@ -20,21 +20,24 @@
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
 	    android:layout_below="@id/id_tv_hello"
-	    android:inputType="textEmailAddress" />
+	    android:inputType="textEmailAddress" 
+	    android:text="nisclan@hotmail.com"/>
 	
 	<EditText
 	    android:id="@+id/id_et_phone_number"
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
 	    android:layout_below="@id/id_et_email"
-	    android:inputType="textEmailAddress" />
+	    android:inputType="number" 
+	    android:text="01034549398"/>
 	
 	<EditText
 	    android:id="@+id/id_et_password"
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
 	    android:layout_below="@id/id_et_phone_number"
-	    android:inputType="textPassword" />
+	    android:inputType="textPassword" 
+	    android:text="password"/>
 	
 	<EditText
 	    android:id="@+id/id_et_repassword"
