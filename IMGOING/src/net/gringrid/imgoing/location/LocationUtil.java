@@ -162,7 +162,7 @@ public class LocationUtil implements LocationListener{
 			}
 			
 			// 서버로 전송
-			requestHttp(messageVO);
+			//requestHttp(messageVO);
 		}else{
 			Log.d("jiho", "!!!!!!!!!! Location is null !!!!!!!!!!!");
 		}
