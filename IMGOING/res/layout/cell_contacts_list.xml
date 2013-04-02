@@ -1,4 +1,4 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -10,11 +10,17 @@
 
     <TextView
         android:id="@+id/id_tv_name"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_weight="1"
         android:layout_marginLeft="10px"
         android:singleLine="true"
         android:text="Name"/>
 		    	    	    	    
-	
-</RelativeLayout>
+	<ImageView 
+	    android:id="@+id/id_iv_contacts_list_selector"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:visibility="gone"
+	    android:src="@drawable/contacts_selector"/>	
+</LinearLayout>
