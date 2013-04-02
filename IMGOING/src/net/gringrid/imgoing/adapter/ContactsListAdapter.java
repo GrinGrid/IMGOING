@@ -70,7 +70,6 @@ public class ContactsListAdapter extends BaseAdapter{
 		if (item != null)
 		{
 			TextView id_tv_name = (TextView)view.findViewById(R.id.id_tv_name);
-			
 			id_tv_name.setText(item.name);
 		}
 		

@@ -28,6 +28,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -51,7 +52,9 @@ public class LocationControlActivity extends Activity implements OnClickListener
 	// 전송 간격을 세팅
 	private int[] timeList = new int[]{1, 3, 5, 10, 15, 20, 25, 30, 40, 50, 60, 120};
 	private int currentTime = 5;
+	private TextView id_tv_send_message;
 	private String receiverPhoneNumber;
+	private String receiverName;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +80,10 @@ public class LocationControlActivity extends Activity implements OnClickListener
 		contactsListAdapter = new ContactsListAdapter(this);
 		id_lv_contacts.setAdapter(contactsListAdapter);
 		contactsListAdapter.setAll(contactsList);
+		
+		// 전송알림메시지 
+		id_tv_send_message = (TextView)findViewById(R.id.id_tv_send_message);
+		id_tv_send_message.setText( makeLocationAlertMessage() );
 		
 		// Start / Stop 버튼을 세팅한다.
 		if ( isLocationServiceRunning() ){
@@ -224,7 +231,6 @@ public class LocationControlActivity extends Activity implements OnClickListener
 		
 		Intent intent;
 		TextView id_tv_min = null;
-		TextView id_tv_min_below = null;
 		
 		switch( v.getId() ){
 		case R.id.id_bt_control:
@@ -251,7 +257,6 @@ public class LocationControlActivity extends Activity implements OnClickListener
 			
 		case R.id.id_iv_number_up:
 			id_tv_min = (TextView)findViewById(R.id.id_tv_min);
-			id_tv_min_below = (TextView)findViewById(R.id.id_tv_min_below);
 			currentTime = Integer.parseInt(id_tv_min.getText().toString());
 			
 			for ( int i=0; i<timeList.length; i++ ){
@@ -265,13 +270,13 @@ public class LocationControlActivity extends Activity implements OnClickListener
 				}
 			}
 			id_tv_min.setText(Integer.toString(currentTime));
-			id_tv_min_below.setText(Integer.toString(currentTime));
+    		id_tv_send_message.setText( makeLocationAlertMessage() );
+			
 			
 			break;
 			
 		case R.id.id_iv_number_down:
 			id_tv_min = (TextView)findViewById(R.id.id_tv_min);
-			id_tv_min_below = (TextView)findViewById(R.id.id_tv_min_below);
 			
 			currentTime = Integer.parseInt(id_tv_min.getText().toString());
 			
@@ -286,7 +291,7 @@ public class LocationControlActivity extends Activity implements OnClickListener
 				}
 			}
 			id_tv_min.setText(Integer.toString(currentTime));
-			id_tv_min_below.setText(Integer.toString(currentTime));
+    		id_tv_send_message.setText( makeLocationAlertMessage() );
 			break;
 			
 		case R.id.id_menu_location_control:
@@ -310,8 +315,14 @@ public class LocationControlActivity extends Activity implements OnClickListener
 		Log.d("jiho", "id : "+id);
 		Log.d("jiho", "position phone_name : "+contactsList.get(position).name);
 		
+		
+		// 선택한 리스트 화살표 모양 보이도록 함
+		contactsListAdapter.notifyDataSetChanged();
+		ImageView id_iv_contacts_list_selector = (ImageView)view.findViewById(R.id.id_iv_contacts_list_selector);
+		id_iv_contacts_list_selector.setVisibility(View.VISIBLE);
+
+		// 연락처 ID로 전화번호 조회
 		String selection = ContactsContract.CommonDataKinds.Phone.CONTACT_ID + "="+contactsList.get(position).id;
-    	
     	CursorLoader phoneLoader = new CursorLoader(this,ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, selection, null, null);
     	Cursor phoneCursor = phoneLoader.loadInBackground();
 	    //Cursor phoneCursor = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, selection, null, null);
@@ -325,12 +336,24 @@ public class LocationControlActivity extends Activity implements OnClickListener
 	    	//01로 시작하는지 체크 해야함
 	    	if ( Integer.parseInt(numberType) == Phone.TYPE_MOBILE ){
 	    		receiverPhoneNumber = number.replace("-", "");
-	    		TextView id_tv_send_message = (TextView)findViewById(R.id.id_tv_send_message);
-	    		id_tv_send_message.setText("분 단위로 "+contactsList.get(position).name+" 님에게 \nLee inhee님의 위치가 전송됩니다.\n시작하시겠습니까?");
+	    		receiverName = contactsList.get(position).name;
+	    		id_tv_send_message.setText( makeLocationAlertMessage() );
 	    	}
 	    }
 	    phoneCursor.close();
-		// TODO Auto-generated method stub
+	}
+	
+	public String makeLocationAlertMessage(){
+		String message = "";
+		String receiver = "";
+		if ( receiverName == null ){
+			receiver = "[           ]";
+		}else{
+			receiver = "[ "+receiverName+" ]";
+		}
+		message += currentTime+" "+getResources().getString(R.string.location_alert_first);
+		message += receiver+" "+getResources().getString(R.string.location_alert_second);
 		
+		return message;
 	}
 }

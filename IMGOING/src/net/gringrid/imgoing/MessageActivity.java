@@ -44,12 +44,14 @@ public class MessageActivity extends Activity implements OnClickListener, OnItem
 		//Cursor cursor = messageDao.queryMessageAll();
 		Cursor cursor = messageDao.querySendList();
 		int index_receiver = cursor.getColumnIndex("receiver"); 
-		do{
-			MessageVO messageVO = new MessageVO();
-			messageVO.receiver = cursor.getString(index_receiver);
-			
-			message_data.add(messageVO);
-		}while(cursor.moveToNext());
+		if ( cursor.moveToFirst() ) {
+			do{
+				MessageVO messageVO = new MessageVO();
+				messageVO.receiver = cursor.getString(index_receiver);
+				
+				message_data.add(messageVO);
+			}while(cursor.moveToNext());
+		}
 		/*
 		int index_no = cursor.getColumnIndex("no");
 		int index_sender = cursor.getColumnIndex("sender"); 
