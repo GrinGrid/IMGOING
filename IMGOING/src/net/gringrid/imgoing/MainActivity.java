@@ -88,6 +88,11 @@ public class MainActivity extends Activity implements OnClickListener {
 			view.setOnClickListener(this);
 		}
 		
+		// Map
+		view = findViewById(R.id.id_bt_map);
+		if ( view != null ){
+			view.setOnClickListener(this);
+		}
 		
 	}
 	
@@ -128,6 +133,11 @@ public class MainActivity extends Activity implements OnClickListener {
 			
 		case R.id.id_bt_message:
 			intent = new Intent(this, MessageActivity.class);
+			startActivity(intent);			
+			break;
+			
+		case R.id.id_bt_map:
+			intent = new Intent(this, MapActivity.class);
 			startActivity(intent);			
 			break;
 		}
