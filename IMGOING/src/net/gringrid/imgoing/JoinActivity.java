@@ -20,7 +20,7 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import net.gringrid.imgoing.location.Util;
+import net.gringrid.imgoing.util.Util;
 import net.gringrid.imgoing.vo.UserVO;
 import android.app.Activity;
 import android.content.Context;
@@ -71,17 +71,14 @@ public class JoinActivity extends Activity implements OnClickListener{
 			EditText id_et_phone_number = (EditText)findViewById(R.id.id_et_phone_number);
 			EditText id_et_password = (EditText)findViewById(R.id.id_et_password);
 			EditText id_et_repassword = (EditText)findViewById(R.id.id_et_repassword);
-			
-			
-			
+		
 			UserVO user = new UserVO();
 			user.email = id_et_email.getText().toString();
 			user.phone_number = id_et_phone_number.getText().toString();
 			user.password = id_et_password.getText().toString();
 			user.repassword = id_et_repassword.getText().toString();
 			user.gcm_reg_id = Preference.GCM_REGISTRATION_ID; 
-					
-
+			
 			Log.d("jiho", "email : "+user.email);
 			Log.d("jiho", "phone_number : "+user.phone_number);
 			Log.d("jiho", "password : "+user.password);

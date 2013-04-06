@@ -5,7 +5,7 @@ import java.util.Iterator;
 
 import net.gringrid.imgoing.dao.MessageDao;
 import net.gringrid.imgoing.location.LocationUtil;
-import net.gringrid.imgoing.location.Util;
+import net.gringrid.imgoing.util.Util;
 import net.gringrid.imgoing.vo.MessageVO;
 
 import android.content.Context;

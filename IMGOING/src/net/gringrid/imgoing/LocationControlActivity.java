@@ -6,6 +6,7 @@ import java.util.Vector;
 
 import net.gringrid.imgoing.adapter.ContactsListAdapter;
 import net.gringrid.imgoing.location.SendCurrentLocationService;
+import net.gringrid.imgoing.util.Util;
 import net.gringrid.imgoing.vo.ContactsVO;
 import net.gringrid.imgoing.vo.UserVO;
 import android.app.Activity;
@@ -46,9 +47,6 @@ public class LocationControlActivity extends Activity implements OnClickListener
 	private ListView id_lv_contacts;
 	private ContactsListAdapter contactsListAdapter;
 	
-	// 주소록 데이
-	private Vector<ContactsVO> contactsList = new Vector<ContactsVO>();
-	
 	// 전송 간격을 세팅
 	private int[] timeList = new int[]{1, 3, 5, 10, 15, 20, 25, 30, 40, 50, 60, 120};
 	private int currentTime = 5;
@@ -79,7 +77,7 @@ public class LocationControlActivity extends Activity implements OnClickListener
 		id_lv_contacts = (ListView)findViewById(R.id.id_lv_contacts);
 		contactsListAdapter = new ContactsListAdapter(this);
 		id_lv_contacts.setAdapter(contactsListAdapter);
-		contactsListAdapter.setAll(contactsList);
+		contactsListAdapter.setAll(Preference.CONTACTS_LIST);
 		
 		// 전송알림메시지 
 		id_tv_send_message = (TextView)findViewById(R.id.id_tv_send_message);
@@ -123,67 +121,12 @@ public class LocationControlActivity extends Activity implements OnClickListener
 	}
 	
 	/**
-	 * 주소록으로부터 벡터를 만든다.
+	 * 주소록 data가 없을 경우 주소록 data 를 세팅한다.
 	 */
 	private void setContacts(){
-		// 주소록 Adapter에 세팅
-		String projection[] = new String[]{ContactsContract.Contacts._ID, ContactsContract.Contacts.DISPLAY_NAME};
-		
-	    Uri uri = ContactsContract.Contacts.CONTENT_URI;
-
-	    String selection = ContactsContract.Contacts.HAS_PHONE_NUMBER + "=1" + 
-	    " AND " + ContactsContract.Contacts.IN_VISIBLE_GROUP + " =1";
-
-	    String order = ContactsContract.Contacts.DISPLAY_NAME + " COLLATE LOCALIZED ASC";
-
-	    CursorLoader loader = new CursorLoader(this, uri, projection, selection, null, order);
-	    Cursor cursor = loader.loadInBackground();
-	    
-	    int id_idx = cursor.getColumnIndex(ContactsContract.Contacts._ID);
-	    int id_name = cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME);
-	    String id_value = null;
-	    String name_value = null;
-	    
-	    while ( cursor.moveToNext() ){
-	    	ContactsVO contacts = new ContactsVO();
-	    	id_value = cursor.getString( id_idx );
-	    	name_value = cursor.getString( id_name );
-	    	contacts.id = id_value;
-	    	contacts.name = name_value;
-	    	contactsList.add(contacts);
-	    	/*
-	    	selection = ContactsContract.CommonDataKinds.Phone.CONTACT_ID + "="+id_value;
-	    	
-	    	CursorLoader phoneLoader = new CursorLoader(this,ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, selection, null, null);
-	    	Cursor phoneCursor = phoneLoader.loadInBackground();
-		    //Cursor phoneCursor = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, selection, null, null);
-		    
-		    while ( phoneCursor.moveToNext() ){
-		    	
-		    	String number = phoneCursor.getString(phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-		    	String numberType = phoneCursor.getString(phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.TYPE));
-		    	String numberId = phoneCursor.getString(phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.CONTACT_ID));
-		    	
-		    	if ( Integer.parseInt(numberType) == Phone.TYPE_MOBILE ){
-		    		ContactsVO contacts = new ContactsVO();
-			    	contacts.name = name_value;			    	
-		    		contacts.phoneNumber = number;
-		    		contactsList.add(contacts);		    		
-		    	}
-		    }
-		    phoneCursor.close();
-		    */
-	    }
-	    
-	    cursor.close();
-	    /*
-	    for ( ContactsVO vo : contactsList ){
-	    	Log.d("jiho", "id : "+vo.id);
-	    	Log.d("jiho", "name : "+vo.name);
-	    	//Log.d("jiho", "phoneNumber : "+vo.phoneNumber);
-	    }
-	    */
-
+		if ( Preference.CONTACTS_LIST == null ){
+			Util.setContacts(this);
+		}	
 	}
 
 	/**
@@ -313,7 +256,7 @@ public class LocationControlActivity extends Activity implements OnClickListener
 		Log.d("jiho", "view : "+view.getClass().getSimpleName());
 		Log.d("jiho", "position : "+position);
 		Log.d("jiho", "id : "+id);
-		Log.d("jiho", "position phone_name : "+contactsList.get(position).name);
+		Log.d("jiho", "position phone_name : "+Preference.CONTACTS_LIST.get(position).name);
 		
 		
 		// 선택한 리스트 화살표 모양 보이도록 함
@@ -322,7 +265,7 @@ public class LocationControlActivity extends Activity implements OnClickListener
 		id_iv_contacts_list_selector.setVisibility(View.VISIBLE);
 
 		// 연락처 ID로 전화번호 조회
-		String selection = ContactsContract.CommonDataKinds.Phone.CONTACT_ID + "="+contactsList.get(position).id;
+		String selection = ContactsContract.CommonDataKinds.Phone.CONTACT_ID + "="+Preference.CONTACTS_LIST.get(position).id;
     	CursorLoader phoneLoader = new CursorLoader(this,ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, selection, null, null);
     	Cursor phoneCursor = phoneLoader.loadInBackground();
 	    //Cursor phoneCursor = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, selection, null, null);
@@ -336,7 +279,7 @@ public class LocationControlActivity extends Activity implements OnClickListener
 	    	//01로 시작하는지 체크 해야함
 	    	if ( Integer.parseInt(numberType) == Phone.TYPE_MOBILE ){
 	    		receiverPhoneNumber = number.replace("-", "");
-	    		receiverName = contactsList.get(position).name;
+	    		receiverName = Preference.CONTACTS_LIST.get(position).name;
 	    		id_tv_send_message.setText( makeLocationAlertMessage() );
 	    	}
 	    }

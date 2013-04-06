@@ -6,8 +6,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
 import net.gringrid.imgoing.location.LocationUtil;
-import net.gringrid.imgoing.location.Util;
 import net.gringrid.imgoing.util.DBHelper;
+import net.gringrid.imgoing.util.Util;
 import net.gringrid.imgoing.vo.MessageVO;
 import net.gringrid.imgoing.vo.UserVO;
 

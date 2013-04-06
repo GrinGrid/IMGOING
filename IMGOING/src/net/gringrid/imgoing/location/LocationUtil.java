@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Locale;
 
 import net.gringrid.imgoing.dao.MessageDao;
+import net.gringrid.imgoing.util.Util;
 import net.gringrid.imgoing.vo.MessageVO;
 import net.gringrid.imgoing.vo.UserVO;
 
