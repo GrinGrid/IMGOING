@@ -2,23 +2,29 @@ package net.gringrid.imgoing.adapter;
 
 import java.util.Vector;
 
+import net.gringrid.imgoing.MapActivity;
 import net.gringrid.imgoing.R;
+import net.gringrid.imgoing.dao.MessageDao;
 import net.gringrid.imgoing.vo.MessageVO;
 
 import android.content.Context;
+import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class MessageListAdapter extends BaseAdapter{
 
 	Vector<MessageVO> data = new Vector<MessageVO>();
-	
+	Context mContext;
 	/**
 	 * 레이아웃 인플래터 
 	 */
@@ -31,6 +37,7 @@ public class MessageListAdapter extends BaseAdapter{
 	 */
 	public MessageListAdapter(Context context)
 	{
+		mContext = context;
 		inflater = LayoutInflater.from(context);
 	}
 	
@@ -61,6 +68,8 @@ public class MessageListAdapter extends BaseAdapter{
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		View view = convertView;
+		
+		
 		if (view == null)
 		{
 			view = inflater.inflate(R.layout.cell_message_list, null);
@@ -78,6 +87,7 @@ public class MessageListAdapter extends BaseAdapter{
 			TextView id_tv_latitude = (TextView)view.findViewById(R.id.id_tv_latitude);
 			TextView id_tv_longitude = (TextView)view.findViewById(R.id.id_tv_longitude);
 			TextView id_tv_location_name = (TextView)view.findViewById(R.id.id_tv_location_name);
+			Button id_bt_map = (Button)view.findViewById(R.id.id_bt_map);
 			
 			if ( position % 2 == 0 ){
 				id_rl_cell.setBackgroundColor(Color.CYAN);
@@ -91,10 +101,24 @@ public class MessageListAdapter extends BaseAdapter{
 			id_tv_provider.setText(item.provider);
 			id_tv_latitude.setText(item.latitude);
 			id_tv_longitude.setText(item.longitude);
-			id_tv_location_name.setText(item.location_name);			
+			id_tv_location_name.setText(item.location_name);
+			
+			final String receiver = item.receiver;
+			
+			id_bt_map.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					if ( v.getId() == R.id.id_bt_map ){
+						Intent intent = new Intent(mContext, MapActivity.class);
+						intent.putExtra("RECEIVER", receiver);
+						mContext.startActivity(intent);
+					}
+				}
+			});
 		}
 		
 		return view;		
-	}
+	} // end of getView
 
 }

@@ -57,7 +57,8 @@ public class MessageDao {
 	// 보낸목록 
 	private static final String SQL_SEND_LIST = 
 			String.format("SELECT "+
-					"receiver "+
+					"no"+
+					",receiver "+
 					"FROM MESSAGE "+
 					"WHERE sender = ? "+
 					"GROUP BY receiver");
@@ -151,6 +152,7 @@ public class MessageDao {
 		Cursor cursor = null;
 		mDB = dbHelper.getDB();
 		cursor = mDB.rawQuery(SQL_SEND_LIST_FOR_ONE, new String[]{ receiver });
+		
 
 		if(cursor != null){
 			cursor.moveToFirst();

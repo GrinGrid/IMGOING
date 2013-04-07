@@ -1,32 +1,55 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:weightSum="100"
     android:background="#000000"
-    android:gravity="center"
-    tools:context=".MainActivity" >
-
-    <ImageView
-        android:id="@+id/id_iv_intro"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:src="@drawable/intro" />
-	
-    <ProgressBar 
-        android:id="@+id/id_pb_loading"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/id_iv_intro"
-        style="@android:style/Widget.ProgressBar.Horizontal"/>
+    android:gravity="center" >
     
-    <TextView
-        android:id="@+id/id_tv_pb_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/id_pb_loading"
-        android:gravity="center_horizontal"
-        android:textColor="#FFFFFF"
-        android:text="data loading.."
-        />	
-</RelativeLayout>
+	<LinearLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="0dp"
+	    android:layout_weight="20" 
+	    >
+	    
+	</LinearLayout>
+	
+	<LinearLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="0dp"
+	    android:layout_weight="60"
+	    android:gravity="center"
+	    >
+		<ImageView
+	        android:id="@+id/id_iv_intro"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:src="@drawable/intro" />
+	</LinearLayout>
+	
+	<LinearLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="0dp"
+	    android:layout_weight="20" 
+	    android:orientation="vertical"
+	    android:gravity="center"
+	    >
+		<ProgressBar 
+	        android:id="@+id/id_pb_loading"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        style="@android:style/Widget.ProgressBar.Horizontal"/>
+	    
+	    <TextView
+	        android:id="@+id/id_tv_pb_text"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:textColor="#FFFFFF"
+	        android:gravity="center"
+	        android:text="data loading.."
+	        />    
+	</LinearLayout>
+    
+    	
+</LinearLayout>

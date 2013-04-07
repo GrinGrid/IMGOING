@@ -1,42 +1,178 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".MainActivity" >
-
-    <TextView
-        android:id="@+id/id_tv_hello"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/hello_world" />
+    android:orientation="vertical" >
+    
+    <!-- Body Start -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:weightSum="480"
+        >
+        <!-- 왼쪽여백 시작 -->
+		<LinearLayout
+		    android:layout_width="0dp"
+		    android:layout_height="match_parent"
+		    android:layout_weight="80">
+		    
+		</LinearLayout>
+		<!-- 왼쪽여백 끝 -->
+		
+		
+		<!-- 가운데 내용 시작 -->
+		<LinearLayout
+		    android:layout_width="0dp"
+		    android:layout_height="match_parent"
+		    android:layout_weight="320"
+		    android:weightSum="800"
+		    android:orientation="vertical">
+		    <LinearLayout
+		        android:layout_width="match_parent"
+			    android:layout_height="0dp"
+			    android:layout_weight="200"
+		        >
+		    	<ImageView 
+				    android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+				    android:layout_gravity="bottom"
+				    android:src="@drawable/intro_title"/>
+		    </LinearLayout>
+		    
+		    <LinearLayout
+		        android:layout_width="match_parent"
+			    android:layout_height="0dp"
+			    android:layout_weight="300"
+			    android:orientation="vertical"
+		        >
+		    	<LinearLayout
+		    	    android:layout_width="match_parent"
+			    	android:layout_height="wrap_content"
+			    	android:weightSum="3"
+			    	android:background="@drawable/intro_bg">
+			    	
+			    	<!-- 위치전송 버튼 -->
+		    	    <LinearLayout
+		    	        android:id="@+id/id_ll_location_control"
+		    	        android:layout_width="0dp"
+		    	        android:layout_height="match_parent"
+		    	        android:layout_weight="1"
+		    	        android:gravity="center"
+		    	        android:orientation="vertical"
+		    	        >
+		    	        <ImageView
+			                android:layout_width="wrap_content"
+			                android:layout_height="wrap_content"
+			                android:src="@drawable/location_control" 
+			                />
+		    	        <TextView 
+		    	            android:layout_width="wrap_content"
+		    	            android:layout_height="wrap_content"
+		    	            android:textColor="#FFFFFF"
+		    	            android:textSize="10dp"
+		    	            android:textStyle="bold"
+		    	            android:layout_marginTop="5dp"
+		    	            android:text="위치전송"/>
+		    	    </LinearLayout>
+		    	    
+		    	    <!-- 위치확인 버튼 -->
+		    	    <LinearLayout
+		    	        android:id="@+id/id_ll_location_list"
+		    	        android:layout_width="0dp"
+		    	        android:layout_height="match_parent"
+		    	        android:layout_weight="1"
+		    	        android:gravity="center"
+		    	        android:orientation="vertical"
+		    	        >
+		    	        <ImageView
+			                android:layout_width="wrap_content"
+			                android:layout_height="wrap_content"
+			                android:src="@drawable/location_list" 
+			                />
+		    	        <TextView 
+		    	            android:layout_width="wrap_content"
+		    	            android:layout_height="wrap_content"
+		    	            android:textColor="#FFFFFF"
+		    	            android:textSize="10dp"
+		    	            android:textStyle="bold"
+		    	            android:layout_marginTop="5dp"
+		    	            android:text="위치확인"/>
+		    	    </LinearLayout>
+		    	    
+		    	    <!-- 설정 버튼 -->
+		    	    <LinearLayout
+		    	        android:id="@+id/id_ll_config"
+		    	        android:layout_width="0dp"
+		    	        android:layout_height="match_parent"
+		    	        android:layout_weight="1"
+		    	        android:gravity="center"
+		    	        android:orientation="vertical"
+		    	        >
+		    	        <ImageView
+			                android:layout_width="wrap_content"
+			                android:layout_height="wrap_content"
+			                android:src="@drawable/config" 
+			                />
+		    	        <TextView 
+		    	            android:layout_width="wrap_content"
+		    	            android:layout_height="wrap_content"
+		    	            android:textColor="#FFFFFF"
+		    	            android:textSize="10dp"
+		    	            android:textStyle="bold"
+		    	            android:layout_marginTop="5dp"
+		    	            android:text="설정"/>
+		    	    </LinearLayout>
+		    	</LinearLayout>
+		        <ImageView 
+				    android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+				    android:layout_gravity="right"
+				    android:src="@drawable/buboo"/>
+		    </LinearLayout>
+		    
+		    <LinearLayout
+		        android:layout_width="match_parent"
+			    android:layout_height="0dp"
+			    android:layout_weight="300"
+			    android:orientation="vertical"
+		        >
+		        <TextView 
+		            android:id="@+id/id_bt_join"
+				    android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+				    android:layout_gravity="center"
+				    android:text="      회원가입"
+				    android:background="@drawable/intro_bt_join"/>
+		        <TextView 
+		            android:id="@+id/id_bt_login"
+				    android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+				    android:layout_gravity="center"
+				    android:layout_marginTop="20dp"
+				    android:text="       로그인"
+				    android:background="@drawable/intro_bt_login"/>
+		    </LinearLayout>
+		    
+		</LinearLayout>
+		<!-- 가운데 내용 끝 -->
+		
+		
+		<!-- 오른쪽 여백 시작 -->
+		<LinearLayout
+		    android:layout_width="0dp"
+		    android:layout_height="match_parent"
+		    android:layout_weight="80">
+		    
+		</LinearLayout>
+		<!-- 오른쪽 여백 끝 -->
+		
+	</LinearLayout>
+	<!-- Body End -->	
 	
-	<Button
-	    android:id="@+id/id_bt_location_control"
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
-	    android:layout_below="@id/id_tv_hello"
-	    android:text="Location Control" />
-	<Button
-	    android:id="@+id/id_bt_join"
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
-	    android:layout_below="@id/id_bt_location_control"
-	    android:text="JOIN" />	
-	<Button
-	    android:id="@+id/id_bt_message"
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
-	    android:layout_below="@id/id_bt_join"
-	    android:text="Message" />	
-	<Button
-	    android:id="@+id/id_bt_map"
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
-	    android:layout_below="@id/id_bt_message"
-	    android:text="Map" />	
+    
+    
 	
-</RelativeLayout>
+	
+</LinearLayout>
+	

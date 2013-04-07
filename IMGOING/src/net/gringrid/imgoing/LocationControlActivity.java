@@ -2,7 +2,14 @@ package net.gringrid.imgoing;
 
 import java.sql.Date;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import net.gringrid.imgoing.adapter.ContactsListAdapter;
 import net.gringrid.imgoing.location.SendCurrentLocationService;
@@ -14,6 +21,7 @@ import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -258,6 +266,8 @@ public class LocationControlActivity extends Activity implements OnClickListener
 		Log.d("jiho", "id : "+id);
 		Log.d("jiho", "position phone_name : "+Preference.CONTACTS_LIST.get(position).name);
 		
+		receiverPhoneNumber = null;
+		receiverName = null;
 		
 		// 선택한 리스트 화살표 모양 보이도록 함
 		contactsListAdapter.notifyDataSetChanged();
@@ -277,15 +287,45 @@ public class LocationControlActivity extends Activity implements OnClickListener
 	    	String numberId = phoneCursor.getString(phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.CONTACT_ID));
 	    	
 	    	//01로 시작하는지 체크 해야함
-	    	if ( Integer.parseInt(numberType) == Phone.TYPE_MOBILE ){
+	    	if ( Integer.parseInt(numberType) == Phone.TYPE_MOBILE && number.substring(0, 2).equals("01") ){
 	    		receiverPhoneNumber = number.replace("-", "");
+	    		Log.d("jiho", "receiverPhoneNumber : "+receiverPhoneNumber);
 	    		receiverName = Preference.CONTACTS_LIST.get(position).name;
-	    		id_tv_send_message.setText( makeLocationAlertMessage() );
 	    	}
 	    }
 	    phoneCursor.close();
+	    
+	    // 휴대폰 번호가 없는 사용자인 경우
+	    if ( receiverPhoneNumber == null ){
+	    	Toast.makeText(this, "보낼 수 없는 사용자 입니다.", Toast.LENGTH_SHORT).show();
+	    }else{
+	    	// 안내메시지 세팅
+	    	id_tv_send_message.setText( makeLocationAlertMessage() );
+    		
+    		// 서버에 등록되어 있는지 확인
+    		String url = "http://choijiho.com/gringrid/imgoing/imgoing.php";
+	        List < NameValuePair > inputData = new ArrayList < NameValuePair > (4);
+	        inputData.add(new BasicNameValuePair("mode","IS_REGISTERED"));
+	        inputData.add(new BasicNameValuePair("phone_number",receiverPhoneNumber));
+	        JSONObject resultData = Util.requestHttp(url, inputData);
+	        
+			// result_cd 가 0000 이 아니면 에러처리
+			try {
+				if ( resultData.getString("result_cd").equals(Constants.SUCCESS) == false ){
+					Toast.makeText(this, resultData.getString("result_msg"), Toast.LENGTH_SHORT).show();
+				}
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	    }
 	}
 	
+	
+	/**
+	 * 사용자가 선택한 정보(받는사람/송신간격)을 텍스트로 세팅
+	 * @return 세팅된 메시지
+	 */
 	public String makeLocationAlertMessage(){
 		String message = "";
 		String receiver = "";

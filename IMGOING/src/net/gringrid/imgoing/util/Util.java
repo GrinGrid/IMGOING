@@ -1,10 +1,31 @@
 package net.gringrid.imgoing.util;
 
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Vector;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import net.gringrid.imgoing.Constants;
 import net.gringrid.imgoing.Preference;
 import net.gringrid.imgoing.vo.ContactsVO;
+import net.gringrid.imgoing.vo.UserVO;
 import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
@@ -58,6 +79,7 @@ public class Util {
 	 * @param mContext
 	 */
 	public static void setContacts(Context mContext){
+		// 초기화
 		Preference.CONTACTS_LIST = new Vector<ContactsVO>();
 		
 		String projection[] = new String[]{ContactsContract.Contacts._ID, ContactsContract.Contacts.DISPLAY_NAME};
@@ -87,11 +109,66 @@ public class Util {
 	    }
 	    
 	    cursor.close();
-	    
+	    /*
 	    for ( ContactsVO vo : Preference.CONTACTS_LIST ){
 	    	Log.d("jiho", "id : "+vo.id);
 	    	Log.d("jiho", "name : "+vo.name);
-	    	//Log.d("jiho", "phoneNumber : "+vo.phoneNumber);
+	    	Log.d("jiho", "phoneNumber : "+vo.phoneNumber);
 	    }
+	    */
 	}
+	
+	
+	/**
+	 * String 이 비어 있는지 확인한다.
+	 */
+	public static boolean isEmpty(String str, int minLength){
+		boolean result = false;
+		if ( str == null || str.equals("") || str.length() < minLength){
+			result = true;
+		}
+		return result;
+	}
+	
+	
+	/**
+	 * Geocoder 클래스의 getFromLocation이 null일경우 HTTP를 통해 얻어온다.
+	 * @return
+	 */
+	public static JSONObject requestHttp(String url, List < NameValuePair >  nameValuePairs) {
+
+		HttpPost httpPost = new HttpPost(url);
+        HttpClient client = new DefaultHttpClient();
+        HttpResponse response;
+        StringBuilder stringBuilder = new StringBuilder();
+
+        try {        	
+        	httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+            response = client.execute(httpPost);
+ 
+            HttpEntity entity = response.getEntity();            
+            InputStream stream = entity.getContent();
+            
+            // 한글을 위해
+            Reader reader=new InputStreamReader(stream);
+         
+            int b;
+            while ((b = reader.read()) != -1) {
+                stringBuilder.append((char) b);
+            }
+            Log.d("jiho", "stringBuilder : "+stringBuilder);
+        } catch (ClientProtocolException e) {
+            } catch (IOException e) {
+        }
+
+        JSONObject jsonObject = new JSONObject();
+        
+        try {
+        	jsonObject = new JSONObject(stringBuilder.toString());
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonObject;
+    }
 }

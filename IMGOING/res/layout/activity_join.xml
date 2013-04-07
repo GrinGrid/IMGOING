@@ -44,7 +44,8 @@
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
 	    android:layout_below="@id/id_et_password"
-	    android:inputType="textPassword" />
+	    android:inputType="textPassword"
+	    android:text="password" />
 
 	<Button
 	    android:id="@+id/id_bt_submit"

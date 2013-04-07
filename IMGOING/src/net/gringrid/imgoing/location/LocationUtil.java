@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import net.gringrid.imgoing.Constants;
 import net.gringrid.imgoing.dao.MessageDao;
 import net.gringrid.imgoing.util.Util;
 import net.gringrid.imgoing.vo.MessageVO;
@@ -31,6 +32,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.location.Address;
 import android.location.Criteria;
 import android.location.Geocoder;
@@ -163,9 +165,26 @@ public class LocationUtil implements LocationListener{
 			}
 			
 			// 서버로 전송
-			//requestHttp(messageVO);
+			String url = "http://choijiho.com/gringrid/imgoing/imgoing.php";
+	        List < NameValuePair > inputData = new ArrayList < NameValuePair > (5);
+	        inputData.add(new BasicNameValuePair("mode","SEND_GCM"));
+	        inputData.add(new BasicNameValuePair("sender",messageVO.sender));
+	        inputData.add(new BasicNameValuePair("receiver_phone_number",receiver));
+	        inputData.add(new BasicNameValuePair("latitude",messageVO.latitude));
+	        inputData.add(new BasicNameValuePair("longitude",messageVO.longitude));
+			
+	        JSONObject resultData = Util.requestHttp(url, inputData);
+			
+	        try {
+	        	Log.d("jiho", "success : "+resultData.getString("success"));
+				
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}else{
 			Log.d("jiho", "!!!!!!!!!! Location is null !!!!!!!!!!!");
+			setLocationUpdater();
 		}
 		
 	}
@@ -232,12 +251,13 @@ public class LocationUtil implements LocationListener{
 		if ( locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER ) ){
 			Log.d("jiho", "GPS Enabled");
 			//criteria.setAccuracy(Criteria.ACCURACY_FINE);
+			location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 			locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, properInterval, propertMeters, this);
 		}
 		if ( locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER) ){
 			Log.d("jiho", "NETWORK Enabled");
 			//criteria.setAccuracy(Criteria.ACCURACY_COARSE);
-			//location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+			location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 			locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, properInterval, propertMeters, this);
 		}
 		

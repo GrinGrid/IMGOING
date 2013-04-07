@@ -64,5 +64,12 @@
         android:singleLine="true"
         android:text="Location Name"/>	
 		    	    
-	
+	<Button
+	    android:id="@+id/id_bt_map" 
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentRight="true"
+	    android:layout_alignTop="@id/id_tv_receiver"
+	    android:text="Map"
+	    />	
 </RelativeLayout>

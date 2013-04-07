@@ -16,11 +16,13 @@ import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -137,11 +139,11 @@ public class MessageActivity extends FragmentActivity implements OnClickListener
 		
 	}
 
+	
+	
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-		//querySendListForOne
-		// TODO Auto-generated method stub
-		
+		Log.d("jiho", "onlcick.");
 		String receiver = message_data.get(position).receiver;
 		
 		message_data.clear();

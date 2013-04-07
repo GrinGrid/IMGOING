@@ -29,8 +29,8 @@ public class GCMIntentService extends GCMBaseIntentService{
 	@Override
 	protected void onMessage(Context context, Intent intent) {
 		
-		//Vibrator vi = (Vibrator)getSystemService(Context.VIBRATOR_SERVICE);
-	    //vi.vibrate(500);
+		Vibrator vi = (Vibrator)getSystemService(Context.VIBRATOR_SERVICE);
+	    vi.vibrate(500);
 		
 	    Bundle bundle = intent.getExtras();
 		 

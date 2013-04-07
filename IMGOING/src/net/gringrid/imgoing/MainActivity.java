@@ -12,6 +12,7 @@ import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.Menu;
@@ -55,23 +56,35 @@ public class MainActivity extends Activity implements OnClickListener {
     		Log.e("jiho", "DB Error!!");
     	}
     	
-		// GCM서버에 단말정보를 세팅한다.
-		GCMRegistrar.checkDevice(this);
-		GCMRegistrar.checkManifest(this);		
-		final String regId = GCMRegistrar.getRegistrationId(this);
-		if ( regId.equals("") ){
-			GCMRegistrar.register(this, "877042154251");
-		}else{
-			Preference.GCM_REGISTRATION_ID = regId;
-			//Log.d("jiho", "oncreated regId = "+regId);
-			//Log.d("jiho", "already registered.");
+		// SharedPreferences에 로그인 정보가 있는지 확인
+		SharedPreferences settings = getSharedPreferences(Constants.PREFS_NAME, 0);
+		boolean isAutoLogin = settings.getBoolean("AUTO_LOGIN", false);
+		
+		if ( isAutoLogin ){
+			// join 버튼 감춘다.
+			View view = findViewById(R.id.id_bt_join);
+			view.setVisibility(View.GONE);
 		}
+		
+		
 	}
 	
 	private void regEvent() {
 		
 		// 위치관리 버튼
-		View view = findViewById(R.id.id_bt_location_control);
+		View view = findViewById(R.id.id_ll_location_control);
+		if ( view != null ){
+			view.setOnClickListener(this);
+		}
+		
+		// 메시지 목록보기
+		view = findViewById(R.id.id_ll_location_list);
+		if ( view != null ){
+			view.setOnClickListener(this);
+		}
+		
+		// 설정
+		view = findViewById(R.id.id_ll_config);
 		if ( view != null ){
 			view.setOnClickListener(this);
 		}
@@ -82,14 +95,8 @@ public class MainActivity extends Activity implements OnClickListener {
 			view.setOnClickListener(this);
 		}
 		
-		// 메시지 목록보기
-		view = findViewById(R.id.id_bt_message);
-		if ( view != null ){
-			view.setOnClickListener(this);
-		}
-		
-		// Map
-		view = findViewById(R.id.id_bt_map);
+		// 로그인 버튼
+		view = findViewById(R.id.id_bt_login);
 		if ( view != null ){
 			view.setOnClickListener(this);
 		}
@@ -121,8 +128,18 @@ public class MainActivity extends Activity implements OnClickListener {
 		Intent intent = null;
 		
 		switch ( v.getId() ){
-		case R.id.id_bt_location_control:		
+		case R.id.id_ll_location_control:		
 			intent = new Intent(this, LocationControlActivity.class);
+			startActivity(intent);			
+			break;
+		
+		case R.id.id_ll_location_list:		
+			intent = new Intent(this, MessageActivity.class);
+			startActivity(intent);			
+			break;
+			
+		case R.id.id_ll_config:		
+			intent = new Intent(this, MessageActivity.class);
 			startActivity(intent);			
 			break;
 			
@@ -131,26 +148,13 @@ public class MainActivity extends Activity implements OnClickListener {
 			startActivity(intent);			
 			break;
 			
-		case R.id.id_bt_message:
-			intent = new Intent(this, MessageActivity.class);
+		case R.id.id_bt_login:
+			//TODO 팝업으로 로그인 할 수 있게 띄운다.
+			
+			intent = new Intent(this, JoinActivity.class);
 			startActivity(intent);			
 			break;
 			
-		case R.id.id_bt_map:
-			intent = new Intent(this, MapActivity.class);
-			startActivity(intent);			
-			break;
 		}
 	}
-	
-	private boolean isLocationServiceRunning(){
-		ActivityManager manager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
-		for (RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {			
-			if (Constants.LOCATION_SERVICE.equals(service.service.getClassName())) {					
-				return true;
-			}
-		}
-		return false;
-	}
-
 }

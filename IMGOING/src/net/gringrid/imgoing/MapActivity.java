@@ -1,6 +1,11 @@
 package net.gringrid.imgoing;
 
 
+import java.util.Vector;
+
+import net.gringrid.imgoing.dao.MessageDao;
+import net.gringrid.imgoing.vo.MessageVO;
+
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -13,21 +18,107 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 
 public class MapActivity extends FragmentActivity{
 
-	GoogleMap mMap;
+	private GoogleMap mMap;
+	
+	// 송/수신된 위치 데이타
+	Vector<MessageVO> message_data = new Vector<MessageVO>();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_map);		
+		init();
+		regEvent();
+		
+	}
+	
+	private void init(){
+		Intent intent = getIntent();
+		Bundle bundle = intent.getExtras();
+		String receiver = null;
+		
+		if ( bundle != null ){
+			receiver = bundle.getString("RECEIVER");
+			Log.d("jiho", "MapActivity receiver : "+receiver);
+		
+		
+			MessageDao messageDao = new MessageDao(this);
+			Cursor cursor = messageDao.querySendListForOne(receiver);
+			
+			int index_no = cursor.getColumnIndex("no");
+			int index_sender = cursor.getColumnIndex("sender"); 
+			int index_receiver = cursor.getColumnIndex("receiver"); 
+			int index_send_time = cursor.getColumnIndex("send_time"); 
+			int index_latitude = cursor.getColumnIndex("latitude");
+			int index_longitude = cursor.getColumnIndex("longitude");
+			int index_provider = cursor.getColumnIndex("provider");
+			int index_location_name = cursor.getColumnIndex("location_name");
+			
+			do{
+				MessageVO messageVO = new MessageVO();
+				messageVO.no = cursor.getInt(index_no);
+				messageVO.sender = cursor.getString(index_sender);
+				messageVO.receiver = cursor.getString(index_receiver);
+				messageVO.send_time = cursor.getString(index_send_time);
+				messageVO.latitude = cursor.getString(index_latitude);
+				messageVO.longitude = cursor.getString(index_longitude);
+				messageVO.provider = cursor.getString(index_provider);
+				messageVO.location_name = cursor.getString(index_location_name);
+				
+				message_data.add(messageVO);	
+			
+			}while(cursor.moveToNext());
+		}else{
+			Log.d("jiho", "Bundle is null!!");
+		}
+	}
+	
+	private void regEvent(){
+		
+	}
+	
+	@Override
+	protected void onResume() {
 		setUpMapIfNeeded();
+		drawLine();
+		super.onResume();
 	}
 
+	private void drawLine() {
+		// TODO Auto-generated method stub
+		// Instantiates a new Polyline object and adds points to define a rectangle
+    	PolylineOptions rectOptions = new PolylineOptions();
+    	String latitude = "";
+    	String longitude = "";
+    	String location_name = "";
+    	
+    	for ( MessageVO data : message_data ){
+    		if ( data.latitude.equals(latitude) == true && 
+    			 data.longitude.equals(longitude) == true	){
+    			continue;
+    		}else{
+    			latitude = data.latitude;
+    			longitude = data.longitude;
+    			location_name = data.location_name;
+    			Log.d("jiho", "["+data.provider+"] ["+latitude+"] ["+longitude+"]");
+    			rectOptions.add(new LatLng(Double.parseDouble(latitude), Double.parseDouble(longitude)));
+    		}
+    	}
+    	
+    	// Get back the mutable Polyline
+    	Polyline polyline = mMap.addPolyline(rectOptions);
+    	moveThere(Double.parseDouble(latitude), Double.parseDouble(longitude), location_name);
+	}
+
+	
 	private void setUpMapIfNeeded() {
         // Do a null check to confirm that we have not already instantiated the map.
         if (mMap == null) {
@@ -38,9 +129,6 @@ public class MapActivity extends FragmentActivity{
             if (mMap != null) {
                 //setUpMap();
             }
-            //moveThere(37.563387,126.987212);
-            moveThere(37.48998628, 126.82505027);
-            
         }
     	mMap.setOnMarkerClickListener(new OnMarkerClickListener() {
 			
@@ -50,33 +138,28 @@ public class MapActivity extends FragmentActivity{
 				Log.d("Test", "marker.getId() = "+marker.getId());
 				return false;
 			}
-		});
-    	
-    	// Instantiates a new Polyline object and adds points to define a rectangle
-    	PolylineOptions rectOptions = new PolylineOptions()
-    	        .add(new LatLng(37.48998628, 126.82505027))
-    	        .add(new LatLng(37.48998628, 126.82505027))  // North of the previous point, but at the same longitude
-    	        //.add(new LatLng(37.45, -122.2))  // Same latitude, and 30km to the west
-    	        //.add(new LatLng(37.35, -122.2))  // Same longitude, and 16km to the south
-    	        .add(new LatLng(37.49173843, 126.83110025)); // Closes the polyline.
-
-    	// Get back the mutable Polyline
-    	Polyline polyline = mMap.addPolyline(rectOptions);
-    	
-    	
-    	
-    	
+		});	
     }
 
-    private void moveThere(double lat, double lng){
+	
+	
+	/**
+	 * 마지막 위치로 이동하고 마커 생
+	 * @param lat : 위도 
+	 * @param lng : 경도 
+	 * @param location_name : 위치명 
+	 */
+    private void moveThere(double lat, double lng, String location_name){
     	LatLng latLng = new LatLng(lat, lng);
     	mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,17));
+    	
     	mMap.addMarker(new MarkerOptions()
     			.position(latLng)
-    			.title("명동성당")    			
-    			.snippet("간략한 설명")
+    			.title("마지막위치")    			
+    			.snippet(location_name)
     			.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))    			
     			);
+    	
     }
 
 }
