@@ -5,6 +5,7 @@ public class MessageVO {
 	public int no;						// 일련번호
 	public String sender;				// 보낸사람 email
 	public String receiver;				// 받는사람 email
+	public String start_time;			// 시작시간
 	public String send_time;			// 보낸시간
 	public String receive_time;			// 받은시간
 	public String latitude;				// 위도

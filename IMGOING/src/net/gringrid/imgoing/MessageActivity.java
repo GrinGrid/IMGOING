@@ -38,63 +38,30 @@ public class MessageActivity extends FragmentActivity implements OnClickListener
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_message);
 		
-		
+		init();
 		regEvent();
 		
-		
-		
-		MessageDao messageDao = new MessageDao(this);
-		//Cursor cursor = messageDao.queryMessageAll();
-		Cursor cursor = messageDao.querySendList();
-		int index_receiver = cursor.getColumnIndex("receiver"); 
-		if ( cursor.moveToFirst() ) {
-			do{
-				MessageVO messageVO = new MessageVO();
-				messageVO.receiver = cursor.getString(index_receiver);
-				
-				message_data.add(messageVO);
-			}while(cursor.moveToNext());
-		}
-		/*
-		int index_no = cursor.getColumnIndex("no");
-		int index_sender = cursor.getColumnIndex("sender"); 
-		int index_receiver = cursor.getColumnIndex("receiver"); 
-		int index_send_time = cursor.getColumnIndex("send_time"); 
-		int index_latitude = cursor.getColumnIndex("latitude");
-		int index_longitude = cursor.getColumnIndex("longitude");
-		int index_provider = cursor.getColumnIndex("provider");
-		int index_location_name = cursor.getColumnIndex("location_name");
-		
-		while (cursor.moveToNext()){
-			MessageVO messageVO = new MessageVO();
-			messageVO.no = cursor.getInt(index_no);
-			messageVO.sender = cursor.getString(index_sender);
-			messageVO.receiver = cursor.getString(index_receiver);
-			messageVO.send_time = cursor.getString(index_send_time);
-			messageVO.latitude = cursor.getString(index_latitude);
-			messageVO.longitude = cursor.getString(index_longitude);
-			messageVO.provider = cursor.getString(index_provider);
-			messageVO.location_name = cursor.getString(index_location_name);
-			
-			message_data.add(messageVO);
-		}
-		*/		
+	}
+	
+	@Override
+	protected void onResume() {
+		viewReceiveMessage();
+		super.onResume();
+	}
+	
+	// 초기화
+	public void init(){
 		messageList = (ListView)findViewById(R.id.id_lv_message);
 		
 		if ( messageList != null ){
 			messageList.setOnItemClickListener(this);
 			messageListAdapter = new MessageListAdapter(this);
 			messageList.setAdapter(messageListAdapter);
-			messageListAdapter.setAll(message_data);
 		}
-
 	}
 	
-	// 초기화
-	public void init(){
-		
-	}
 	
+	// 이벤트 등록
 	private void regEvent() {
 		
 		// 서비스 시작 버튼
@@ -110,12 +77,63 @@ public class MessageActivity extends FragmentActivity implements OnClickListener
 		if ( view != null ){
 			view.setOnClickListener(this);
 		}
-		
-		
+		view = findViewById(R.id.id_bt_send);
+		if ( view != null ){
+			view.setOnClickListener(this);
+		}
+		view = findViewById(R.id.id_bt_receive);
+		if ( view != null ){
+			view.setOnClickListener(this);
+		}
+	}
+	
+	/**
+	 * 보낸 메시지 보이기
+	 */
+	private void viewSendMessage(){
+		MessageDao messageDao = new MessageDao(this);
+		Cursor cursor = messageDao.querySendList();
+		int index_receiver = cursor.getColumnIndex("receiver");
+		int index_start_time = cursor.getColumnIndex("start_time");
+		message_data.clear();
+		if ( cursor.moveToFirst() ) {
+			do{
+				MessageVO messageVO = new MessageVO();
+				messageVO.receiver = cursor.getString(index_receiver);
+				messageVO.start_time = cursor.getString(index_start_time);
+				
+				message_data.add(messageVO);
+			}while(cursor.moveToNext());
+		}
+		messageListAdapter.setAll(message_data);
 	}
 	
 	
-//id_bt_delete
+	/**
+	 * 받은 메시지 보이기
+	 */
+	private void viewReceiveMessage(){
+		MessageDao messageDao = new MessageDao(this);
+		//Cursor cursor = messageDao.queryMessageAll();
+		Cursor cursor = messageDao.queryReceiveList();
+		
+		int index_sender = cursor.getColumnIndex("sender");
+		int index_start_time = cursor.getColumnIndex("start_time");
+		message_data.clear();
+		if ( cursor.moveToFirst() ) {
+			do{
+				MessageVO messageVO = new MessageVO();
+				messageVO.sender = cursor.getString(index_sender);
+				messageVO.start_time = cursor.getString(index_start_time);
+				
+				message_data.add(messageVO);
+			}while(cursor.moveToNext());
+		}
+		messageListAdapter.setAll(message_data);
+	}
+
+	
+	
 	@Override
 	public void onClick(View v) {
 		
@@ -134,6 +152,12 @@ public class MessageActivity extends FragmentActivity implements OnClickListener
 		case R.id.id_menu_location_list:
 			intent = new Intent(this, MessageActivity.class);
 			startActivity(intent);
+			break;
+		case R.id.id_bt_send:
+			viewSendMessage();
+			break;
+		case R.id.id_bt_receive:
+			viewReceiveMessage();
 			break;
 		}
 		
@@ -154,6 +178,7 @@ public class MessageActivity extends FragmentActivity implements OnClickListener
 		int index_no = cursor.getColumnIndex("no");
 		int index_sender = cursor.getColumnIndex("sender"); 
 		int index_receiver = cursor.getColumnIndex("receiver"); 
+		int index_start_time = cursor.getColumnIndex("start_time"); 
 		int index_send_time = cursor.getColumnIndex("send_time"); 
 		int index_latitude = cursor.getColumnIndex("latitude");
 		int index_longitude = cursor.getColumnIndex("longitude");
@@ -165,6 +190,7 @@ public class MessageActivity extends FragmentActivity implements OnClickListener
 			messageVO.no = cursor.getInt(index_no);
 			messageVO.sender = cursor.getString(index_sender);
 			messageVO.receiver = cursor.getString(index_receiver);
+			messageVO.start_time = cursor.getString(index_start_time);
 			messageVO.send_time = cursor.getString(index_send_time);
 			messageVO.latitude = cursor.getString(index_latitude);
 			messageVO.longitude = cursor.getString(index_longitude);

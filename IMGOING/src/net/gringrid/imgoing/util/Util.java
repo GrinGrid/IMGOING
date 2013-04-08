@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -131,6 +133,18 @@ public class Util {
 	}
 	
 	
+	
+	/**
+	 * 현재 시간을 return 한다. ex) 2013-04-08 22:31:23
+	 */
+	public static String getCurrentTime(){
+		long time = System.currentTimeMillis(); 
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String currentTime = sdf.format(new Date(time));
+		return currentTime;
+		
+	}
+	
 	/**
 	 * Geocoder 클래스의 getFromLocation이 null일경우 HTTP를 통해 얻어온다.
 	 * @return
@@ -171,4 +185,11 @@ public class Util {
         }
         return jsonObject;
     }
+	
+	
+	public String getContactName(final String phoneNumber) 
+	{  
+		String contactName = "";
+		return contactName; 
+	}
 }

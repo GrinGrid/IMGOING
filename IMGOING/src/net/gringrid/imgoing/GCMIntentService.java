@@ -54,11 +54,12 @@ public class GCMIntentService extends GCMBaseIntentService{
 		
 		messageVO.sender = bundle.get("sender").toString();
 		messageVO.receiver = Util.getMyPhoneNymber(context);
-		messageVO.send_time = "";
-		messageVO.receive_time = "";
+		messageVO.start_time = bundle.get("start_time").toString();
+		messageVO.send_time = bundle.get("send_time").toString();;
+		messageVO.receive_time = Util.getCurrentTime();
 		messageVO.latitude = bundle.get("latitude").toString();
 		messageVO.longitude	= bundle.get("longitude").toString();
-		messageVO.interval = "";
+		messageVO.interval = bundle.get("interval").toString();;
 		messageVO.provider = "";
 		messageVO.location_name = locationUtil.getLocationName(latitude, longitude);
 		messageVO.near_metro_name = "";

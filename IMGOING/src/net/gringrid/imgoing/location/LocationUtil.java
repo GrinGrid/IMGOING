@@ -58,8 +58,9 @@ public class LocationUtil implements LocationListener{
 	private String provider;
 	
 	// 전송정보 
-	public String receiver;	// 수신자 
-	public int interval;	// 전송간격 
+	public String start_time;	// 시작시
+	public String receiver;		// 수신자 
+	public int interval;		// 전송간격 
 	
 	// 현재위치 업데이트 조건 (60초에 한번씩 100m이상 이동시)
 	private static final int properInterval = 1000 * 60 * 1; 	// 1분
@@ -133,9 +134,6 @@ public class LocationUtil implements LocationListener{
 		}
 		
 		
-		long time = System.currentTimeMillis(); 
-		SimpleDateFormat dayTime = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
-		String send_time = dayTime.format(new Date(time));
 		
 		if ( location != null ){
 			location = locationManager.getLastKnownLocation(location.getProvider());
@@ -147,7 +145,8 @@ public class LocationUtil implements LocationListener{
 			
 			messageVO.sender = Util.getMyPhoneNymber(mContext);
 			messageVO.receiver = this.receiver;
-			messageVO.send_time = send_time;
+			messageVO.start_time = this.start_time;
+			messageVO.send_time = Util.getCurrentTime();
 			messageVO.receive_time = "";
 			messageVO.latitude = Double.toString(location.getLatitude());
 			messageVO.longitude	= Double.toString(location.getLongitude());
@@ -166,13 +165,17 @@ public class LocationUtil implements LocationListener{
 			
 			// 서버로 전송
 			String url = "http://choijiho.com/gringrid/imgoing/imgoing.php";
-	        List < NameValuePair > inputData = new ArrayList < NameValuePair > (5);
+	        List < NameValuePair > inputData = new ArrayList < NameValuePair > (9);
 	        inputData.add(new BasicNameValuePair("mode","SEND_GCM"));
 	        inputData.add(new BasicNameValuePair("sender",messageVO.sender));
 	        inputData.add(new BasicNameValuePair("receiver_phone_number",receiver));
+	        inputData.add(new BasicNameValuePair("start_time",messageVO.start_time));
+	        inputData.add(new BasicNameValuePair("send_time",messageVO.send_time));
 	        inputData.add(new BasicNameValuePair("latitude",messageVO.latitude));
 	        inputData.add(new BasicNameValuePair("longitude",messageVO.longitude));
-			
+	        inputData.add(new BasicNameValuePair("interval",messageVO.interval));
+	        inputData.add(new BasicNameValuePair("provider",messageVO.provider));
+	        
 	        JSONObject resultData = Util.requestHttp(url, inputData);
 			
 	        try {

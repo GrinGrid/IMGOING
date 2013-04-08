@@ -24,7 +24,7 @@ public class DBHelper extends SQLiteOpenHelper{
 	 * 다를경우 : onCreate -> onUpgrade 실행
 	 * 같을경우 : onOpen 실행
 	 */
-	private static final int DATABASE_VERSION = 4;
+	private static final int DATABASE_VERSION = 5;
 	
 	
 	/**
@@ -45,6 +45,7 @@ public class DBHelper extends SQLiteOpenHelper{
 				"no	    			INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL, "+
 				"sender 			TEXT NOT NULL, "+
 				"receiver			TEXT NOT NULL, "+
+				"start_time			TEXT NOT NULL, "+
 				"send_time			TEXT NULL, "+
 				"receive_time		TEXT NULL, "+
 				"latitude	 		TEXT NULL, "+				
