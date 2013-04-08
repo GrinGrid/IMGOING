@@ -166,12 +166,16 @@
                     android:paddingRight="10dp"
                     android:orientation="vertical"
                     >
-                    <EditText 
-	                    android:layout_width="match_parent"
-	                    android:layout_height="match_parent"
-	                    android:layout_marginLeft="5dp"
-	                    android:background="#00000000"
-	                    />
+                    
+					<AutoCompleteTextView  
+					    android:id="@+id/autocomplete_country"
+					    android:layout_width="match_parent"
+					    android:layout_height="match_parent"
+					    android:layout_marginLeft="5dp"
+					    android:completionThreshold="1"
+					    android:background="#00000000"
+					    android:text="TEST" />
+                    
                     <ImageView
 	                    android:layout_width="match_parent"
 	                    android:layout_height="wrap_content"
@@ -295,6 +299,7 @@
                     android:layout_width="0dp"
 	        		android:layout_height="match_parent"
 	        		android:layout_weight="1">
+                    
                 </LinearLayout>
 				<Button
 				    android:id="@+id/id_bt_control"

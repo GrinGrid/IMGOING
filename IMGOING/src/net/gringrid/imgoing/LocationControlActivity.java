@@ -35,6 +35,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -97,6 +99,22 @@ public class LocationControlActivity extends Activity implements OnClickListener
 		}else{
 			CURRENT_BUTTON = START;
 		}
+		
+		// 주소록 검색 자동완성 세팅
+		AutoCompleteTextView textView = (AutoCompleteTextView) findViewById(R.id.autocomplete_country);
+		String[] names = new String[Preference.CONTACTS_LIST.size()];
+		int i = 0;
+		for ( ContactsVO vo : Preference.CONTACTS_LIST ){
+			names[i++] = vo.name;
+		}
+		for ( String name : names ){
+			Log.d("jiho", "name : "+name);
+		}
+		ArrayAdapter<String> adapter = 
+		        new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, names);
+		textView.setAdapter(adapter);		
+		
+		
 		setControlButtonText();
 	}
 

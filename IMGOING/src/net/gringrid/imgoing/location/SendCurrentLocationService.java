@@ -1,6 +1,10 @@
 package net.gringrid.imgoing.location;
 
+import java.sql.Date;
+import java.text.SimpleDateFormat;
+
 import net.gringrid.imgoing.Constants;
+import net.gringrid.imgoing.util.Util;
 import android.app.IntentService;
 import android.content.Intent;
 import android.os.Bundle;
@@ -33,6 +37,8 @@ public class SendCurrentLocationService extends IntentService {
 		receiver = mBundle.getString("RECEIVER");
 		interval = mBundle.getInt("INTERVAL");
 		
+		String start_time = Util.getCurrentTime();
+		
 		Log.d("jiho", "INTERVAL : "+mBundle.getInt("INTERVAL"));;
 		
 		while(isSendLocation){
@@ -43,6 +49,7 @@ public class SendCurrentLocationService extends IntentService {
 			    
 				// IMGOING앱만 받을 수 있도록 broadcasting 한다.
 				Intent localIntent = new Intent(Constants.BROADCAST_ACTION);
+				localIntent.putExtra("START_TIME", start_time);
 				localIntent.putExtra("RECEIVER", receiver);
 				localIntent.putExtra("INTERVAL", interval);
 				localIntent.putExtra("MODE", "START");
@@ -50,8 +57,8 @@ public class SendCurrentLocationService extends IntentService {
 				Log.d("jiho", "execute service interval : "+interval);
 					
 				// 사용자가 요청한 전송간격만큰 시간을 둔다.
-				//Thread.sleep(1000 * 60 * interval);
-				Thread.sleep(5000);
+				Thread.sleep(1000 * 60 * interval);
+				//Thread.sleep(5000);
 				
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block

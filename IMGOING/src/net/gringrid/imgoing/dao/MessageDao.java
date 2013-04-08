@@ -19,10 +19,11 @@ public class MessageDao {
 	
 	// 단건 입력
 	private static final String SQL_INSERT =
-			String.format("INSERT INTO %s(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) VALUES(?,?,?,?,?,?,?,?,?,?)",
+			String.format("INSERT INTO %s(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) VALUES(?,?,?,?,?,?,?,?,?,?,?)",
 					"MESSAGE",
 					"sender",
 					"receiver",
+					"start_time",
 					"send_time",
 					"receive_time",
 					"latitude",
@@ -44,6 +45,7 @@ public class MessageDao {
 					"no"+
 					",sender"+
 					",receiver"+
+					",start_time"+
 					",send_time"+
 					",receive_time"+
 					",latitude"+
@@ -57,11 +59,22 @@ public class MessageDao {
 	// 보낸목록 
 	private static final String SQL_SEND_LIST = 
 			String.format("SELECT "+
-					"no"+
-					",receiver "+
+					"receiver "+
+					",start_time "+
 					"FROM MESSAGE "+
 					"WHERE sender = ? "+
-					"GROUP BY receiver");
+					"GROUP BY receiver, start_time");
+	
+	
+	// 받은목록
+	private static final String SQL_RECEIVE_LIST = 
+			String.format("SELECT "+
+					"sender "+
+					",start_time "+
+					"FROM MESSAGE "+
+					"WHERE receiver = ? "+
+					"GROUP BY sender, start_time");
+	
 	
 	// 한사람에 대한 메시지 송신목
 	private static final String SQL_SEND_LIST_FOR_ONE = 
@@ -95,14 +108,15 @@ public class MessageDao {
 				
 		stmt.bindString(1, vo.sender);
 		stmt.bindString(2, vo.receiver);
-		stmt.bindString(3, vo.send_time);
-		stmt.bindString(4, vo.receive_time);
-		stmt.bindString(5, vo.latitude);
-		stmt.bindString(6, vo.longitude);
-		stmt.bindString(7, vo.interval);
-		stmt.bindString(8, vo.provider);
-		stmt.bindString(9, vo.location_name);
-		stmt.bindString(10, vo.near_metro_name);
+		stmt.bindString(3, vo.start_time);
+		stmt.bindString(4, vo.send_time);
+		stmt.bindString(5, vo.receive_time);
+		stmt.bindString(6, vo.latitude);
+		stmt.bindString(7, vo.longitude);
+		stmt.bindString(8, vo.interval);
+		stmt.bindString(9, vo.provider);
+		stmt.bindString(10, vo.location_name);
+		stmt.bindString(11, vo.near_metro_name);
 		
 		
 		try {
@@ -131,6 +145,8 @@ public class MessageDao {
 		return cursor;
 	}
 	
+	
+	
 	/**
 	 * 보낸 메시지 목록 조회 
 	 */
@@ -144,6 +160,24 @@ public class MessageDao {
 		}
 		return cursor;
 	}
+	
+	
+	
+	/**
+	 * 받은 메시지 목록 조회
+	 */
+	public Cursor queryReceiveList(){
+		Cursor cursor = null;
+		mDB = dbHelper.getDB();
+		cursor = mDB.rawQuery(SQL_RECEIVE_LIST, new String[]{ Util.getMyPhoneNymber(mContext) });
+
+		if(cursor != null){
+			cursor.moveToFirst();
+		}
+		return cursor;
+	}
+	
+	
 	
 	/**
 	 * 특정인에게 보낸 메시지 목록 조회 

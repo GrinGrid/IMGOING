@@ -23,6 +23,7 @@ public class ResponseLocationServiceReceiver extends BroadcastReceiver {
 		if ( mBundle.get("MODE").equals("START") ){
 			Log.d("jiho", "onReceive");
 			locationUtil = LocationUtil.getInstance(context);
+			locationUtil.start_time = mBundle.getString("START_TIME");
 			locationUtil.receiver = mBundle.getString("RECEIVER");
 			locationUtil.interval = mBundle.getInt("INTERVAL"); 
 			locationUtil.sendLocation();
