@@ -57,8 +57,8 @@ public class SendCurrentLocationService extends IntentService {
 				Log.d("jiho", "execute service interval : "+interval);
 					
 				// 사용자가 요청한 전송간격만큰 시간을 둔다.
-				//Thread.sleep(1000 * 60 * interval);
-				Thread.sleep(5000);
+				Thread.sleep(1000 * 60 * interval);
+				//Thread.sleep(5000);
 				
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
