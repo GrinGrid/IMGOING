@@ -79,7 +79,13 @@
 		<activity android:name="MainActivity"></activity>
 		<activity android:name="JoinActivity"></activity>
 		<activity android:name="MessageActivity"></activity>
-		<activity android:name="LocationControlActivity"></activity>
+		
+		<!-- 위치전송 화면 -->
+		<activity 
+		    android:name="LocationControlActivity"
+		    android:windowSoftInputMode="adjustPan">
+		</activity>
+		
         <meta-data
 		android:name="com.google.android.maps.v2.API_KEY"
 		android:value="AIzaSyAIymjx_Hc1fo3LDwHKpNUGd9gglUVvZTk"/>

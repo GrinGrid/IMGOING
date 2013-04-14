@@ -71,7 +71,7 @@
         android:layout_below="@id/id_tv_latitude"
         android:singleLine="true"
         android:text="Location Name"/>	
-		    	    
+
 	<Button
 	    android:id="@+id/id_bt_map" 
 	    android:layout_width="wrap_content"
@@ -79,5 +79,14 @@
 	    android:layout_alignParentRight="true"
 	    android:layout_alignTop="@id/id_tv_receiver"
 	    android:text="Map"
+	    />	
+	    		    	    
+	<Button
+	    android:id="@+id/id_bt_del" 
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignTop="@id/id_tv_receiver"
+	    android:layout_toLeftOf="@id/id_bt_map"
+	    android:text="DEL"
 	    />	
 </RelativeLayout>

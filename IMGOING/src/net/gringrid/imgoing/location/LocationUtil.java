@@ -58,7 +58,7 @@ public class LocationUtil implements LocationListener{
 	private String provider;
 	
 	// 전송정보 
-	public String start_time;	// 시작시
+	public String start_time;	// 시작시긴
 	public String receiver;		// 수신자 
 	public int interval;		// 전송간격 
 	

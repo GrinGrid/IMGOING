@@ -82,7 +82,21 @@ public class MessageDao {
 					"* "+
 					"FROM MESSAGE "+
 					"WHERE receiver = ? ");
-	 
+	
+	// 보낸 메시지 힌건삭제
+	private static final String SQL_DELETE_SEND_ONE =
+			String.format(
+				"DELETE FROM MESSAGE "+
+				"WHERE sender = ? " +
+				"AND start_time = ? ");
+	
+	// 받은 메시지 힌건삭제
+	private static final String SQL_DELETE_RECEIVE_ONE =
+			String.format(
+				"DELETE FROM MESSAGE "+
+				"WHERE receiver = ? " +
+				"AND start_time = ? ");
+	
 	// 전체삭제
 	private static final String SQL_DELETE_ALL = 
 			"DELETE FROM MESSAGE";
@@ -193,7 +207,46 @@ public class MessageDao {
 		}
 		return cursor;
 	}
-	
+
+	/**
+	 * 보낸 메시지 삭제
+	 */
+	public int deleteSendOne(String sender, String start_time){
+		SQLiteStatement stmt = null;
+		
+		int resultCnt = 0;
+
+		mDB = dbHelper.getDB();
+		stmt = mDB.compileStatement(SQL_DELETE_SEND_ONE);
+		
+		stmt.bindString(1, sender);
+		stmt.bindString(2, start_time);
+		
+		stmt.execute();
+		
+		return resultCnt;
+	}
+
+	/**
+	 * 보낸 메시지 삭제
+	 */
+	public int deleteReceiveOne(String receiver, String start_time){
+		SQLiteStatement stmt = null;
+		
+		int resultCnt = 0;
+
+		mDB = dbHelper.getDB();
+		stmt = mDB.compileStatement(SQL_DELETE_RECEIVE_ONE);
+		
+		stmt.bindString(1, receiver);
+		stmt.bindString(2, start_time);
+		
+		stmt.execute();
+		
+		return resultCnt;
+
+	}
+
 	
 	public void deleteAll() { 
 		mDB = dbHelper.getDB();

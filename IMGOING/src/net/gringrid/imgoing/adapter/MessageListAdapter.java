@@ -75,7 +75,7 @@ public class MessageListAdapter extends BaseAdapter{
 			view = inflater.inflate(R.layout.cell_message_list, null);
 		}
 		
-		MessageVO item = data.get(position);
+		final MessageVO item = data.get(position);
 		
 		if (item != null)
 		{
@@ -89,6 +89,7 @@ public class MessageListAdapter extends BaseAdapter{
 			TextView id_tv_longitude = (TextView)view.findViewById(R.id.id_tv_longitude);
 			TextView id_tv_location_name = (TextView)view.findViewById(R.id.id_tv_location_name);
 			Button id_bt_map = (Button)view.findViewById(R.id.id_bt_map);
+			Button id_bt_del = (Button)view.findViewById(R.id.id_bt_del);
 			
 			if ( position % 2 == 0 ){
 				id_rl_cell.setBackgroundColor(Color.CYAN);
@@ -115,6 +116,26 @@ public class MessageListAdapter extends BaseAdapter{
 						Intent intent = new Intent(mContext, MapActivity.class);
 						intent.putExtra("RECEIVER", receiver);
 						mContext.startActivity(intent);
+					}
+				}
+			});
+			
+			id_bt_del.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					if ( v.getId() == R.id.id_bt_del ){
+						if ( item.sender == null ){
+							MessageDao dao = new MessageDao(mContext);
+							dao.deleteReceiveOne(item.receiver, item.start_time);
+							notifyDataSetChanged();
+						}
+						if ( item.receiver == null ){
+							MessageDao dao = new MessageDao(mContext);
+							dao.deleteSendOne(item.sender, item.start_time);
+							notifyDataSetChanged();
+							
+						}
 					}
 				}
 			});

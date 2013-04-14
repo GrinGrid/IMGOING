@@ -1,10 +1,7 @@
 package net.gringrid.imgoing;
 
-import java.sql.Date;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -15,21 +12,15 @@ import net.gringrid.imgoing.adapter.ContactsListAdapter;
 import net.gringrid.imgoing.location.SendCurrentLocationService;
 import net.gringrid.imgoing.util.Util;
 import net.gringrid.imgoing.vo.ContactsVO;
-import net.gringrid.imgoing.vo.UserVO;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
-import android.provider.ContactsContract.PhoneLookup;
 import android.support.v4.content.CursorLoader;
-import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -288,10 +279,9 @@ public class LocationControlActivity extends Activity implements OnClickListener
 		receiverName = null;
 		
 		// 선택한 리스트 화살표 모양 보이도록 함
+		contactsListAdapter.setSelected(position);
 		contactsListAdapter.notifyDataSetChanged();
-		ImageView id_iv_contacts_list_selector = (ImageView)view.findViewById(R.id.id_iv_contacts_list_selector);
-		id_iv_contacts_list_selector.setVisibility(View.VISIBLE);
-
+		
 		// 연락처 ID로 전화번호 조회
 		String selection = ContactsContract.CommonDataKinds.Phone.CONTACT_ID + "="+Preference.CONTACTS_LIST.get(position).id;
     	CursorLoader phoneLoader = new CursorLoader(this,ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, selection, null, null);

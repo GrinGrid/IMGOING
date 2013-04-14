@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class ContactsListAdapter extends BaseAdapter{
@@ -22,7 +23,7 @@ public class ContactsListAdapter extends BaseAdapter{
 	 * 레이아웃 인플래터 
 	 */
 	private LayoutInflater inflater;
-	
+	private int selectedIndex;
 	
 	/**
 	 * 생성자
@@ -57,6 +58,10 @@ public class ContactsListAdapter extends BaseAdapter{
 		notifyDataSetChanged();
 	}
 	
+	public void setSelected(int position){
+		selectedIndex = position;
+	}
+	
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		View view = convertView;
@@ -70,6 +75,12 @@ public class ContactsListAdapter extends BaseAdapter{
 		if (item != null)
 		{
 			TextView id_tv_name = (TextView)view.findViewById(R.id.id_tv_name);
+			ImageView id_iv_contacts_list_selector = (ImageView)view.findViewById(R.id.id_iv_contacts_list_selector);
+			if ( selectedIndex == position ){
+				id_iv_contacts_list_selector.setVisibility(View.VISIBLE);
+			}else{
+				id_iv_contacts_list_selector.setVisibility(View.GONE);
+			}
 			id_tv_name.setText(item.name);
 		}
 		
