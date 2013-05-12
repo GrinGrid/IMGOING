@@ -107,6 +107,7 @@ public class MessageListAdapter extends BaseAdapter{
 			id_tv_location_name.setText(item.location_name);
 			
 			final String receiver = item.receiver;
+			final String start_time = item.start_time;
 			
 			id_bt_map.setOnClickListener(new OnClickListener() {
 				
@@ -115,6 +116,7 @@ public class MessageListAdapter extends BaseAdapter{
 					if ( v.getId() == R.id.id_bt_map ){
 						Intent intent = new Intent(mContext, MapActivity.class);
 						intent.putExtra("RECEIVER", receiver);
+						intent.putExtra("START_TIME", start_time);
 						mContext.startActivity(intent);
 					}
 				}

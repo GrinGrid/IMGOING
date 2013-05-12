@@ -44,14 +44,16 @@ public class MapActivity extends FragmentActivity{
 		Intent intent = getIntent();
 		Bundle bundle = intent.getExtras();
 		String receiver = null;
+		String start_time = null;
 		
 		if ( bundle != null ){
 			receiver = bundle.getString("RECEIVER");
+			start_time = bundle.getString("START_TIME");
 			Log.d("jiho", "MapActivity receiver : "+receiver);
 		
 		
 			MessageDao messageDao = new MessageDao(this);
-			Cursor cursor = messageDao.querySendListForOne(receiver);
+			Cursor cursor = messageDao.querySendListForOne(receiver, start_time);
 			
 			int index_no = cursor.getColumnIndex("no");
 			int index_sender = cursor.getColumnIndex("sender"); 

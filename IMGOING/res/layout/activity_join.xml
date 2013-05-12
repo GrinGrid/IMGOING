@@ -8,20 +8,12 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".MainActivity" >
 
-    <TextView
-        android:id="@+id/id_tv_hello"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/hello_world" />
-	
-
 	<EditText
 	    android:id="@+id/id_et_email"
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
-	    android:layout_below="@id/id_tv_hello"
 	    android:inputType="textEmailAddress" 
-	    android:text="nisclan@hotmail.com"/>
+	    android:hint="@string/email"/>
 	
 	<EditText
 	    android:id="@+id/id_et_phone_number"
@@ -29,7 +21,7 @@
 	    android:layout_height="wrap_content"
 	    android:layout_below="@id/id_et_email"
 	    android:inputType="number" 
-	    android:text="01034549398"/>
+	    android:hint="@string/phone_number"/>
 	
 	<EditText
 	    android:id="@+id/id_et_password"
@@ -37,7 +29,7 @@
 	    android:layout_height="wrap_content"
 	    android:layout_below="@id/id_et_phone_number"
 	    android:inputType="textPassword" 
-	    android:text="password"/>
+	    android:hint="@string/password"/>
 	
 	<EditText
 	    android:id="@+id/id_et_repassword"
@@ -45,13 +37,26 @@
 	    android:layout_height="wrap_content"
 	    android:layout_below="@id/id_et_password"
 	    android:inputType="textPassword"
-	    android:text="password" />
-
-	<Button
-	    android:id="@+id/id_bt_submit"
+	    android:hint="@string/repassword"/>
+	
+	<LinearLayout 
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
 	    android:layout_below="@id/id_et_repassword"
-	    android:text="Submit" />
+	    >
+		<Button
+		    android:id="@+id/id_bt_submit"
+		    android:layout_width="0dp"
+		    android:layout_height="wrap_content"
+		    android:layout_weight="1"
+		    android:text="@string/join" />
+		
+		<Button
+		    android:id="@+id/id_bt_cancel"
+		    android:layout_width="0dp"
+		    android:layout_height="wrap_content"
+		    android:layout_weight="1"
+		    android:text="@string/cancel" />    
+	</LinearLayout>
 	
 </RelativeLayout>

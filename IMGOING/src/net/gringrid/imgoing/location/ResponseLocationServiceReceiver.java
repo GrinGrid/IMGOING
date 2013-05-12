@@ -25,6 +25,7 @@ public class ResponseLocationServiceReceiver extends BroadcastReceiver {
 			locationUtil = LocationUtil.getInstance(context);
 			locationUtil.start_time = mBundle.getString("START_TIME");
 			locationUtil.receiver = mBundle.getString("RECEIVER");
+			locationUtil.receiver_id = mBundle.getString("RECEIVER_ID");
 			locationUtil.interval = mBundle.getInt("INTERVAL"); 
 			locationUtil.sendLocation();
 			

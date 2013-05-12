@@ -169,11 +169,12 @@ public class MessageActivity extends FragmentActivity implements OnClickListener
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		Log.d("jiho", "onlcick.");
 		String receiver = message_data.get(position).receiver;
+		String start_time = message_data.get(position).start_time;
 		
 		message_data.clear();
 		message_data = new Vector<MessageVO>();
 		MessageDao messageDao = new MessageDao(this);
-		Cursor cursor = messageDao.querySendListForOne(receiver);
+		Cursor cursor = messageDao.querySendListForOne(receiver, start_time);
 		
 		int index_no = cursor.getColumnIndex("no");
 		int index_sender = cursor.getColumnIndex("sender"); 

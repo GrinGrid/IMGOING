@@ -60,13 +60,14 @@ public class MainActivity extends Activity implements OnClickListener {
 		SharedPreferences settings = getSharedPreferences(Constants.PREFS_NAME, 0);
 		boolean isAutoLogin = settings.getBoolean("AUTO_LOGIN", false);
 		
+		// 자동로그인 설정이 되어 있으면 회원가입/로그인 버튼을 감춘다.
 		if ( isAutoLogin ){
 			// join 버튼 감춘다.
 			View view = findViewById(R.id.id_bt_join);
 			view.setVisibility(View.GONE);
+			view = findViewById(R.id.id_bt_login);
+			view.setVisibility(View.GONE);
 		}
-		
-		
 	}
 	
 	private void regEvent() {
@@ -149,9 +150,7 @@ public class MainActivity extends Activity implements OnClickListener {
 			break;
 			
 		case R.id.id_bt_login:
-			//TODO 팝업으로 로그인 할 수 있게 띄운다.
-			
-			intent = new Intent(this, JoinActivity.class);
+			intent = new Intent(this, LoginActivity.class);
 			startActivity(intent);			
 			break;
 			

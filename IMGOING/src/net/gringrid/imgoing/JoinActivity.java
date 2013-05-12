@@ -36,6 +36,7 @@ public class JoinActivity extends Activity implements OnClickListener{
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_join);		
+		this.setTitle(R.string.join_title);
 		
 		init();
 		regEvent();
@@ -45,11 +46,26 @@ public class JoinActivity extends Activity implements OnClickListener{
 	private void init() {
 		
 		
+		EditText id_et_email = (EditText)findViewById(R.id.id_et_email);
+		EditText id_et_phone_number = (EditText)findViewById(R.id.id_et_phone_number);
+		EditText id_et_password = (EditText)findViewById(R.id.id_et_password);
+		EditText id_et_repassword = (EditText)findViewById(R.id.id_et_repassword);
+	
+		id_et_email.setText("nisclan@hotmail.com");
+		id_et_phone_number.setText("01023420928");
+		id_et_password.setText("password");
+		id_et_repassword.setText("password");
+		
+		
 	}
 
 	
 	private void regEvent() {
 		View view = findViewById(R.id.id_bt_submit);
+		if ( view != null ){
+			view.setOnClickListener(this);
+		}
+		view = findViewById(R.id.id_bt_cancel);
 		if ( view != null ){
 			view.setOnClickListener(this);
 		}
@@ -65,6 +81,8 @@ public class JoinActivity extends Activity implements OnClickListener{
 	@Override
 	public void onClick(View v) {
 		switch( v.getId() ){
+		
+		// 가입버튼
 		case R.id.id_bt_submit:
 			SharedPreferences settings = getSharedPreferences(Constants.PREFS_NAME, 0);
 			
@@ -147,6 +165,11 @@ public class JoinActivity extends Activity implements OnClickListener{
 			
 			//String result_cd = resultData.getString("result_cd");
 			
+			break;
+		
+		// 취소버튼
+		case R.id.id_bt_cancel:
+			finish();
 			break;
 		}
 	}

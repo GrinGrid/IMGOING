@@ -19,10 +19,11 @@ public class MessageDao {
 	
 	// 단건 입력
 	private static final String SQL_INSERT =
-			String.format("INSERT INTO %s(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) VALUES(?,?,?,?,?,?,?,?,?,?,?)",
+			String.format("INSERT INTO %s(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",
 					"MESSAGE",
 					"sender",
 					"receiver",
+					"receiver_id",
 					"start_time",
 					"send_time",
 					"receive_time",
@@ -45,6 +46,7 @@ public class MessageDao {
 					"no"+
 					",sender"+
 					",receiver"+
+					",receiver_id"+
 					",start_time"+
 					",send_time"+
 					",receive_time"+
@@ -56,6 +58,17 @@ public class MessageDao {
 					",near_metro_name "+
 					"FROM MESSAGE");
 	
+	// 보낸사람 목록
+	private static final String SQL_SEND_PERSON_LIST = 
+	String.format("SELECT "+
+			"DISTINCT receiver "+
+			",receiver_id "+
+			"FROM MESSAGE "+
+			"WHERE sender = ? "+
+			"ORDER BY start_time DESC");
+
+	
+	
 	// 보낸목록 
 	private static final String SQL_SEND_LIST = 
 			String.format("SELECT "+
@@ -63,7 +76,8 @@ public class MessageDao {
 					",start_time "+
 					"FROM MESSAGE "+
 					"WHERE sender = ? "+
-					"GROUP BY receiver, start_time");
+					"GROUP BY receiver, start_time "+
+					"ORDER BY start_time DESC");
 	
 	
 	// 받은목록
@@ -73,7 +87,8 @@ public class MessageDao {
 					",start_time "+
 					"FROM MESSAGE "+
 					"WHERE receiver = ? "+
-					"GROUP BY sender, start_time");
+					"GROUP BY sender, start_time "+
+					"ORDER BY start_time DESC");
 	
 	
 	// 한사람에 대한 메시지 송신목
@@ -81,7 +96,9 @@ public class MessageDao {
 			String.format("SELECT "+
 					"* "+
 					"FROM MESSAGE "+
-					"WHERE receiver = ? ");
+					"WHERE receiver = ? "+
+					"AND start_time = ? "
+					);
 	
 	// 보낸 메시지 힌건삭제
 	private static final String SQL_DELETE_SEND_ONE =
@@ -122,15 +139,16 @@ public class MessageDao {
 				
 		stmt.bindString(1, vo.sender);
 		stmt.bindString(2, vo.receiver);
-		stmt.bindString(3, vo.start_time);
-		stmt.bindString(4, vo.send_time);
-		stmt.bindString(5, vo.receive_time);
-		stmt.bindString(6, vo.latitude);
-		stmt.bindString(7, vo.longitude);
-		stmt.bindString(8, vo.interval);
-		stmt.bindString(9, vo.provider);
-		stmt.bindString(10, vo.location_name);
-		stmt.bindString(11, vo.near_metro_name);
+		stmt.bindString(3, vo.receiver_id);
+		stmt.bindString(4, vo.start_time);
+		stmt.bindString(5, vo.send_time);
+		stmt.bindString(6, vo.receive_time);
+		stmt.bindString(7, vo.latitude);
+		stmt.bindString(8, vo.longitude);
+		stmt.bindString(9, vo.interval);
+		stmt.bindString(10, vo.provider);
+		stmt.bindString(11, vo.location_name);
+		stmt.bindString(12, vo.near_metro_name);
 		
 		
 		try {
@@ -159,6 +177,20 @@ public class MessageDao {
 		return cursor;
 	}
 	
+
+	/**
+	 * 보낸 사람 목록 조회 
+	 */
+	public Cursor querySendPersonList(){
+		Cursor cursor = null;
+		mDB = dbHelper.getDB();
+		cursor = mDB.rawQuery(SQL_SEND_PERSON_LIST, new String[]{ Util.getMyPhoneNymber(mContext) });
+
+		if(cursor != null){
+			cursor.moveToFirst();
+		}
+		return cursor;
+	}
 	
 	
 	/**
@@ -196,10 +228,10 @@ public class MessageDao {
 	/**
 	 * 특정인에게 보낸 메시지 목록 조회 
 	 */
-	public Cursor querySendListForOne(String receiver){
+	public Cursor querySendListForOne(String receiver, String start_time){
 		Cursor cursor = null;
 		mDB = dbHelper.getDB();
-		cursor = mDB.rawQuery(SQL_SEND_LIST_FOR_ONE, new String[]{ receiver });
+		cursor = mDB.rawQuery(SQL_SEND_LIST_FOR_ONE, new String[]{ receiver, start_time });
 		
 
 		if(cursor != null){

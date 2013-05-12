@@ -42,8 +42,7 @@ public class ContactsListAdapter extends BaseAdapter{
 
 	@Override
 	public Object getItem(int position) {
-		// TODO Auto-generated method stub
-		return null;
+		return data.get(position);
 	}
 
 	@Override

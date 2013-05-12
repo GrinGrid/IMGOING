@@ -17,6 +17,7 @@ public class SendCurrentLocationService extends IntentService {
 	
 	private boolean isSendLocation = false;
 	private String receiver;
+	private String receiver_id;
 	private int interval;
 	
 	public SendCurrentLocationService() {
@@ -35,13 +36,14 @@ public class SendCurrentLocationService extends IntentService {
 		mBundle = intent.getExtras();
 		isSendLocation = true;
 		receiver = mBundle.getString("RECEIVER");
+		receiver_id = mBundle.getString("RECEIVER_ID");
 		interval = mBundle.getInt("INTERVAL");
 		
 		String start_time = Util.getCurrentTime();
 		
 		Log.d("jiho", "INTERVAL : "+mBundle.getInt("INTERVAL"));;
 		
-		while(isSendLocation){
+		while( isSendLocation ){
 			try {
 				
 				//Vibrator vi = (Vibrator)getSystemService(this.VIBRATOR_SERVICE);
@@ -51,14 +53,15 @@ public class SendCurrentLocationService extends IntentService {
 				Intent localIntent = new Intent(Constants.BROADCAST_ACTION);
 				localIntent.putExtra("START_TIME", start_time);
 				localIntent.putExtra("RECEIVER", receiver);
+				localIntent.putExtra("RECEIVER_ID", receiver_id);
 				localIntent.putExtra("INTERVAL", interval);
 				localIntent.putExtra("MODE", "START");
 				LocalBroadcastManager.getInstance(this).sendBroadcast(localIntent);
 				Log.d("jiho", "execute service interval : "+interval);
 					
 				// 사용자가 요청한 전송간격만큰 시간을 둔다.
-				Thread.sleep(1000 * 60 * interval);
-				//Thread.sleep(5000);
+				//Thread.sleep(1000 * 60 * interval);
+				Thread.sleep(5000);
 				
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block

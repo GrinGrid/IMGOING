@@ -8,6 +8,7 @@ import java.io.Reader;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
@@ -36,15 +37,18 @@ import android.content.SharedPreferences;
 import android.location.Address;
 import android.location.Criteria;
 import android.location.Geocoder;
+import android.location.GpsSatellite;
+import android.location.GpsStatus;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.location.LocationProvider;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.util.Log;
 import android.widget.Toast;
 
-public class LocationUtil implements LocationListener{
+public class LocationUtil implements LocationListener, GpsStatus.Listener{
 	
 	private final boolean DEBUG = false;
 	
@@ -59,7 +63,8 @@ public class LocationUtil implements LocationListener{
 	
 	// 전송정보 
 	public String start_time;	// 시작시긴
-	public String receiver;		// 수신자 
+	public String receiver;		// 수신자
+	public String receiver_id;	// 수신자 연락처 ID
 	public int interval;		// 전송간격 
 	
 	// 현재위치 업데이트 조건 (60초에 한번씩 100m이상 이동시)
@@ -69,6 +74,10 @@ public class LocationUtil implements LocationListener{
 	
 	// 현재위치 전송 시작 여부 
 	private boolean isStarted = false;
+	
+	// 마지막 location을 얻은 시간.
+	private long mLastLocationMillis;
+	private boolean isGpsFix;
 	
 	/**
 	 * 생성자 SINGLETON
@@ -103,12 +112,13 @@ public class LocationUtil implements LocationListener{
 	private void init(){
 	
 		locationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
-		//Criteria criteria = new Criteria();
+		locationManager.addGpsStatusListener(this);
+		Criteria criteria = new Criteria();
 		
-		//provider = locationManager.getBestProvider(criteria, false);
-		//Log.d("jiho", "init provider : "+provider);
+		provider = locationManager.getBestProvider(criteria, false);
+		Log.d("jiho", "init provider : "+provider);
 		
-		//locationManager.requestLocationUpdates(provider, properInterval, propertMeters, this);
+		locationManager.requestLocationUpdates(provider, properInterval, propertMeters, this);
 	}
 
 	
@@ -133,10 +143,10 @@ public class LocationUtil implements LocationListener{
 			Log.d("jiho", "==============================================");
 		}
 		
-		
+		//location = null;
 		
 		if ( location != null ){
-			location = locationManager.getLastKnownLocation(location.getProvider());
+			//location = locationManager.getLastKnownLocation(location.getProvider());
 			
 			// DB에 저장
 			MessageDao messageDAO = new MessageDao(mContext);
@@ -145,6 +155,7 @@ public class LocationUtil implements LocationListener{
 			
 			messageVO.sender = Util.getMyPhoneNymber(mContext);
 			messageVO.receiver = this.receiver;
+			messageVO.receiver_id = this.receiver_id;
 			messageVO.start_time = this.start_time;
 			messageVO.send_time = Util.getCurrentTime();
 			messageVO.receive_time = "";
@@ -169,6 +180,7 @@ public class LocationUtil implements LocationListener{
 	        inputData.add(new BasicNameValuePair("mode","SEND_GCM"));
 	        inputData.add(new BasicNameValuePair("sender",messageVO.sender));
 	        inputData.add(new BasicNameValuePair("receiver_phone_number",receiver));
+	        inputData.add(new BasicNameValuePair("receiver_id",receiver_id));
 	        inputData.add(new BasicNameValuePair("start_time",messageVO.start_time));
 	        inputData.add(new BasicNameValuePair("send_time",messageVO.send_time));
 	        inputData.add(new BasicNameValuePair("latitude",messageVO.latitude));
@@ -254,13 +266,13 @@ public class LocationUtil implements LocationListener{
 		if ( locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER ) ){
 			Log.d("jiho", "GPS Enabled");
 			//criteria.setAccuracy(Criteria.ACCURACY_FINE);
-			location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+			//location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 			locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, properInterval, propertMeters, this);
 		}
 		if ( locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER) ){
 			Log.d("jiho", "NETWORK Enabled");
 			//criteria.setAccuracy(Criteria.ACCURACY_COARSE);
-			location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+			//location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 			locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, properInterval, propertMeters, this);
 		}
 		
@@ -382,11 +394,14 @@ public class LocationUtil implements LocationListener{
 		
 		Log.d("jiho", "["+newLocation.getProvider()+"] onLocationChanged");
 		
+		mLastLocationMillis = SystemClock.elapsedRealtime();
+		
 		if ( isBetterLocation(newLocation, location)){
 			this.location = newLocation;
 		}
 		
 	}
+	
 
 	@Override
 	public void onStatusChanged(String provider, int status, Bundle extras) {
@@ -464,5 +479,51 @@ public class LocationUtil implements LocationListener{
 	      return provider2 == null;
 	    }
 	    return provider1.equals(provider2);
+	}
+
+	@Override
+	public void onGpsStatusChanged(int event) {
+		switch ( event ){
+		case GpsStatus.GPS_EVENT_FIRST_FIX:
+			Log.d("jiho", "GPS_EVENT_FIRST_FIX");
+			isGpsFix = true;
+			break;
+		case GpsStatus.GPS_EVENT_SATELLITE_STATUS:
+			Log.d("jiho", "GPS_EVENT_SATELLITE_STATUS");
+			
+			// 위성수를 세는것보다 이 방법이 좋음. SpeedView
+			if ( location != null ){
+				isGpsFix = (SystemClock.elapsedRealtime() - mLastLocationMillis) < 3000;
+				Log.d("jiho", "isGpsFix is : "+isGpsFix);
+			}
+			
+			if ( isGpsFix ){
+				//TODO
+				Log.d("jiho", "provider를 GPS로 사용해야지 ");
+			}else{
+				//TODO
+				Log.d("jiho", "provider를 Network 로 사용해야지 ");
+			}
+			GpsStatus gpsStatus = locationManager.getGpsStatus(null);
+			Iterator<GpsSatellite> iterator = gpsStatus.getSatellites().iterator();
+			int satCnt = 0;
+			while ( iterator.hasNext() ){
+				GpsSatellite satellite = iterator.next();
+				if ( satellite.usedInFix() ){
+					satCnt++;
+					Log.d("jiho", "satCnt : "+satCnt);
+				}
+			}
+			
+			Log.d("jiho", "Satellites number : "+gpsStatus.getMaxSatellites());
+			break;
+		case GpsStatus.GPS_EVENT_STARTED:
+			Log.d("jiho", "GPS_EVENT_STARTED");
+			break;
+		case GpsStatus.GPS_EVENT_STOPPED:
+			Log.d("jiho", "GPS_EVENT_STOPPED");
+			break;
+		}
+		
 	}
 }
