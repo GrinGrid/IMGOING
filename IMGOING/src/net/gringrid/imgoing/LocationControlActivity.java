@@ -40,7 +40,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class LocationControlActivity extends Activity implements OnClickListener, OnItemClickListener{
+public class LocationControlActivity extends Base implements OnClickListener, OnItemClickListener{
 
 	private Intent mCurrentLocationServiceIntent = null;
 	
@@ -268,12 +268,12 @@ public class LocationControlActivity extends Activity implements OnClickListener
 			
 		case R.id.id_menu_location_control:
 			intent = new Intent(this, LocationControlActivity.class);
-			startActivity(intent);
+			startNewActivity(intent);
 			break;
 			
 		case R.id.id_menu_location_list:
 			intent = new Intent(this, MessageActivity.class);
-			startActivity(intent);
+			startNewActivity(intent);
 			break;
 			
 		case R.id.id_tv_send_person_list:

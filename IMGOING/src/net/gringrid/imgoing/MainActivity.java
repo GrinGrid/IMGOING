@@ -20,7 +20,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
-public class MainActivity extends Activity implements OnClickListener {
+public class MainActivity extends Base implements OnClickListener {
 
 	private Intent mCurrentLocationServiceIntent = null;
 	// 앱 실행시 DB instance 생성
@@ -131,27 +131,27 @@ public class MainActivity extends Activity implements OnClickListener {
 		switch ( v.getId() ){
 		case R.id.id_ll_location_control:		
 			intent = new Intent(this, LocationControlActivity.class);
-			startActivity(intent);			
+			startNewActivity(intent);			
 			break;
 		
 		case R.id.id_ll_location_list:		
 			intent = new Intent(this, MessageActivity.class);
-			startActivity(intent);			
+			startNewActivity(intent);			
 			break;
 			
 		case R.id.id_ll_config:		
 			intent = new Intent(this, MessageActivity.class);
-			startActivity(intent);			
+			startNewActivity(intent);			
 			break;
 			
 		case R.id.id_bt_join:
 			intent = new Intent(this, JoinActivity.class);
-			startActivity(intent);			
+			startNewActivity(intent);			
 			break;
 			
 		case R.id.id_bt_login:
 			intent = new Intent(this, LoginActivity.class);
-			startActivity(intent);			
+			startNewActivity(intent);			
 			break;
 			
 		}

@@ -26,7 +26,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class MessageActivity extends FragmentActivity implements OnClickListener, OnItemClickListener{
+public class MessageActivity extends Base implements OnClickListener, OnItemClickListener{
 
 	private ListView messageList;
 	MessageListAdapter messageListAdapter;
@@ -147,11 +147,11 @@ public class MessageActivity extends FragmentActivity implements OnClickListener
 			break;
 		case R.id.id_menu_location_control:
 			intent = new Intent(this, LocationControlActivity.class);
-			startActivity(intent);
+			startNewActivity(intent);
 			break;
 		case R.id.id_menu_location_list:
 			intent = new Intent(this, MessageActivity.class);
-			startActivity(intent);
+			startNewActivity(intent);
 			break;
 		case R.id.id_bt_send:
 			viewSendMessage();
