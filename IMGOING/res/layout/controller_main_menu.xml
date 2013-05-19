@@ -1,0 +1,112 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
+    
+	<!-- Main Menu Start -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="100"
+        android:orientation="horizontal"
+        android:background="#000000" 
+        >
+        <LinearLayout
+            android:id="@+id/id_ll_menu_location_control"
+            android:layout_width="0dp"
+	        android:layout_height="match_parent"
+	        android:layout_weight="1"
+	        android:gravity="center" 
+            >
+            <ImageView
+                android:id="@+id/id_menu_location_control"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/location_control" 
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+	        android:layout_height="match_parent"
+            >
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/menu_line_height" 
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/id_ll_menu_location_list"
+            android:layout_width="0dp"
+	        android:layout_height="match_parent"
+	        android:layout_weight="1" 
+	        android:gravity="center" 
+	        
+            >
+            <ImageView
+                android:id="@+id/id_menu_location_list"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/location_list" 
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+	        android:layout_height="match_parent"
+            >
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/menu_line_height" 
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/id_ll_menu_config"
+            android:layout_width="0dp"
+	        android:layout_height="match_parent"
+	        android:layout_weight="1"
+	        android:gravity="center" 
+            >
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/config" 
+                />
+        </LinearLayout>
+    </LinearLayout>
+    <!-- Main Menu end -->
+    
+    
+    <!-- Menu Indicator Start -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+        <LinearLayout 
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal"
+            android:layout_weight="1">
+	        <ImageView
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:src="@drawable/menu_selector"/>
+        </LinearLayout>
+        <LinearLayout 
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+	    </LinearLayout>
+	    <LinearLayout 
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+	    </LinearLayout>
+    </LinearLayout>
+    <!-- Menu Indicator End -->
+    
+    
+</LinearLayout>

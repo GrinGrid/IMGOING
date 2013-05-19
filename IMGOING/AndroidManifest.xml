@@ -89,6 +89,7 @@
 		</activity>		  
 		    
 		<activity android:name="MessageActivity"></activity>
+		<activity android:name="ConfigActivity"></activity>
 		
 		<!-- 위치전송 화면 -->
 		<activity 

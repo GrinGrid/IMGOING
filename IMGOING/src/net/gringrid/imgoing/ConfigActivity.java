@@ -40,7 +40,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class LocationControlActivity extends Base implements OnClickListener, OnItemClickListener{
+public class ConfigActivity extends Base implements OnClickListener, OnItemClickListener{
 
 	private Intent mCurrentLocationServiceIntent = null;
 	
@@ -64,7 +64,7 @@ public class LocationControlActivity extends Base implements OnClickListener, On
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_location_control);		
+		setContentView(R.layout.activity_config);		
 		
 		init();
 		regEvent();
@@ -137,10 +137,6 @@ public class LocationControlActivity extends Base implements OnClickListener, On
 			view.setOnClickListener(this);
 		}
 		view = findViewById(R.id.id_menu_location_list);
-		if ( view != null ){
-			view.setOnClickListener(this);
-		}
-		view = findViewById(R.id.id_menu_config);
 		if ( view != null ){
 			view.setOnClickListener(this);
 		}
@@ -271,17 +267,12 @@ public class LocationControlActivity extends Base implements OnClickListener, On
 			break;
 			
 		case R.id.id_menu_location_control:
-			intent = new Intent(this, LocationControlActivity.class);
+			intent = new Intent(this, ConfigActivity.class);
 			startNewActivity(intent);
 			break;
 			
 		case R.id.id_menu_location_list:
 			intent = new Intent(this, MessageActivity.class);
-			startNewActivity(intent);
-			break;
-		
-		case R.id.id_menu_config:
-			intent = new Intent(this, ConfigActivity.class);
 			startNewActivity(intent);
 			break;
 			
