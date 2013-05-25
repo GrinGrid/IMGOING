@@ -65,8 +65,12 @@ public class Util {
 		if ( Preference.PHONE_NUMBER == null ){
 			TelephonyManager tMgr =(TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
 			phone_number = tMgr.getLine1Number();
-			// KT일경우 +8210xxxxxxx 형식으로 리턴되므로 처리
-			phone_number = phone_number.replace("+82", "0");
+			if ( phone_number != null ){
+				// KT일경우 +8210xxxxxxx 형식으로 리턴되므로 처리
+				phone_number = phone_number.replace("+82", "0");
+			}else{
+				phone_number = "WIFI DEVICE";
+			}
 			Preference.PHONE_NUMBER = phone_number;
 		}else{
 			phone_number = Preference.PHONE_NUMBER;
