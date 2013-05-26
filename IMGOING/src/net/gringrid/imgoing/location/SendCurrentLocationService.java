@@ -1,3 +1,11 @@
+/**
+ * File : SendCurrentLocationService.class
+ * Description : 5초 간격으로 3번 조회해서 location 값이 null이 아니면 DB insert하고 서버보내고 정상응답오면 서비스 종료
+ * 1. 5초 간격으로 location을 3번 조회
+ * 2. location이 null이 아니면 DB에 insert
+ * 3. 서버로 데이타 전송
+ * 4. 정상응답 받으면 서비스 종료 
+ */
 package net.gringrid.imgoing.location;
 
 import java.sql.Date;
@@ -10,7 +18,9 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 
 import net.gringrid.imgoing.Constants;
+import net.gringrid.imgoing.dao.MessageDao;
 import net.gringrid.imgoing.util.Util;
+import net.gringrid.imgoing.vo.MessageVO;
 import android.app.IntentService;
 import android.content.Intent;
 import android.location.Location;
@@ -30,10 +40,12 @@ public class SendCurrentLocationService extends IntentService implements
 	LocationRequest mLocationRequest;
 	Location mLocation;
 	
+	private int mUpdateCount;
+	
 	private boolean isSendLocation = false;
-	private String receiver;
-	private String receiver_id;
-	private int interval;
+	private String mReceiver;
+	private String mReceiverId;
+	private int mInterval;
 	private String mStartTime;
 	
 	
@@ -77,17 +89,14 @@ public class SendCurrentLocationService extends IntentService implements
 	
 	@Override
 	protected void onHandleIntent(Intent intent) {
-		
+		Log.d("jiho", "SendCurrentLocationService onHandleIntent");
 		Bundle mBundle = new Bundle();
 		mBundle = intent.getExtras();
 		isSendLocation = true;
-		receiver = mBundle.getString("RECEIVER");
-		receiver_id = mBundle.getString("RECEIVER_ID");
-		interval = mBundle.getInt("INTERVAL");
-		
-		mStartTime = Util.getCurrentTime();
-		
-		Log.d("jiho", "INTERVAL : "+mBundle.getInt("INTERVAL"));;
+		mReceiver = mBundle.getString("RECEIVER");
+		mReceiverId = mBundle.getString("RECEIVER_ID");
+		mInterval = mBundle.getInt("INTERVAL");
+		mStartTime = mBundle.getString("START_TIME");
 		
 		
 		// Use high accuracy
@@ -97,8 +106,16 @@ public class SendCurrentLocationService extends IntentService implements
         // Set the fastest update interval to 1 second
         mLocationRequest.setFastestInterval(FASTEST_INTERVAL);
 		
-		
-		
+        do{
+        	try {
+				Thread.sleep(20000);
+				isSendLocation = false;
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+        }while(isSendLocation);
+        /*
 		while( isSendLocation ){
 			/*
 			try {
@@ -131,11 +148,11 @@ public class SendCurrentLocationService extends IntentService implements
 				e.printStackTrace();
 			}
 			*/
-		}
-		
-		//LocalBroadcastManager.getInstance(getApplicationContext()
-		
+		//}
+	
 	}
+	
+	
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		// TODO Auto-generated method stub
@@ -144,11 +161,14 @@ public class SendCurrentLocationService extends IntentService implements
 	@Override
 	public void onDestroy() {
 		Log.d("jiho", "onDestroy");
+		Log.d("jiho", "****************************************/");
 		isSendLocation = false;
+		/*
 		Intent localIntent = new Intent(Constants.BROADCAST_ACTION)
 		.putExtra("MODE", "STOP");
 		
 		LocalBroadcastManager.getInstance(this).sendBroadcast(localIntent);
+		*/
 		mLocationClient.disconnect();
 	}
 
@@ -161,28 +181,78 @@ public class SendCurrentLocationService extends IntentService implements
 	public void onConnected(Bundle arg0) {
 		mLocation = mLocationClient.getLastLocation();
 		if ( mLocation !=null ){
-			Log.d("jiho", "Latitude : "+mLocation.getLatitude());
-			Log.d("jiho", "Longitude : "+mLocation.getLongitude());
+			//Log.d("jiho", "Latitude : "+mLocation.getLatitude());
+			//Log.d("jiho", "Longitude : "+mLocation.getLongitude());
+		}else{
+			Log.d("jiho", "onConnected location is null");
 		}
 		mLocationClient.requestLocationUpdates(mLocationRequest, this);
-		Log.d("jiho", "onConnected");
+		
 		
 	}
 	
 	@Override
 	public void onLocationChanged(Location location) {
+		Log.d("jiho", "onLocationChanged");
 		if ( location != null ){
 			mLocation = location;
-			String msg = "Updated Location: " +
-	                Double.toString(location.getLatitude()) + "," +
-	                Double.toString(location.getLongitude());
-	        //Log.d("jiho", msg);
-			//Log.d("jiho", getLocationName(location.getLatitude(), location.getLongitude()));
-	        sendBroadCast();
+			mUpdateCount++;
+			
+			if ( mUpdateCount > 2 ){
+				if ( insertMessage(location) == true ){
+					if ( sendServer() == true ){
+						this.stopSelf();
+					}
+				}
+			}
+			
 		}else{
 			Log.d("jiho", "onLocationChanged location numm ):");
 		}
 	}
+	
+	
+	private boolean insertMessage(Location location){
+		boolean result = false;
+		
+		// DB에 저장
+		MessageDao messageDAO = new MessageDao(this);
+		MessageVO messageVO = new MessageVO();
+		int resultCd = 0;
+		
+		messageVO.sender = Util.getMyPhoneNymber(this);
+		messageVO.receiver = mReceiver;
+		messageVO.receiver_id = mReceiverId;
+		messageVO.start_time = mStartTime;
+		messageVO.send_time = Util.getCurrentTime();
+		messageVO.receive_time = "";
+		messageVO.latitude = Double.toString(location.getLatitude());
+		messageVO.longitude	= Double.toString(location.getLongitude());
+		messageVO.interval = Integer.toString(mInterval);
+		messageVO.provider = location.getProvider();
+		//messageVO.location_name = getLocationName(location.getLatitude(), location.getLongitude());
+		messageVO.location_name = "";
+		messageVO.near_metro_name = "";
+				
+		resultCd = messageDAO.insert(messageVO);
+		
+		if ( resultCd == 0 ){
+			Log.d("jiho", "insert success! provider : "+location.getProvider());
+			result = true;
+		}else{
+			Log.d("jiho", "[ERROR] insert fail!");
+			result = false;
+		}
+		return result;
+	}
+	
+	private boolean sendServer(){
+		boolean result = false;
+		result = true;
+		Log.d("jiho", "sendServer Success!!");
+		return result;
+	}
+	
 	
 	private void sendBroadCast(){
 		// IMGOING앱만 받을 수 있도록 broadcasting 한다.
@@ -192,9 +262,9 @@ public class SendCurrentLocationService extends IntentService implements
 		// 3. 화면이 열려있을경우 화면 갱신
 		Intent localIntent = new Intent(Constants.BROADCAST_ACTION);
 		localIntent.putExtra("START_TIME", mStartTime);
-		localIntent.putExtra("RECEIVER", receiver);
-		localIntent.putExtra("RECEIVER_ID", receiver_id);
-		localIntent.putExtra("INTERVAL", interval);
+		localIntent.putExtra("RECEIVER", mReceiver);
+		localIntent.putExtra("RECEIVER_ID", mReceiverId);
+		localIntent.putExtra("INTERVAL", mInterval);
 		localIntent.putExtra("MODE", "START");
 		localIntent.putExtra("LOCATION", mLocation);
 		LocalBroadcastManager.getInstance(this).sendBroadcast(localIntent);	

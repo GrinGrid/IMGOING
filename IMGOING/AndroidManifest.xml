@@ -69,7 +69,7 @@
 		    <category android:name="net.gringrid.imgoing" />
 		  </intent-filter>
 		</receiver>
-				
+		
 		<service android:name=".GCMIntentService" />        
         
 		<service 
@@ -100,7 +100,8 @@
         <meta-data
 		android:name="com.google.android.maps.v2.API_KEY"
 		android:value="AIzaSyAIymjx_Hc1fo3LDwHKpNUGd9gglUVvZTk"/>
-        <activity android:name="MapActivity"></activity>	
+        <activity android:name="MapActivity"></activity>
+        <receiver android:name=".location.AlarmReceiver" android:process=":remote"></receiver>	
     </application>
     
 	<uses-feature

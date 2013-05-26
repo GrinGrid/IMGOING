@@ -11,6 +11,7 @@ import org.json.JSONObject;
 
 import net.gringrid.imgoing.adapter.ContactsListAdapter;
 import net.gringrid.imgoing.dao.MessageDao;
+import net.gringrid.imgoing.location.AlarmReceiver;
 import net.gringrid.imgoing.location.SendCurrentLocationService;
 import net.gringrid.imgoing.util.Util;
 import net.gringrid.imgoing.vo.ContactsVO;
@@ -18,6 +19,9 @@ import net.gringrid.imgoing.vo.MessageVO;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -215,17 +219,42 @@ public class LocationControlActivity extends Base implements OnClickListener, On
 					Toast.makeText(this, "위치를 전송할 사람을 선택하세요.", Toast.LENGTH_SHORT).show();
 					return;
 				}
+				AlarmManager alarmManager = (AlarmManager)this.getSystemService(Context.ALARM_SERVICE);
+				intent = new Intent(getApplicationContext(), AlarmReceiver.class);
+				intent.putExtra(AlarmReceiver.ACTION_ALARM, AlarmReceiver.ACTION_ALARM);
+				intent.putExtra("RECEIVER", receiverPhoneNumber);
+				intent.putExtra("RECEIVER_ID", receiverNumberId);
+				intent.putExtra("INTERVAL", currentTime);
+				intent.putExtra("START_TIME", Util.getCurrentTime());
+				
+				
+				PendingIntent pIntent = PendingIntent.getBroadcast(this, 1234567, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+					 
+				alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 25000, pIntent);
+					    
+					   
+				
+				/*
 				mCurrentLocationServiceIntent = new Intent(this, SendCurrentLocationService.class);
 				mCurrentLocationServiceIntent.putExtra("RECEIVER", receiverPhoneNumber);
 				mCurrentLocationServiceIntent.putExtra("RECEIVER_ID", receiverNumberId);
 				mCurrentLocationServiceIntent.putExtra("INTERVAL", currentTime);
 				this.startService(mCurrentLocationServiceIntent);
-				
+				*/
 			// 정지버튼 Click 했을 경우 
 			}else if ( CURRENT_BUTTON == STOP ){
+				intent = new Intent(getApplicationContext(), AlarmReceiver.class);
+				intent.putExtra(AlarmReceiver.ACTION_ALARM, AlarmReceiver.ACTION_ALARM);
+				 
+				final PendingIntent pIntent = PendingIntent.getBroadcast(this, 1234567,intent, PendingIntent.FLAG_UPDATE_CURRENT);
+				 
+				AlarmManager alarms = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
+				alarms.cancel(pIntent);
+				/*
 				if ( isLocationServiceRunning() ){
 					this.stopService(new Intent(this, SendCurrentLocationService.class));
 				}
+				*/
 			}
 			
 			toggleControlButton();
