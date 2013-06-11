@@ -1,5 +1,6 @@
 package net.gringrid.imgoing;
 
+
 import net.gringrid.imgoing.util.MyActivityManager;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -63,9 +64,9 @@ public class Base extends Activity implements OnClickListener{
 	public void showTerminateAlert() {
 		try {
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			builder.setTitle("알림");
+			builder.setTitle(R.string.alert_title);
 			builder.setMessage("종료하시겠습니까?");
-			builder.setPositiveButton("확인",
+			builder.setPositiveButton(R.string.alert_confirm,
 					new android.content.DialogInterface.OnClickListener() {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
@@ -105,12 +106,20 @@ public class Base extends Activity implements OnClickListener{
 		Intent intent;
 		switch ( v.getId() ) {
 		case R.id.id_menu_location_control:
+			if ( Preference.IS_LOGIN == false ){
+				showAlert(R.string.alert_need_login);
+				return;
+			}
 			Log.d("jiho", "LocationControl Menu");
 			intent = new Intent(this, LocationControlActivity.class);
 			startNewActivity(intent);
 			break;
 			
 		case R.id.id_menu_location_list:
+			if ( Preference.IS_LOGIN == false ){
+				showAlert(R.string.alert_need_login);
+				return;
+			}
 			Log.d("jiho", "id_menu_location_list");
 			intent = new Intent(this, MessageActivity.class);
 			startNewActivity(intent);
@@ -121,5 +130,30 @@ public class Base extends Activity implements OnClickListener{
 		}// TODO Auto-generated method stub
 		
 	}
+	
+	public void showAlert(String message) {
+		try {
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setTitle(R.string.alert_title);
+			builder.setMessage(message);
+			builder.setPositiveButton(R.string.alert_confirm, null);
+			builder.show();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
+	
+	
+	public void showAlert(int messageResourceID) {
+		try {
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setTitle(R.string.alert_title);
+			builder.setMessage(messageResourceID);
+			builder.setPositiveButton(R.string.alert_confirm, null);
+			builder.show();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }

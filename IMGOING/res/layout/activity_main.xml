@@ -152,6 +152,20 @@
 				    android:layout_marginTop="20dp"
 				    android:text="       로그인"
 				    android:background="@drawable/intro_bt_login"/>
+		        <TextView 
+		            android:id="@+id/id_login_email"
+				    android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+				    android:layout_gravity="center"
+				    android:layout_marginTop="20dp"
+				    android:text="nisclan@hotmail.com"/>
+		        <TextView 
+		            android:id="@+id/id_bt_logout"
+				    android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+				    android:layout_gravity="center"
+				    android:layout_marginTop="20dp"
+				    android:text="다른아이디로 로그인"/>
 		    </LinearLayout>
 		    
 		</LinearLayout>

@@ -31,19 +31,24 @@
         android:layout_toRightOf="@id/id_tv_start_time"
         android:text="receiver"/>
     
+    
     <TextView
-        android:id="@+id/id_tv_send_time"
+        android:id="@+id/id_tv_location_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_toRightOf="@id/id_tv_receiver"
-        android:text="send_time"/>
+        android:singleLine="true"
+        android:text="Location Name"/>	
+    
+    
+    
     
 	<TextView
         android:id="@+id/id_tv_provider"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/id_tv_send_time"
+        android:layout_below="@id/id_tv_location_name"
         android:text="Provider"/>
     
     <TextView
@@ -65,13 +70,13 @@
         android:text="Longitude"/>
 	
 	<TextView
-        android:id="@+id/id_tv_location_name"
+        android:id="@+id/id_tv_send_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/id_tv_latitude"
-        android:singleLine="true"
-        android:text="Location Name"/>	
-
+        android:text="send_time"/>
+    
+	
 	<Button
 	    android:id="@+id/id_bt_map" 
 	    android:layout_width="wrap_content"
@@ -88,5 +93,13 @@
 	    android:layout_alignTop="@id/id_tv_receiver"
 	    android:layout_toLeftOf="@id/id_bt_map"
 	    android:text="DEL"
+	    />
+	<Button
+	    android:id="@+id/id_bt_list" 
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignTop="@id/id_tv_receiver"
+	    android:layout_toLeftOf="@id/id_bt_del"
+	    android:text="LIST"
 	    />	
 </RelativeLayout>

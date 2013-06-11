@@ -90,6 +90,7 @@ public class MessageListAdapter extends BaseAdapter{
 			TextView id_tv_location_name = (TextView)view.findViewById(R.id.id_tv_location_name);
 			Button id_bt_map = (Button)view.findViewById(R.id.id_bt_map);
 			Button id_bt_del = (Button)view.findViewById(R.id.id_bt_del);
+			Button id_bt_list = (Button)view.findViewById(R.id.id_bt_list);
 			
 			if ( position % 2 == 0 ){
 				id_rl_cell.setBackgroundColor(Color.CYAN);
@@ -141,6 +142,46 @@ public class MessageListAdapter extends BaseAdapter{
 					}
 				}
 			});
+			
+			id_bt_list.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					if ( v.getId() == R.id.id_bt_list ){
+						MessageDao messageDao = new MessageDao(mContext);
+						Cursor cursor = messageDao.querySendOneRouteList(start_time);
+						Vector<MessageVO> listdata = new Vector<MessageVO>();
+						
+						int index_no = cursor.getColumnIndex("no");
+						int index_sender = cursor.getColumnIndex("sender"); 
+						int index_receiver = cursor.getColumnIndex("receiver"); 
+						int index_start_time = cursor.getColumnIndex("start_time"); 
+						int index_send_time = cursor.getColumnIndex("send_time"); 
+						int index_latitude = cursor.getColumnIndex("latitude");
+						int index_longitude = cursor.getColumnIndex("longitude");
+						int index_provider = cursor.getColumnIndex("provider");
+						int index_location_name = cursor.getColumnIndex("location_name");
+
+						do{
+							MessageVO messageVO = new MessageVO();
+							messageVO.no = cursor.getInt(index_no);
+							messageVO.sender = cursor.getString(index_sender);
+							messageVO.receiver = cursor.getString(index_receiver);
+							messageVO.start_time = cursor.getString(index_start_time);
+							messageVO.send_time = cursor.getString(index_send_time);
+							messageVO.latitude = cursor.getString(index_latitude);
+							messageVO.longitude = cursor.getString(index_longitude);
+							messageVO.provider = cursor.getString(index_provider);
+							messageVO.location_name = cursor.getString(index_location_name);
+							
+							listdata.add(messageVO);	
+						
+						}while(cursor.moveToNext());
+						setAll(listdata);
+					}
+				}
+			});
+			
 		}
 		
 		return view;		

@@ -79,6 +79,27 @@ public class MessageDao {
 					"GROUP BY receiver, start_time "+
 					"ORDER BY start_time DESC");
 	
+	// 한번 보낸 경로 목록 
+	private static final String SQL_SEND_ONE_ROUTE_LIST = 
+			String.format("SELECT "+
+					"no"+
+					",sender"+
+					",receiver"+
+					",receiver_id"+
+					",start_time"+
+					",send_time"+
+					",receive_time"+
+					",latitude"+
+					",longitude"+
+					",interval"+
+					",provider"+
+					",location_name"+
+					",near_metro_name "+
+					"FROM MESSAGE "+
+					"WHERE sender = ? "+
+					"AND start_time = ?"+
+					"ORDER BY start_time DESC");
+	
 	
 	// 받은목록
 	private static final String SQL_RECEIVE_LIST = 
@@ -206,6 +227,22 @@ public class MessageDao {
 		}
 		return cursor;
 	}
+	
+	
+	/**
+	 * 보낸 메시지 목록 조회 
+	 */
+	public Cursor querySendOneRouteList(String start_time){
+		Cursor cursor = null;
+		mDB = dbHelper.getDB();
+		cursor = mDB.rawQuery(SQL_SEND_ONE_ROUTE_LIST, new String[]{ Util.getMyPhoneNymber(mContext), start_time });
+
+		if(cursor != null){
+			cursor.moveToFirst();
+		}
+		return cursor;
+	}
+	
 	
 	
 	

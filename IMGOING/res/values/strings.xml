@@ -28,4 +28,7 @@
 	<string name="location_alert_first">분 간격으로</string>
 	<string name="location_alert_second">님에게 위치가 전송됩니다.\n 시작 하시겠습니까?</string>
 	<!-- 위치전송화면 끝 -->
+	<string name="alert_title">알림</string>
+	<string name="alert_confirm">확인</string>
+	<string name="alert_need_login">로그인이 필요한 메뉴 입니다.</string>
 </resources>

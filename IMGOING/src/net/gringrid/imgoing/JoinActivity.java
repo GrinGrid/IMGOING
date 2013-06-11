@@ -31,7 +31,7 @@ import android.view.View.OnClickListener;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class JoinActivity extends Activity implements OnClickListener{
+public class JoinActivity extends Base implements OnClickListener{
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -155,6 +155,9 @@ public class JoinActivity extends Activity implements OnClickListener{
 					editor.putString("PHONE_NUMBER", user.phone_number);
 					editor.putString("GCM_REG_ID", user.gcm_reg_id);
 					editor.commit();
+					
+					showAlert("정상적으로 가입되었습니다");
+					finish();
 				}else{
 					Toast.makeText(this, resultData.getString("result_msg"), Toast.LENGTH_SHORT).show();
 				}
