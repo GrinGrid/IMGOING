@@ -20,5 +20,7 @@ public class Preference {
 	// 전송시간 
 	public static String SEND_INTERVAL = "";
 	
+	public final static int DEFAULT_INTERVAL = 5;
+	
 	
 }

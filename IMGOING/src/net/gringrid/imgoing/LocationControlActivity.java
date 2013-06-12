@@ -18,12 +18,18 @@ import net.gringrid.imgoing.vo.ContactsVO;
 import net.gringrid.imgoing.vo.MessageVO;
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.app.AlertDialog;
 import android.app.ActivityManager.RunningServiceInfo;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -45,13 +51,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class LocationControlActivity extends Base implements OnClickListener, OnItemClickListener{
-
-	private Intent mCurrentLocationServiceIntent = null;
-	
-	// 시작 / 정지버튼 세팅
-	private boolean CURRENT_BUTTON;
-	private final boolean START = true;
-	private final boolean STOP = false;
 	
 	// 주소록 Listview
 	private ListView id_lv_contacts;
@@ -94,12 +93,8 @@ public class LocationControlActivity extends Base implements OnClickListener, On
 		id_tv_send_message = (TextView)findViewById(R.id.id_tv_send_message);
 		id_tv_send_message.setText( makeLocationAlertMessage() );
 		
-		// Start / Stop 버튼을 세팅한다.
-		if ( isLocationServiceRunning() ){
-			CURRENT_BUTTON = STOP;
-		}else{
-			CURRENT_BUTTON = START;
-		}
+		// Start / Stop 에 따라 레이아웃 세팅 
+		setStartStopMode();
 		
 		// 주소록 검색 자동완성 세팅
 		AutoCompleteTextView textView = (AutoCompleteTextView) findViewById(R.id.autocomplete_country);
@@ -115,8 +110,6 @@ public class LocationControlActivity extends Base implements OnClickListener, On
 		        new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, names);
 		textView.setAdapter(adapter);		
 		
-		
-		setControlButtonText();
 	}
 
 
@@ -156,6 +149,34 @@ public class LocationControlActivity extends Base implements OnClickListener, On
 		
 	}
 	
+	
+	private void setStartStopMode(){
+		SharedPreferences settings = getSharedPreferences(Constants.PREFS_NAME, 0);
+		boolean isStarted = settings.getBoolean("IS_START", false);
+		int interval = settings.getInt("INTERVAL", Preference.DEFAULT_INTERVAL);
+		receiverName = settings.getString("RECEIVER", null);
+
+		Button id_bt_control = (Button)findViewById(R.id.id_bt_control);
+		TextView id_tv_min = (TextView)findViewById(R.id.id_tv_min);
+		
+		
+		if ( isStarted ){
+			id_bt_control.setText("Stop");
+			id_lv_contacts.setEnabled(false);
+			findViewById(R.id.id_iv_number_up).setEnabled(false);
+			findViewById(R.id.id_iv_number_down).setEnabled(false);
+		}else{
+			id_bt_control.setText("Start");
+			id_lv_contacts.setEnabled(true);
+			findViewById(R.id.id_iv_number_up).setEnabled(true);
+			findViewById(R.id.id_iv_number_down).setEnabled(true);
+		}
+		
+		currentTime = interval;
+		id_tv_send_message.setText( makeLocationAlertMessage() );
+		id_tv_min.setText(Integer.toString(currentTime));
+	}
+	
 	/**
 	 * 주소록 data가 없을 경우 주소록 data 를 세팅한다.
 	 */
@@ -164,32 +185,7 @@ public class LocationControlActivity extends Base implements OnClickListener, On
 			Util.setContacts(this);
 		}	
 	}
-
-	/**
-	 * 시작 / 정지 버튼의 텍스트를 세팅한다.
-	 */
-	private void setControlButtonText(){
-		Button id_bt_control = (Button)findViewById(R.id.id_bt_control);
-		if ( CURRENT_BUTTON == START ){
-			id_bt_control.setText("Start");
-		}else{
-			id_bt_control.setText("Stop");
-		}
-	}
 	
-	/**
-	 * 시작 / 정지 버튼 토글 
-	 */
-	private void toggleControlButton(){		
-		
-		if ( CURRENT_BUTTON == START ){
-			CURRENT_BUTTON = STOP;			
-		}else{
-			CURRENT_BUTTON = START;			
-		}
-		
-		setControlButtonText();
-	}
 	
 	/**
 	 * 서비스가 수행중인지 확인한다.
@@ -210,15 +206,57 @@ public class LocationControlActivity extends Base implements OnClickListener, On
 		
 		Intent intent;
 		TextView id_tv_min = null;
+		SharedPreferences settings = getSharedPreferences(Constants.PREFS_NAME, 0);
+		SharedPreferences.Editor editor = settings.edit();
 		
 		switch( v.getId() ){
 		case R.id.id_bt_control:
+			
+			boolean isStarted = settings.getBoolean("IS_START", false);
+			int userSelectInterval = 0;
+			
 			// 시작버튼 Click 했을 경우.
-			if ( CURRENT_BUTTON == START ){
+			if ( isStarted == false ){
+				userSelectInterval = currentTime;
+				
 				if ( receiverPhoneNumber == null ){
 					Toast.makeText(this, "위치를 전송할 사람을 선택하세요.", Toast.LENGTH_SHORT).show();
 					return;
 				}
+				
+				// GPS체크
+				LocationManager locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+				
+				if( locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) == false ) {
+					AlertDialog.Builder builder = new AlertDialog.Builder(this);
+					builder.setTitle(R.string.alert_title);
+					builder.setMessage("GPS 기능을 활성화 시키면 보다 정확한 위치정보를 얻을 수 있습니다. GPS기능을 설정 하시겠습니까?");
+					builder.setPositiveButton(R.string.alert_confirm,
+							new android.content.DialogInterface.OnClickListener() {
+								@Override
+								public void onClick(DialogInterface dialog, int which) {
+									Intent gpsOptionsIntent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+							        startActivity(gpsOptionsIntent);
+								}
+							});
+					builder.setNegativeButton("취소", null);
+					builder.show();
+				}
+				
+				// 네트워크 체크
+				ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+		        NetworkInfo ni = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+		        boolean isWifiAvail = ni.isAvailable();
+		        boolean isWifiConn = ni.isConnected();
+		        ni = cm.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+		        boolean isMobileAvail = ni.isAvailable();
+		        boolean isMobileConn = ni.isConnected();
+				
+		        if (!isWifiConn && !isMobileConn) {
+		        	showAlert("Wifi 혹은 3G망이 연결되지 않았거나 원활하지 않습니다.네트워크 확인후 다시 접속해 주세요!");
+		        	return;
+		        }
+		        
 				AlarmManager alarmManager = (AlarmManager)this.getSystemService(Context.ALARM_SERVICE);
 				intent = new Intent(getApplicationContext(), AlarmReceiver.class);
 				intent.putExtra(AlarmReceiver.ACTION_ALARM, AlarmReceiver.ACTION_ALARM);
@@ -232,8 +270,6 @@ public class LocationControlActivity extends Base implements OnClickListener, On
 					 
 				alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 25000, pIntent);
 					    
-					   
-				
 				/*
 				mCurrentLocationServiceIntent = new Intent(this, SendCurrentLocationService.class);
 				mCurrentLocationServiceIntent.putExtra("RECEIVER", receiverPhoneNumber);
@@ -242,7 +278,11 @@ public class LocationControlActivity extends Base implements OnClickListener, On
 				this.startService(mCurrentLocationServiceIntent);
 				*/
 			// 정지버튼 Click 했을 경우 
-			}else if ( CURRENT_BUTTON == STOP ){
+			}else if ( isStarted == true ){
+				userSelectInterval = Preference.DEFAULT_INTERVAL;
+				receiverName = null;
+				receiverPhoneNumber = null;
+				
 				intent = new Intent(getApplicationContext(), AlarmReceiver.class);
 				intent.putExtra(AlarmReceiver.ACTION_ALARM, AlarmReceiver.ACTION_ALARM);
 				 
@@ -256,8 +296,14 @@ public class LocationControlActivity extends Base implements OnClickListener, On
 				}
 				*/
 			}
+			editor.putBoolean("IS_START", !isStarted);
+			editor.putInt("INTERVAL", userSelectInterval);
+			editor.putString("RECEIVER", receiverName);
+			editor.commit();
 			
-			toggleControlButton();
+			setStartStopMode();
+			
+			//toggleControlButton();
 			break;
 			
 		case R.id.id_iv_number_up:
@@ -416,9 +462,7 @@ public class LocationControlActivity extends Base implements OnClickListener, On
 	    if ( receiverPhoneNumber == null ){
 	    	Toast.makeText(this, "보낼 수 없는 사용자 입니다.", Toast.LENGTH_SHORT).show();
 	    }else{
-	    	// 안내메시지 세팅
-	    	id_tv_send_message.setText( makeLocationAlertMessage() );
-    		
+	    	
     		// 서버에 등록되어 있는지 확인
     		String url = "http://choijiho.com/gringrid/imgoing/imgoing.php";
 	        List < NameValuePair > inputData = new ArrayList < NameValuePair > (4);
@@ -429,7 +473,11 @@ public class LocationControlActivity extends Base implements OnClickListener, On
 			// result_cd 가 0000 이 아니면 에러처리
 			try {
 				if ( resultData.getString("result_cd").equals(Constants.SUCCESS) == false ){
+					receiverPhoneNumber = null;
 					Toast.makeText(this, resultData.getString("result_msg"), Toast.LENGTH_SHORT).show();
+				}else{
+					// 안내메시지 세팅
+			    	id_tv_send_message.setText( makeLocationAlertMessage() );
 				}
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
