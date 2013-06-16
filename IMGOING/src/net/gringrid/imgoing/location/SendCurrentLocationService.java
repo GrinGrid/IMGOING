@@ -18,6 +18,7 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 
 import net.gringrid.imgoing.Constants;
+import net.gringrid.imgoing.Preference;
 import net.gringrid.imgoing.dao.MessageDao;
 import net.gringrid.imgoing.util.Util;
 import net.gringrid.imgoing.vo.MessageVO;
@@ -43,10 +44,8 @@ public class SendCurrentLocationService extends IntentService implements
 	private int mUpdateCount;
 	
 	private boolean isSendLocation = false;
-	private String mReceiver;
-	private String mReceiverId;
-	private int mInterval;
-	private String mStartTime;
+	
+	private MessageVO mMessageVO;
 	
 	
 	// Milliseconds per second
@@ -90,14 +89,10 @@ public class SendCurrentLocationService extends IntentService implements
 	@Override
 	protected void onHandleIntent(Intent intent) {
 		Log.d("jiho", "SendCurrentLocationService onHandleIntent");
-		Bundle mBundle = new Bundle();
-		mBundle = intent.getExtras();
+		Bundle bundle = new Bundle();
+		bundle = intent.getExtras();
+		mMessageVO = (MessageVO)bundle.getParcelable("MESSAGEVO");
 		isSendLocation = true;
-		mReceiver = mBundle.getString("RECEIVER");
-		mReceiverId = mBundle.getString("RECEIVER_ID");
-		mInterval = mBundle.getInt("INTERVAL");
-		mStartTime = mBundle.getString("START_TIME");
-		
 		
 		// Use high accuracy
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
@@ -108,9 +103,9 @@ public class SendCurrentLocationService extends IntentService implements
 		
         do{
         	try {
-				Thread.sleep(20000);
-				isSendLocation = false;
-			} catch (InterruptedException e) {
+				//Thread.sleep(20000);
+				//isSendLocation = false;
+			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -196,12 +191,13 @@ public class SendCurrentLocationService extends IntentService implements
 		Log.d("jiho", "onLocationChanged");
 		if ( location != null ){
 			mLocation = location;
+			Preference.LAST_LOCATION = location;
 			mUpdateCount++;
 			
 			if ( mUpdateCount > 2 ){
 				if ( insertMessage(location) == true ){
 					if ( sendServer() == true ){
-						this.stopSelf();
+						//this.stopSelf();
 					}
 				}
 			}
@@ -221,14 +217,14 @@ public class SendCurrentLocationService extends IntentService implements
 		int resultCd = 0;
 		
 		messageVO.sender = Util.getMyPhoneNymber(this);
-		messageVO.receiver = mReceiver;
-		messageVO.receiver_id = mReceiverId;
-		messageVO.start_time = mStartTime;
+		messageVO.receiver = mMessageVO.receiver;
+		messageVO.receiver_id = mMessageVO.receiver_id;
+		messageVO.start_time = mMessageVO.start_time;
 		messageVO.send_time = Util.getCurrentTime();
 		messageVO.receive_time = "";
 		messageVO.latitude = Double.toString(location.getLatitude());
 		messageVO.longitude	= Double.toString(location.getLongitude());
-		messageVO.interval = Integer.toString(mInterval);
+		messageVO.interval = mMessageVO.interval;
 		messageVO.provider = location.getProvider();
 		//messageVO.location_name = getLocationName(location.getLatitude(), location.getLongitude());
 		messageVO.location_name = "";
@@ -261,10 +257,10 @@ public class SendCurrentLocationService extends IntentService implements
 		// 2. Server insert
 		// 3. 화면이 열려있을경우 화면 갱신
 		Intent localIntent = new Intent(Constants.BROADCAST_ACTION);
-		localIntent.putExtra("START_TIME", mStartTime);
-		localIntent.putExtra("RECEIVER", mReceiver);
-		localIntent.putExtra("RECEIVER_ID", mReceiverId);
-		localIntent.putExtra("INTERVAL", mInterval);
+		localIntent.putExtra("START_TIME", mMessageVO.start_time);
+		localIntent.putExtra("RECEIVER", mMessageVO.receiver);
+		localIntent.putExtra("RECEIVER_ID", mMessageVO.receiver_id);
+		localIntent.putExtra("INTERVAL", mMessageVO.interval);
 		localIntent.putExtra("MODE", "START");
 		localIntent.putExtra("LOCATION", mLocation);
 		LocalBroadcastManager.getInstance(this).sendBroadcast(localIntent);	
@@ -274,6 +270,6 @@ public class SendCurrentLocationService extends IntentService implements
 	public void onDisconnected() {
 		Log.d("jiho", "onDisconnected");
 	};
-	
+
 }
 

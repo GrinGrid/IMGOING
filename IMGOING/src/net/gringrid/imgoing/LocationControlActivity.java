@@ -21,6 +21,8 @@ import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.app.ActivityManager.RunningServiceInfo;
 import android.app.AlarmManager;
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -35,12 +37,19 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.provider.ContactsContract.PhoneLookup;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.CursorLoader;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnFocusChangeListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.TextView.OnEditorActionListener;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -50,19 +59,31 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class LocationControlActivity extends Base implements OnClickListener, OnItemClickListener{
+public class LocationControlActivity extends Base implements 	OnClickListener, 
+																OnItemClickListener,
+																OnFocusChangeListener,
+																OnEditorActionListener{
 	
 	// 주소록 Listview
 	private ListView id_lv_contacts;
 	private ContactsListAdapter contactsListAdapter;
 	
 	// 전송 간격을 세팅
-	private int[] timeList = new int[]{1, 3, 5, 10, 15, 20, 25, 30, 40, 50, 60, 120};
-	private int currentTime = 5;
+	private int[] timeList = new int[]{1, 3, 5, 7, 10, 15, 20, 25, 30, 40, 50, 60, 120};
+	private int currentTime;
 	private TextView id_tv_send_message;
 	private String receiverPhoneNumber;
 	private String receiverNumberId;
 	private String receiverName;
+	
+	// 초성검색 , 중간검색
+	private static final char HANGUL_BEGIN_UNICODE = 44032;	// 가
+	private static final char HANGUL_LAST_UNICODE = 55203;	// 힣
+	private static final char HANGUL_BASE_UNIT = 588;		// 각자음 마다 가지는 글자수
+	private static final char[] INITIAL_SOUND = {'ㄱ', 'ㄲ', 'ㄴ', 'ㄷ', 'ㄸ', 'ㄹ', 'ㅁ', 'ㅂ', 'ㅃ', 'ㅅ', 'ㅆ', 'ㅇ', 'ㅈ', 'ㅉ', 'ㅊ', 'ㅋ', 'ㅌ', 'ㅍ', 'ㅎ'};
+	
+	// Notification ID 
+	private static final int NOTIFICATION_ID_MAIN = 7575;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +101,7 @@ public class LocationControlActivity extends Base implements OnClickListener, On
 	}
 	
 	private void init() {
+		
 		// 주소록을 가져와 vector에 담는다.
 		setContacts();
 		
@@ -87,7 +109,8 @@ public class LocationControlActivity extends Base implements OnClickListener, On
 		id_lv_contacts = (ListView)findViewById(R.id.id_lv_contacts);
 		contactsListAdapter = new ContactsListAdapter(this);
 		id_lv_contacts.setAdapter(contactsListAdapter);
-		contactsListAdapter.setAll(Preference.CONTACTS_LIST);
+		contactsListAdapter.setAll(Preference.SEND_HISTORY_CONTACTS_LIST);
+		contactsListAdapter.addAll(Preference.CONTACTS_LIST);
 		
 		// 전송알림메시지 
 		id_tv_send_message = (TextView)findViewById(R.id.id_tv_send_message);
@@ -97,18 +120,46 @@ public class LocationControlActivity extends Base implements OnClickListener, On
 		setStartStopMode();
 		
 		// 주소록 검색 자동완성 세팅
-		AutoCompleteTextView textView = (AutoCompleteTextView) findViewById(R.id.autocomplete_country);
-		String[] names = new String[Preference.CONTACTS_LIST.size()];
-		int i = 0;
-		for ( ContactsVO vo : Preference.CONTACTS_LIST ){
-			names[i++] = vo.name;
+		//AutoCompleteTextView textView = (AutoCompleteTextView) findViewById(R.id.autocomplete_country);
+		final EditText searchEditText = (EditText) findViewById(R.id.autocomplete_country);
+		if(searchEditText != null) {
+			searchEditText.setOnFocusChangeListener(this);
+			searchEditText.setOnEditorActionListener(this);
+			searchEditText.addTextChangedListener(new TextWatcher() {
+				@Override
+				public void afterTextChanged(Editable s) {}
+				
+				@Override
+				public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+				
+				@Override
+				public void onTextChanged(CharSequence s, int start, int before, int count) {
+					String keyword = searchEditText.getText().toString().toUpperCase();
+					
+					if ( keyword.length() == 0 ){
+						contactsListAdapter.setAll(Preference.SEND_HISTORY_CONTACTS_LIST);
+						contactsListAdapter.addAll(Preference.CONTACTS_LIST);
+						
+					}else{
+						Vector<ContactsVO> matched = new Vector<ContactsVO>();
+						for ( ContactsVO contact : Preference.CONTACTS_LIST ){
+
+							if ( contact.name.toUpperCase().indexOf(keyword) >= 0 ){
+								matched.add(contact);
+							}else{
+								if ( matchString(contact.name, keyword) ){
+									matched.add(contact);
+								}
+							}
+						}
+						contactsListAdapter.setAll(matched);
+					}
+						
+				}
+			});
 		}
-		for ( String name : names ){
-			//Log.d("jiho", "name : "+name);
-		}
-		ArrayAdapter<String> adapter = 
-		        new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, names);
-		textView.setAdapter(adapter);		
+		
+		
 		
 	}
 
@@ -257,29 +308,62 @@ public class LocationControlActivity extends Base implements OnClickListener, On
 		        	return;
 		        }
 		        
+		        // 알람등록을 위한 데이타 세팅
 				AlarmManager alarmManager = (AlarmManager)this.getSystemService(Context.ALARM_SERVICE);
+				MessageVO messageVO = new MessageVO();
+				messageVO.receiver = receiverPhoneNumber;
+				messageVO.receiver_id = receiverNumberId;
+				messageVO.interval = Integer.toString(currentTime);
+				messageVO.start_time = Util.getCurrentTime();
+				
 				intent = new Intent(getApplicationContext(), AlarmReceiver.class);
 				intent.putExtra(AlarmReceiver.ACTION_ALARM, AlarmReceiver.ACTION_ALARM);
+				intent.putExtra("MESSAGEVO", messageVO);
+				/*
 				intent.putExtra("RECEIVER", receiverPhoneNumber);
 				intent.putExtra("RECEIVER_ID", receiverNumberId);
 				intent.putExtra("INTERVAL", currentTime);
 				intent.putExtra("START_TIME", Util.getCurrentTime());
-				
-				
-				PendingIntent pIntent = PendingIntent.getBroadcast(this, 1234567, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-					 
-				alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 25000, pIntent);
-					    
-				/*
-				mCurrentLocationServiceIntent = new Intent(this, SendCurrentLocationService.class);
-				mCurrentLocationServiceIntent.putExtra("RECEIVER", receiverPhoneNumber);
-				mCurrentLocationServiceIntent.putExtra("RECEIVER_ID", receiverNumberId);
-				mCurrentLocationServiceIntent.putExtra("INTERVAL", currentTime);
-				this.startService(mCurrentLocationServiceIntent);
 				*/
-			// 정지버튼 Click 했을 경우 
+				PendingIntent pIntent = PendingIntent.getBroadcast(this, 1234567, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+				
+				// 설정한 시간 간격으로 알람 호출
+				alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 25000, pIntent);
+				
+				// Preference.SEND_HISTORY_CONTACTS_LIST 갱신
+				Util.setSendHistoryContactList(this);
+				editor.putInt("INTERVAL", userSelectInterval);
+				
+				// Notification 생성
+				//Notification noti = NotificationCompat.Builder.build();
+				Intent resultIntent = new Intent(this, IntroActivity.class);
+				resultIntent.putExtra("IS_FROM_NOTIFICATION", true);
+				resultIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				PendingIntent notifyIntent =
+				        PendingIntent.getActivity(
+				        this,
+				        0,
+				        resultIntent,
+				        PendingIntent.FLAG_UPDATE_CURRENT
+				);
+				
+				
+				NotificationCompat.Builder notiBuilder = new NotificationCompat.Builder(this);
+				notiBuilder.setSmallIcon(R.drawable.ic_launcher);
+				notiBuilder.setContentTitle("I'm Going");
+				notiBuilder.setContentText("I'm going is running ~");
+				notiBuilder.setOngoing(true);
+				notiBuilder.setContentIntent(notifyIntent);
+				
+				
+				NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+				notificationManager.notify(NOTIFICATION_ID_MAIN, notiBuilder.build());
+				
+				
+			// 정지버튼 Click 했을 경우
+			// 알람 중지
+			// 서비스가 실행중일경우 서비스 중지
 			}else if ( isStarted == true ){
-				userSelectInterval = Preference.DEFAULT_INTERVAL;
 				receiverName = null;
 				receiverPhoneNumber = null;
 				
@@ -290,15 +374,19 @@ public class LocationControlActivity extends Base implements OnClickListener, On
 				 
 				AlarmManager alarms = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
 				alarms.cancel(pIntent);
-				/*
+				
 				if ( isLocationServiceRunning() ){
 					this.stopService(new Intent(this, SendCurrentLocationService.class));
 				}
-				*/
+				
+				// Notification dismiss
+				NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+				notificationManager.cancel(NOTIFICATION_ID_MAIN);
+				
+				
 			}
-			editor.putBoolean("IS_START", !isStarted);
-			editor.putInt("INTERVAL", userSelectInterval);
 			editor.putString("RECEIVER", receiverName);
+			editor.putBoolean("IS_START", !isStarted);
 			editor.commit();
 			
 			setStartStopMode();
@@ -486,6 +574,70 @@ public class LocationControlActivity extends Base implements OnClickListener, On
 	    }
 	}
 	
+	private boolean matchString(String value, String search) {
+		int t = 0;
+		int seof = value.length() - search.length();
+		int slen = search.length();
+		if (seof < 0)
+			return false; // 검색어가 더 길면 false를 리턴한다.
+
+		for (int i = 0; i <= seof; i++)
+		{
+			t = 0;
+			while (t < slen)
+			{
+				if (isInitialSound(search.charAt(t)) == true && isHangul(value.charAt(i + t)))
+				{
+					// 만약 현재 char이 초성이고 value가 한글이면
+					if (getInitialSound(value.charAt(i + t)) == search.charAt(t))
+						// 각각의 초성끼리 같은지 비교한다
+						t++;
+					else
+						break;
+				}
+				else
+				{
+					// char이 초성이 아니라면
+					if (value.charAt(i + t) == search.charAt(t))
+						// 그냥 같은지 비교한다.
+						t++;
+					else
+						break;
+				}
+			}
+			if (t == slen)
+				return true; // 모두 일치한 결과를 찾으면 true를 리턴한다.
+		}
+
+		return false; // 일치하는 것을 찾지 못했으면 false를 리턴한다.
+	}
+
+
+	
+	private boolean isInitialSound(char searchar) {
+		for (char c : INITIAL_SOUND)
+		{
+			if (c == searchar)
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	
+	private char getInitialSound(char c)
+	{
+		int hanBegin = (c - HANGUL_BEGIN_UNICODE);
+		int index = hanBegin / HANGUL_BASE_UNIT;
+		return INITIAL_SOUND[index];
+	}
+	
+	private boolean isHangul(char c)
+	{
+		return HANGUL_BEGIN_UNICODE <= c && c <= HANGUL_LAST_UNICODE;
+	}
+	
 	
 	/**
 	 * 사용자가 선택한 정보(받는사람/송신간격)을 텍스트로 세팅
@@ -503,5 +655,19 @@ public class LocationControlActivity extends Base implements OnClickListener, On
 		message += receiver+" "+getResources().getString(R.string.location_alert_second);
 		
 		return message;
+	}
+
+
+	@Override
+	public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+	@Override
+	public void onFocusChange(View v, boolean hasFocus) {
+		// TODO Auto-generated method stub
+		
 	}
 }

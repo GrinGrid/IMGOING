@@ -26,6 +26,7 @@ import org.json.JSONObject;
 
 import net.gringrid.imgoing.Constants;
 import net.gringrid.imgoing.Preference;
+import net.gringrid.imgoing.dao.MessageDao;
 import net.gringrid.imgoing.vo.ContactsVO;
 import net.gringrid.imgoing.vo.UserVO;
 import android.app.Activity;
@@ -36,6 +37,7 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.net.NetworkInfo.State;
 import android.provider.ContactsContract;
+import android.provider.ContactsContract.PhoneLookup;
 import android.support.v4.content.CursorLoader;
 import android.telephony.TelephonyManager;
 import android.util.Log;
@@ -77,6 +79,27 @@ public class Util {
 		}
 		
 		return phone_number;
+	}
+	
+	/**
+	 * 전화번호에 해당하는 연락처 정보를 가져온다.
+	 */
+	public static ContactsVO getContactsVOByPhoneNumber(Context context, String phone_number ){
+		ContactsVO contactsVO = null;
+		
+		String[] projection = new String[] {
+		        ContactsContract.PhoneLookup.DISPLAY_NAME,
+		        ContactsContract.PhoneLookup._ID};
+		Uri uri = Uri.withAppendedPath(PhoneLookup.CONTENT_FILTER_URI, Uri.encode( phone_number ));
+		Cursor cursor = context.getContentResolver().query(uri, projection, null, null, null);
+		
+		if ( cursor.moveToFirst() ){
+			contactsVO = new ContactsVO();
+		    contactsVO.id = cursor.getString(cursor.getColumnIndex(ContactsContract.PhoneLookup._ID));
+		    contactsVO.name = cursor.getString(cursor.getColumnIndex(ContactsContract.PhoneLookup.DISPLAY_NAME));
+		    contactsVO.phoneNumber = phone_number;
+		}
+		return contactsVO;
 	}
 	
 	
@@ -125,8 +148,47 @@ public class Util {
 	}
 	
 	
+	public static void setSendHistoryContactList(Context context){
+		Preference.SEND_HISTORY_CONTACTS_LIST = new Vector<ContactsVO>();
+    	MessageDao messageDao = new MessageDao(context);
+		Cursor cursor = messageDao.querySendPersonList();
+		int index_receiver = cursor.getColumnIndex("receiver");
+		
+		if ( cursor.moveToFirst() ) {
+			do{
+				String receiver = cursor.getString(index_receiver);
+				ContactsVO contact = null;
+				if ( Util.isEmpty(receiver) == false ){
+					contact = Util.getContactsVOByPhoneNumber(context, receiver);
+					contact.isHistory = true;
+				}
+				if ( contact != null ){
+					Preference.SEND_HISTORY_CONTACTS_LIST.add(contact);
+				}
+			}while(cursor.moveToNext());
+		}
+	}
+	
+	
 	/**
 	 * String 이 비어 있는지 확인한다.
+	 * @param str : 문자열
+	 * @return 문자열 null 또는 공백여부 
+	 */
+	public static boolean isEmpty(String str){
+		boolean result = false;
+		if ( str == null || str.equals("") ){
+			result = true;
+		}
+		return result;
+	}
+	
+	
+	/**
+	 * String 이 비어 있는지 확인한다.
+	 * @param str : 문자열 
+	 * @param minLength : 문자열 최소길이 
+	 * @return 문자열 null 또는 공백여부
 	 */
 	public static boolean isEmpty(String str, int minLength){
 		boolean result = false;

@@ -7,6 +7,7 @@ import net.gringrid.imgoing.vo.ContactsVO;
 import net.gringrid.imgoing.vo.MessageVO;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -52,13 +53,30 @@ public class ContactsListAdapter extends BaseAdapter{
 	}
 
 	public void setAll(Vector<ContactsVO> messageList){
+		if ( messageList == null ){
+			return;
+		}
 		this.data.clear();
 		this.data.addAll(messageList);		
 		notifyDataSetChanged();
 	}
 	
+	public void addAll(Vector<ContactsVO> messageList){
+		this.data.addAll(messageList);		
+		notifyDataSetChanged();
+	}
+	
+	public void add(ContactsVO contact){
+		this.data.add(0, contact);		
+		notifyDataSetChanged();
+	}
+	
 	public void setSelected(int position){
 		selectedIndex = position;
+	}
+	
+	public Vector<ContactsVO> getAll(){
+		return data;
 	}
 	
 	@Override
@@ -81,6 +99,11 @@ public class ContactsListAdapter extends BaseAdapter{
 				id_iv_contacts_list_selector.setVisibility(View.GONE);
 			}
 			id_tv_name.setText(item.name);
+			if ( item.isHistory ){
+				id_tv_name.setTextColor(Color.BLUE);
+			}else{
+				id_tv_name.setTextColor(Color.BLACK);
+			}
 		}
 		
 		return view;		

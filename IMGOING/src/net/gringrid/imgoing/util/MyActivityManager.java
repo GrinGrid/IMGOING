@@ -77,6 +77,10 @@ public class MyActivityManager {
 		ACTIVITY_HISTORY.clear();
 	}
 
+	public static int getActivityHistorySize(){
+		return ACTIVITY_HISTORY.size();
+	}
+	
 	public static void remove(Activity activity) {
 		String activityNameForRemove = activity.getClass().getName();
 		int activitySize = ACTIVITY_HISTORY.size();

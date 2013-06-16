@@ -112,7 +112,7 @@ public class MessageDao {
 					"ORDER BY start_time DESC");
 	
 	
-	// 한사람에 대한 메시지 송신목
+	// 한사람에 대한 메시지 송신목록
 	private static final String SQL_SEND_LIST_FOR_ONE = 
 			String.format("SELECT "+
 					"* "+

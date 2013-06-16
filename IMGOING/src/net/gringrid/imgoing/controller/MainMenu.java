@@ -12,6 +12,7 @@ import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.view.View.OnClickListener;
 
@@ -24,16 +25,30 @@ public class MainMenu extends LinearLayout implements OnClickListener{
 	public MainMenu(Context context) {
 		super(context);
 		mContext = context;
-		drawMainMenu();
+		//drawMainMenu();
 	}
 	
 	public MainMenu(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		mContext = context;
-		drawMainMenu();
+		//drawMainMenu();
 	}
 
 
+	@Override
+	protected void onLayout(boolean changed, int l, int t, int r, int b) {
+		LinearLayout.LayoutParams params = new LayoutParams(getLayoutParams());
+		params.width = LayoutParams.MATCH_PARENT;
+		params.height = LayoutParams.MATCH_PARENT;
+		ImageView menuLocationControl = new ImageView(mContext);
+		menuLocationControl.setLayoutParams(params); 
+		menuLocationControl.setImageDrawable(mContext.getResources().getDrawable(R.drawable.location_control));
+		addView(menuLocationControl);
+		//net.gringrid.imgoing.controller
+		super.onLayout(changed, l, t, r, b);
+	}
+	
+	
 	protected void drawMainMenu() {
 		mInflater = LayoutInflater.from(mContext);
 		View mainMenu = mInflater.inflate(R.layout.controller_main_menu, null);

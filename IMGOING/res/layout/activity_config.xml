@@ -18,12 +18,11 @@
         android:orientation="horizontal"
         android:background="#000000" 
         >
-        <net.gringrid.imgoing.controller.MainMenu
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#eaeaea"
-            />
-            
+        	<net.gringrid.imgoing.controller.MainMenu
+				android:layout_width="fill_parent"
+				android:layout_height="fill_parent"
+				android:layout_weight="1"
+				/>
     </LinearLayout>
     <!-- Main Menu end -->
     
@@ -66,230 +65,58 @@
         android:orientation="horizontal"
         android:weightSum="480"
         >
-        
-        
-        <!-- Left Body Start -->
-        <LinearLayout
-            android:layout_width="0dp"
-        	android:layout_height="match_parent"
-        	android:layout_weight="160"
-        	android:orientation="vertical"
-        	android:weightSum="680"
-        	android:background="@drawable/location_control_body_bg"
-            >
-            <LinearLayout
-                android:layout_width="match_parent"
-	        	android:layout_height="0dp"
-	        	android:layout_weight="50"
-	        	android:gravity="center"
-                >
-                <ImageView
-                    android:layout_width="wrap_content"
-	                android:layout_height="wrap_content"
-	                android:src="@drawable/friend_icon" 
-                    />
-                <TextView
-                    android:id="@+id/id_tv_send_person_list"
-	                android:layout_width="wrap_content"
-	                android:layout_height="wrap_content"
-	                android:layout_marginLeft="10px"
-	                android:text="친구목록" />
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-	        	android:layout_height="0dp"
-	        	android:layout_weight="30"
-	        	android:gravity="center"
-                >
-                <ImageView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_gravity="bottom"
-                    android:src="@drawable/icon_search"/>
-                <LinearLayout 
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="4"
-                    android:paddingRight="10dp"
-                    android:orientation="vertical"
-                    >
-                    
-					<AutoCompleteTextView  
-					    android:id="@+id/autocomplete_country"
-					    android:layout_width="match_parent"
-					    android:layout_height="match_parent"
-					    android:layout_marginLeft="5dp"
-					    android:completionThreshold="1"
-					    android:background="#00000000"
-					    android:text="" />
-                    
-                    <ImageView
-	                    android:layout_width="match_parent"
-	                    android:layout_height="wrap_content"
-	                    android:layout_gravity="left"
-	                    android:layout_marginTop="-10px"
-	                    android:background="@drawable/search_text_underline"/>
-	                
-                </LinearLayout>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-	        	android:layout_height="0dp"
-	        	android:layout_weight="595"
-                >
-                <ListView
-                    android:id="@+id/id_lv_contacts"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:cacheColorHint="#00000000"/>
-            </LinearLayout>
-        </LinearLayout>
-        <!-- Left Body End -->
-        
-        
-        <!-- Right Body Start -->
-        <LinearLayout
-            android:layout_width="0dp"
-        	android:layout_height="match_parent"
-        	android:layout_weight="320"
-        	android:layout_marginLeft="10px"
-        	android:orientation="vertical"
-        	android:weightSum="680"
-        	android:background="@drawable/location_control_body_bg"
-            >
-            <LinearLayout
-                android:layout_width="match_parent"
-	        	android:layout_height="0dp"
-	        	android:layout_weight="50"
-	        	android:gravity="center"
-                >
-                <ImageView
-                    android:layout_width="wrap_content"
-	                android:layout_height="wrap_content"
-	                android:src="@drawable/clock_icon" 
-                    />
-                <TextView
-	                android:layout_width="wrap_content"
-	                android:layout_height="wrap_content"
-	                android:layout_marginLeft="10px"
-	                android:text="시간설정" />
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-	        	android:layout_height="0dp"
-	        	android:layout_weight="200"
-	        	android:gravity="center"
-                >
-                <TextView
-                    android:id="@+id/id_tv_min"
-	                android:layout_width="0dp"
-	                android:layout_height="match_parent"
-	                android:gravity="center_vertical|right"
-	                android:layout_weight="3"
-	                android:textSize="30dp"
-	                android:text="5" />
-                <TextView
-	                android:layout_width="0dp"
-	                android:layout_height="match_parent"
-	                android:layout_weight="1"
-	                android:gravity="center_vertical"
-	                android:paddingTop="16dp"
-	                android:text="분" />
-                <LinearLayout 
-                    android:layout_width="0dp"
-	                android:layout_height="match_parent"
-	                android:layout_weight="3"
-	                android:orientation="vertical"
-	                android:gravity="center_vertical"
-	                android:paddingLeft="10dp"
-                    >
-                    <ImageView 
-                        android:id="@+id/id_iv_number_up"
-                        android:layout_width="wrap_content"
-	                	android:layout_height="wrap_content"
-	                	android:src="@drawable/number_control_up"
-                        />
-                    <ImageView 
-                        android:id="@+id/id_iv_number_down"
-                        android:layout_width="wrap_content"
-	                	android:layout_height="wrap_content"
-	                	android:layout_marginTop="10px"
-	                	android:src="@drawable/number_control_down"
-                        />
-                </LinearLayout>
-                
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-	        	android:layout_height="0dp"
-	        	android:layout_weight="150"
-	        	android:orientation="horizontal"
-	        	android:gravity="center_horizontal|top"
-                >
-                
-                <TextView
-                    android:id="@+id/id_tv_send_message"
-	                android:layout_width="0dp"
-	                android:layout_height="match_parent"
-	                android:layout_weight="25"
-	                android:paddingLeft="20dp"
-	                android:paddingRight="20dp"
-	                android:textSize="12dp"
-	                android:text="분 단위로 Choi jiho님에게 \nLee inhee님의 위치가 전송됩니다.\n시작하시겠습니까?" />
-            </LinearLayout>
-            
-            <LinearLayout
-                android:layout_width="match_parent"
-	        	android:layout_height="0dp"
-	        	android:layout_weight="250"
-                >
-                <LinearLayout
-                    android:layout_width="0dp"
-	        		android:layout_height="match_parent"
-	        		android:layout_weight="1">
-                    
-                </LinearLayout>
-				<Button
-				    android:id="@+id/id_bt_control"
-				    android:layout_width="0dp"
-	        		android:layout_height="wrap_content"
-	        		android:layout_weight="3"
-	        		android:background="@drawable/start_bt"
-	        		android:textColor="#FFFFFF"
-	        		android:textStyle="bold"
-	        		android:text="Start" />
-				<LinearLayout
-                    android:layout_width="0dp"
-	        		android:layout_height="match_parent"
-	        		android:layout_weight="1">
-                </LinearLayout>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-	        	android:layout_height="0dp"
-	        	android:layout_weight="30"
-                >
-                <LinearLayout
-                    android:layout_width="0dp"
-	        		android:layout_height="match_parent"
-	        		android:layout_weight="1">
-                </LinearLayout>
-				<LinearLayout
-                    android:layout_width="0dp"
-	        		android:layout_height="match_parent"
-	        		android:layout_weight="1">
-                </LinearLayout>
-                <ImageView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:src="@drawable/buboo" 
-                    />
-            </LinearLayout>
-        </LinearLayout>
-        <!-- Right Body End -->
-        
+       <LinearLayout
+           android:layout_width="match_parent" 
+           android:layout_height="wrap_content"
+           android:orientation="vertical"
+           android:background="@drawable/config_body_bg"
+           >
+           <TextView
+		        android:layout_width="fill_parent"
+		        android:layout_height="fill_parent"
+		        android:layout_weight="1"
+		        android:padding="5dp"
+		        android:gravity="center_vertical"
+		        android:text="이용안내"
+		        style="@style/ConfigContent"
+		        />
+           <TextView
+		        android:layout_width="fill_parent"
+		        android:layout_height="fill_parent"
+		        android:layout_weight="1"
+		        android:padding="5dp"
+		        android:gravity="center_vertical"
+		        android:text="현재위치 검색 방법"
+		        style="@style/ConfigContent"
+		        />
+           <TextView
+		        android:layout_width="fill_parent"
+		        android:layout_height="fill_parent"
+		        android:layout_weight="1"
+		        android:padding="5dp"
+		        android:gravity="center_vertical"
+		        android:text="보낸메시지 최대 보관수"
+		        style="@style/ConfigContent"
+		        />
+           <TextView
+		        android:layout_width="fill_parent"
+		        android:layout_height="fill_parent"
+		        android:layout_weight="1"
+		        android:padding="5dp"
+		        android:gravity="center_vertical"
+		        android:text="받은메시지 최대 보관수"
+		        style="@style/ConfigContent"
+		        />
+           <TextView
+		        android:layout_width="fill_parent"
+		        android:layout_height="fill_parent"
+		        android:layout_weight="1"
+		        android:padding="5dp"
+		        android:gravity="center_vertical"
+		        android:text="메시지 도착 알림"
+		        style="@style/ConfigContent"
+		        />
+       </LinearLayout>        
         
     </LinearLayout>
     <!-- Body End -->

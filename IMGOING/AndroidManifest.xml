@@ -94,7 +94,10 @@
 		<!-- 위치전송 화면 -->
 		<activity 
 		    android:name="LocationControlActivity"
-		    android:windowSoftInputMode="adjustPan">
+		    android:windowSoftInputMode="adjustPan"
+		    android:launchMode="singleTask"
+		    android:taskAffinity=""
+		    android:excludeFromRecents="true">
 		</activity>
 		
         <meta-data
