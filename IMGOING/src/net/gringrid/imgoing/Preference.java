@@ -31,10 +31,18 @@ public class Preference {
 	// 마지막 장소
 	public static Location LAST_LOCATION = null;
 	
-	// 현재위치 검색 옵션
+	/**
+	 * 현재위치 검색 옵션
+	 */
 	public static int SETTING_LOCATION_SEARCH;
-	public static final int SETTING_LOCATION_SEARCH_FINE = 0;
-	public static final int SETTING_LOCATION_SEARCH_COARSE = 1;
-	public static final int SETTING_LOCATION_SEARCH_DEFAULT = SETTING_LOCATION_SEARCH_FINE;
+	/**
+	 * 정확도 우선
+	 */
+	public static final int SETTING_LOCATION_SEARCH_ACCURATE = 0;
+	/**
+	 * 배터리 절약 우선
+	 */
+	public static final int SETTING_LOCATION_SEARCH_BATTERY = 1;
+	public static final int SETTING_LOCATION_SEARCH_DEFAULT = SETTING_LOCATION_SEARCH_ACCURATE;
 	
 }

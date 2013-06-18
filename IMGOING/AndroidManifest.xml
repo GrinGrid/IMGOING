@@ -92,12 +92,7 @@
 		<activity android:name="ConfigActivity"></activity>
 		
 		<!-- 위치전송 화면 -->
-		<activity 
-		    android:name="LocationControlActivity"
-		    android:windowSoftInputMode="adjustPan"
-		    android:launchMode="singleTask"
-		    android:taskAffinity=""
-		    android:excludeFromRecents="true">
+		<activity android:name="LocationControlActivity">
 		</activity>
 		
         <meta-data

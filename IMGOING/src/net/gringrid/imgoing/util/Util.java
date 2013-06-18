@@ -26,11 +26,14 @@ import org.json.JSONObject;
 
 import net.gringrid.imgoing.Constants;
 import net.gringrid.imgoing.Preference;
+import net.gringrid.imgoing.R;
 import net.gringrid.imgoing.dao.MessageDao;
 import net.gringrid.imgoing.vo.ContactsVO;
 import net.gringrid.imgoing.vo.UserVO;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -238,7 +241,11 @@ public class Util {
             }
             Log.d("jiho", "stringBuilder : "+stringBuilder);
         } catch (ClientProtocolException e) {
-            } catch (IOException e) {
+        	Log.d("jiho", "ClientProtocolException : "+e.getStackTrace());
+        	return null;
+        } catch (IOException e) {
+        	Log.d("jiho", "IOException : "+e.getStackTrace());
+        	return null;
         }
 
         JSONObject jsonObject = new JSONObject();
@@ -257,5 +264,14 @@ public class Util {
 	{  
 		String contactName = "";
 		return contactName; 
+	}
+	
+	public static void loadSetting(Context context){
+		SharedPreferences settings = context.getSharedPreferences(Constants.PREFS_NAME, 0);
+		SharedPreferences.Editor editor = settings.edit();
+		Preference.SETTING_LOCATION_SEARCH = settings.getInt("SETTING_LOCATION_SEARCH", Preference.SETTING_LOCATION_SEARCH_ACCURATE);
+		Preference.SETTING_LOCATION_SEARCH = settings.getInt("SETTING_LOCATION_SEARCH", Preference.SETTING_LOCATION_SEARCH_BATTERY);
+		editor.commit();
+		
 	}
 }

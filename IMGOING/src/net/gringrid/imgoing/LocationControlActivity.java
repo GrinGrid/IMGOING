@@ -303,6 +303,9 @@ public class LocationControlActivity extends Base implements 	OnClickListener,
 		        boolean isMobileAvail = ni.isAvailable();
 		        boolean isMobileConn = ni.isConnected();
 				
+		        Log.d("jiho", "isWifiAvail : "+isWifiAvail);
+		        Log.d("jiho", "isMobileAvail : "+isMobileAvail);
+		        
 		        if (!isWifiConn && !isMobileConn) {
 		        	showAlert("Wifi 혹은 3G망이 연결되지 않았거나 원활하지 않습니다.네트워크 확인후 다시 접속해 주세요!");
 		        	return;
@@ -326,9 +329,9 @@ public class LocationControlActivity extends Base implements 	OnClickListener,
 				intent.putExtra("START_TIME", Util.getCurrentTime());
 				*/
 				PendingIntent pIntent = PendingIntent.getBroadcast(this, 1234567, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-				
+				int term = currentTime * 60 * 1000;
 				// 설정한 시간 간격으로 알람 호출
-				alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 25000, pIntent);
+				alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), currentTime * 60 * 1000, pIntent);
 				
 				// Preference.SEND_HISTORY_CONTACTS_LIST 갱신
 				Util.setSendHistoryContactList(this);
@@ -338,7 +341,10 @@ public class LocationControlActivity extends Base implements 	OnClickListener,
 				//Notification noti = NotificationCompat.Builder.build();
 				Intent resultIntent = new Intent(this, IntroActivity.class);
 				resultIntent.putExtra("IS_FROM_NOTIFICATION", true);
-				resultIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				// 앱 실행하고 다른 메뉴로 이동후 noti 클릭하면 새로 앱을 띄움
+				//resultIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				resultIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				
 				PendingIntent notifyIntent =
 				        PendingIntent.getActivity(
 				        this,
@@ -558,6 +564,11 @@ public class LocationControlActivity extends Base implements 	OnClickListener,
 	        inputData.add(new BasicNameValuePair("phone_number",receiverPhoneNumber));
 	        JSONObject resultData = Util.requestHttp(url, inputData);
 	        
+	        if ( resultData == null ){
+	        	showAlert(getResources().getString(R.string.alert_network_disable));
+	        	receiverPhoneNumber = null;
+	        	return;
+	        }
 			// result_cd 가 0000 이 아니면 에러처리
 			try {
 				if ( resultData.getString("result_cd").equals(Constants.SUCCESS) == false ){

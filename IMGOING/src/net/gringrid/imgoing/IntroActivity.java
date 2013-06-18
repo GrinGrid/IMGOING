@@ -42,6 +42,7 @@ public class IntroActivity extends Activity{
 		boolean isFromNotification = getIntent().getBooleanExtra("IS_FROM_NOTIFICATION", false);
 		Log.d("jiho", "isFromNotification : "+isFromNotification);
 		if ( isFromNotification == true ){
+			getIntent().removeExtra("IS_FROM_NOTIFICATION");
 			mIntent = new Intent(IntroActivity.this, LocationControlActivity.class);
 		}else{
 			mIntent = new Intent(IntroActivity.this, MainActivity.class);
@@ -59,6 +60,11 @@ public class IntroActivity extends Activity{
 	            	Context mContext = getApplicationContext();
 	                while (mProgressStatus < 100) {
 	                	mProgressStatus = doWork();
+	                	
+	                	// setting 정보를 로딩한다.
+	                	if ( mProgressStatus == 13 ){
+	                		Util.loadSetting(mContext);
+	                	}
 	                	
 	                	// 주소록 정보를 세팅한다.
 	                	if ( mProgressStatus == 33 ){

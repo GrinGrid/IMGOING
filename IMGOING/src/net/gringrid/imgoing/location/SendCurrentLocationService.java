@@ -24,6 +24,7 @@ import net.gringrid.imgoing.util.Util;
 import net.gringrid.imgoing.vo.MessageVO;
 import android.app.IntentService;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
@@ -43,19 +44,18 @@ public class SendCurrentLocationService extends IntentService implements
 	
 	private int mUpdateCount;
 	
-	private boolean isSendLocation = false;
+	private boolean mIsContinue = false;
 	
 	private MessageVO mMessageVO;
-	
-	
+		
 	// Milliseconds per second
     private static final int MILLISECONDS_PER_SECOND = 1000;
     // Update frequency in seconds
-    public static final int UPDATE_INTERVAL_IN_SECONDS = 5;
+    public static final int UPDATE_INTERVAL_IN_SECONDS = 10;
     // Update frequency in milliseconds
     private static final long UPDATE_INTERVAL = MILLISECONDS_PER_SECOND * UPDATE_INTERVAL_IN_SECONDS;
     // The fastest update frequency, in seconds
-    private static final int FASTEST_INTERVAL_IN_SECONDS = 1;
+    private static final int FASTEST_INTERVAL_IN_SECONDS = 5;
     // A fast frequency ceiling in milliseconds
     private static final long FASTEST_INTERVAL =
             MILLISECONDS_PER_SECOND * FASTEST_INTERVAL_IN_SECONDS;
@@ -92,7 +92,7 @@ public class SendCurrentLocationService extends IntentService implements
 		Bundle bundle = new Bundle();
 		bundle = intent.getExtras();
 		mMessageVO = (MessageVO)bundle.getParcelable("MESSAGEVO");
-		isSendLocation = true;
+		mIsContinue = true;
 		
 		// Use high accuracy
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
@@ -103,13 +103,14 @@ public class SendCurrentLocationService extends IntentService implements
 		
         do{
         	try {
+        		
 				//Thread.sleep(20000);
 				//isSendLocation = false;
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-        }while(isSendLocation);
+        }while( mIsContinue );
         /*
 		while( isSendLocation ){
 			/*
@@ -157,7 +158,14 @@ public class SendCurrentLocationService extends IntentService implements
 	public void onDestroy() {
 		Log.d("jiho", "onDestroy");
 		Log.d("jiho", "****************************************/");
-		isSendLocation = false;
+		SharedPreferences settings = getSharedPreferences(Constants.PREFS_NAME, 0);
+		SharedPreferences.Editor editor = settings.edit();
+		editor.putString("LATITUDE", null);
+		editor.putString("LONGITUDE", null);
+		editor.putString("PROVIDER", null);
+		editor.commit();
+		
+		mIsContinue = false;
 		/*
 		Intent localIntent = new Intent(Constants.BROADCAST_ACTION)
 		.putExtra("MODE", "STOP");
@@ -188,22 +196,33 @@ public class SendCurrentLocationService extends IntentService implements
 	
 	@Override
 	public void onLocationChanged(Location location) {
-		Log.d("jiho", "onLocationChanged");
+		
 		if ( location != null ){
-			mLocation = location;
-			Preference.LAST_LOCATION = location;
-			mUpdateCount++;
-			
-			if ( mUpdateCount > 2 ){
-				if ( insertMessage(location) == true ){
-					if ( sendServer() == true ){
-						//this.stopSelf();
+			Log.d("jiho", "SendCurrentLocationService Onlocation Changed Location is not null.");
+			// 배터리 절약 모드일경우 : update 2번하고 insert
+			if ( Preference.SETTING_LOCATION_SEARCH == Preference.SETTING_LOCATION_SEARCH_BATTERY ){
+				mUpdateCount++;
+				
+				if ( mUpdateCount >= 2 ){
+					if ( insertMessage(location) == true ){
+						if ( sendServer() == true ){
+							mIsContinue = false;
+							//this.stopSelf();
+						}
 					}
 				}
+			// 정확도 우선일경우 환경변수에 현재위치 저장	
+			}else if ( Preference.SETTING_LOCATION_SEARCH == Preference.SETTING_LOCATION_SEARCH_ACCURATE ){
+				SharedPreferences settings = getSharedPreferences(Constants.PREFS_NAME, 0);
+				SharedPreferences.Editor editor = settings.edit();
+				editor.putString("LATITUDE", Double.toString(location.getLatitude()));
+				editor.putString("LONGITUDE", Double.toString(location.getLongitude()));
+				editor.putString("PROVIDER", location.getProvider());
+				editor.commit();
+					
 			}
-			
 		}else{
-			Log.d("jiho", "onLocationChanged location numm ):");
+			Log.d("jiho", "onLocationChanged location null ):");
 		}
 	}
 	
@@ -270,6 +289,7 @@ public class SendCurrentLocationService extends IntentService implements
 	public void onDisconnected() {
 		Log.d("jiho", "onDisconnected");
 	};
+
 
 }
 

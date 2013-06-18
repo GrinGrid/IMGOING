@@ -10,6 +10,7 @@ import android.app.ActivityManager.RunningServiceInfo;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
@@ -39,25 +40,38 @@ public class AlarmReceiver extends BroadcastReceiver {
 			MessageDao messageDAO = new MessageDao(mContext);
 			int resultCd = 0;
 			
-			Location location = Preference.LAST_LOCATION;
+			SharedPreferences settings = mContext.getSharedPreferences(Constants.PREFS_NAME, 0);
+			SharedPreferences.Editor editor = settings.edit();
+			String latitude = settings.getString("LATITUDE", null);
+			String longitude = settings.getString("LONGITUDE", null);
+			String provider = settings.getString("PROVIDER", null);
 			
-			if ( location != null ){
+			
+			
+			if ( latitude != null && longitude != null && provider !=null ){
 				messageVO.sender = Util.getMyPhoneNymber(mContext);
 				messageVO.send_time = Util.getCurrentTime();
 				messageVO.receive_time = "";
-				messageVO.latitude = Double.toString(location.getLatitude());
-				messageVO.longitude	= Double.toString(location.getLongitude());
-				messageVO.provider = location.getProvider();
+				messageVO.latitude = latitude;
+				messageVO.longitude	= longitude;
+				messageVO.provider = provider;
 				messageVO.location_name = "";
 				messageVO.near_metro_name = "";
 				resultCd = messageDAO.insert(messageVO);		
 				
 				if ( resultCd == 0 ){
-					Log.d("jiho", "insert success! provider : "+location.getProvider());
+					Log.d("jiho", "insert success! provider : "+provider);
+					
+					editor.putString("LATITUDE", null);
+					editor.putString("LONGITUDE", null);
+					editor.putString("PROVIDER", null);
+					editor.commit();
 				}else{
 					Log.d("jiho", "[ERROR] insert fail!");
 				}
 				
+			}else{
+				Log.d("jiho", "AlarmReceiver location is null");
 			}
 			
 		// 실행중이 아닐경우 서비스 호출	
