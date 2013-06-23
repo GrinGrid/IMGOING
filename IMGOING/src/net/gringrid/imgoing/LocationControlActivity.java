@@ -97,6 +97,9 @@ public class LocationControlActivity extends Base implements 	OnClickListener,
 	
 	@Override
 	protected void onResume() {
+		// Preference.SEND_HISTORY_CONTACTS_LIST 갱신
+		Util.setSendHistoryContactList(this);
+		
 		super.onResume();
 	}
 	
@@ -337,8 +340,6 @@ public class LocationControlActivity extends Base implements 	OnClickListener,
 				// 설정한 시간 간격으로 알람 호출
 				alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), currentTime * 60 * 1000, pIntent);
 				
-				// Preference.SEND_HISTORY_CONTACTS_LIST 갱신
-				Util.setSendHistoryContactList(this);
 				editor.putInt("INTERVAL", userSelectInterval);
 				
 				// Notification 생성
