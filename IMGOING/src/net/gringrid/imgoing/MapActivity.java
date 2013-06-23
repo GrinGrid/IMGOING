@@ -101,6 +101,7 @@ public class MapActivity extends FragmentActivity{
     	String latitude = "";
     	String longitude = "";
     	String location_name = "";
+    	int markerIndex = 1;
     	
     	for ( MessageVO data : message_data ){
     		if ( data.latitude.equals(latitude) == true && 
@@ -110,8 +111,18 @@ public class MapActivity extends FragmentActivity{
     			latitude = data.latitude;
     			longitude = data.longitude;
     			location_name = data.location_name;
+    			LatLng latLng = new LatLng(Double.parseDouble(latitude), Double.parseDouble(longitude));
     			Log.d("jiho", "["+data.provider+"] ["+latitude+"] ["+longitude+"]");
-    			rectOptions.add(new LatLng(Double.parseDouble(latitude), Double.parseDouble(longitude)));
+    			rectOptions.add( latLng );
+    			
+    	    	mMap.addMarker(new MarkerOptions()
+    			.position(latLng)
+    			.title(Integer.toString(markerIndex++))    			
+    			.snippet("1")
+    			.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))    			
+    			);
+    			
+    			
     		}
     	}
     	

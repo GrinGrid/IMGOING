@@ -60,7 +60,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 				resultCd = messageDAO.insert(messageVO);		
 				
 				if ( resultCd == 0 ){
-					Log.d("jiho", "insert success! provider : "+provider);
+					Log.d("jiho", "AlarmReceiver insert success! ["+latitude+"] ["+longitude+"]");
 					
 					editor.putString("LATITUDE", null);
 					editor.putString("LONGITUDE", null);

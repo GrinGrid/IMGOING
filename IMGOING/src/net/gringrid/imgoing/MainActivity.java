@@ -204,7 +204,7 @@ public class MainActivity extends Base implements OnClickListener {
 			break;
 			
 		case R.id.id_ll_config:		
-			intent = new Intent(this, MessageActivity.class);
+			intent = new Intent(this, ConfigActivity.class);
 			startNewActivity(intent);			
 			break;
 			

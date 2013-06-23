@@ -14,7 +14,7 @@
         android:layout_height="0dp"
         android:layout_weight="100"
         android:orientation="horizontal"
-        android:background="#000000" 
+        android:background="@color/imgoing_red" 
         >
         <LinearLayout
             android:layout_width="0dp"
@@ -29,16 +29,7 @@
                 android:src="@drawable/location_control" 
                 />
         </LinearLayout>
-        <LinearLayout
-            android:layout_width="wrap_content"
-	        android:layout_height="match_parent"
-            >
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:src="@drawable/menu_line_height" 
-                />
-        </LinearLayout>
+        
         <LinearLayout
             android:layout_width="0dp"
 	        android:layout_height="match_parent"
@@ -60,7 +51,8 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:src="@drawable/menu_line_height" 
+                android:src="@drawable/menu_line_height"
+                android:visibility="invisible" 
                 />
         </LinearLayout>
         <LinearLayout
@@ -83,29 +75,18 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="20" 
+        android:layout_weight="10" 
+        android:background="@color/imgoing_red_bottom"
         >
-        <LinearLayout 
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
-	        
-        </LinearLayout>
-        <LinearLayout 
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:gravity="center_horizontal"
-            android:layout_weight="1">
-            <ImageView
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:src="@drawable/menu_selector"/>
-	    </LinearLayout>
-	    <LinearLayout 
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
-	    </LinearLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="5dp"
+            android:text="Buboo"
+            android:textColor="@color/imgoing_red_bottom">
+            
+        </TextView>
+        
     </LinearLayout>
     <!-- Menu Indicator End -->
     
@@ -114,9 +95,10 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="680"
+        android:layout_weight="690"
         android:orientation="vertical"
         android:weightSum="480"
+        android:layout_marginTop="10dp"
         >
 		<LinearLayout 
 		    android:layout_width="match_parent"
@@ -158,7 +140,7 @@
 		<LinearLayout 
 		    android:layout_width="match_parent"
 		    android:layout_height="0dp"
-		    android:layout_weight="220">
+		    android:layout_weight="380">
 			<ListView
 			    android:id="@+id/id_lv_message"
 			    android:layout_width="match_parent"
@@ -167,7 +149,8 @@
 		
 		<LinearLayout 
 		    android:layout_width="match_parent"
-		    android:layout_height="wrap_content">
+		    android:layout_height="0dp"
+		    android:layout_weight="50">
 			<Button
 			    android:id="@+id/id_bt_delete"
 			    android:layout_width="wrap_content"

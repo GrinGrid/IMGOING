@@ -23,17 +23,24 @@ import net.gringrid.imgoing.dao.MessageDao;
 import net.gringrid.imgoing.util.Util;
 import net.gringrid.imgoing.vo.MessageVO;
 import android.app.IntentService;
+import android.app.Service;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
+import android.os.PowerManager;
+import android.os.PowerManager.WakeLock;
 import android.os.Vibrator;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 
-public class SendCurrentLocationService extends IntentService implements 
+public class SendCurrentLocationService extends Service implements 
 	GooglePlayServicesClient.ConnectionCallbacks,
 	GooglePlayServicesClient.OnConnectionFailedListener,
 	LocationListener{
@@ -44,10 +51,9 @@ public class SendCurrentLocationService extends IntentService implements
 	
 	private int mUpdateCount;
 	
-	private boolean mIsContinue = false;
-	
 	private MessageVO mMessageVO;
-		
+	//private WakeLock wl;
+	
 	// Milliseconds per second
     private static final int MILLISECONDS_PER_SECOND = 1000;
     // Update frequency in seconds
@@ -59,21 +65,21 @@ public class SendCurrentLocationService extends IntentService implements
     // A fast frequency ceiling in milliseconds
     private static final long FASTEST_INTERVAL =
             MILLISECONDS_PER_SECOND * FASTEST_INTERVAL_IN_SECONDS;
-    
-    
-	public SendCurrentLocationService() {
-		super(null);
-		Log.d("jiho", "SendCurrentLocationService");
-		
-	}
-	
-	public SendCurrentLocationService(String name) {
-		super(name);
-		Log.d("jiho", "SendCurrentLocationService(String name)");
-	}
 	
 	@Override
 	public void onCreate() {
+		/*
+		PowerManager pm = (PowerManager)getSystemService(Context.POWER_SERVICE);
+	    wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "IMGOING");
+	    wl.acquire();
+	    */
+		IntentFilter filter = new IntentFilter();
+		filter.addAction(Intent.ACTION_SCREEN_ON);
+        filter.addAction(Intent.ACTION_SCREEN_OFF);
+        filter.setPriority(Integer.MAX_VALUE);
+        BroadcastReceiver mReceiver = new ScreenReceiver();
+        registerReceiver(mReceiver, filter);
+        
 		mLocationClient = new LocationClient(this, this, this);
 		mLocationRequest = LocationRequest.create();
 		super.onCreate();
@@ -84,15 +90,14 @@ public class SendCurrentLocationService extends IntentService implements
 		mLocationClient.connect();
 		super.onStart(intent, startId);
     }
-
 	
 	@Override
-	protected void onHandleIntent(Intent intent) {
-		Log.d("jiho", "SendCurrentLocationService onHandleIntent");
+	public int onStartCommand(Intent intent, int flags, int startId) {
+		Log.d("jiho", "call onStartCommand");
 		Bundle bundle = new Bundle();
 		bundle = intent.getExtras();
 		mMessageVO = (MessageVO)bundle.getParcelable("MESSAGEVO");
-		mIsContinue = true;
+		
 		
 		// Use high accuracy
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
@@ -101,6 +106,7 @@ public class SendCurrentLocationService extends IntentService implements
         // Set the fastest update interval to 1 second
         mLocationRequest.setFastestInterval(FASTEST_INTERVAL);
 		
+        /*
         do{
         	try {
         		
@@ -111,47 +117,8 @@ public class SendCurrentLocationService extends IntentService implements
 				e.printStackTrace();
 			}
         }while( mIsContinue );
-        /*
-		while( isSendLocation ){
-			/*
-			try {
-				
-				//Vibrator vi = (Vibrator)getSystemService(this.VIBRATOR_SERVICE);
-			    //vi.vibrate(500);
-			    /*
-				// IMGOING앱만 받을 수 있도록 broadcasting 한다.
-				// BroadcastReceiver 에서 하는일
-				// 1. DB insert
-				// 2. Server insert
-				// 3. 화면이 열려있을경우 화면 갱신
-				Intent localIntent = new Intent(Constants.BROADCAST_ACTION);
-				localIntent.putExtra("START_TIME", start_time);
-				localIntent.putExtra("RECEIVER", receiver);
-				localIntent.putExtra("RECEIVER_ID", receiver_id);
-				localIntent.putExtra("INTERVAL", interval);
-				localIntent.putExtra("MODE", "START");
-				localIntent.putExtra("LOCATION", mLocation);
-				LocalBroadcastManager.getInstance(this).sendBroadcast(localIntent);
-				Log.d("jiho", "execute service interval : "+interval);
-					
-				// 사용자가 요청한 전송간격만큰 시간을 둔다.
-				//Thread.sleep(1000 * 60 * interval);
-				
-				//Thread.sleep(5000);
-				
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			*/
-		//}
-	
-	}
-	
-	
-	@Override
-	public int onStartCommand(Intent intent, int flags, int startId) {
-		// TODO Auto-generated method stub
+        */
+        
 		return super.onStartCommand(intent, flags, startId);
 	}
 	@Override
@@ -165,7 +132,6 @@ public class SendCurrentLocationService extends IntentService implements
 		editor.putString("PROVIDER", null);
 		editor.commit();
 		
-		mIsContinue = false;
 		/*
 		Intent localIntent = new Intent(Constants.BROADCAST_ACTION)
 		.putExtra("MODE", "STOP");
@@ -173,6 +139,21 @@ public class SendCurrentLocationService extends IntentService implements
 		LocalBroadcastManager.getInstance(this).sendBroadcast(localIntent);
 		*/
 		mLocationClient.disconnect();
+		//wl.release();
+	}
+	
+	public class ScreenReceiver extends BroadcastReceiver {
+
+		@Override
+	    public void onReceive(Context context, Intent intent) {
+	        if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
+	            Log.d("jiho", "ACTION_SCREEN_OFF");
+	            abortBroadcast();
+	        } else if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
+	        	Log.d("jiho", "ACTION_SCREEN_ON");
+	        }
+	        
+	    }
 	}
 
 	@Override
@@ -188,6 +169,7 @@ public class SendCurrentLocationService extends IntentService implements
 			//Log.d("jiho", "Longitude : "+mLocation.getLongitude());
 		}else{
 			Log.d("jiho", "onConnected location is null");
+			
 		}
 		mLocationClient.requestLocationUpdates(mLocationRequest, this);
 		
@@ -198,7 +180,7 @@ public class SendCurrentLocationService extends IntentService implements
 	public void onLocationChanged(Location location) {
 		
 		if ( location != null ){
-			Log.d("jiho", "SendCurrentLocationService Onlocation Changed Location is not null.");
+			Log.d("jiho", "onLocationChanged Location is not null. ["+location.getLatitude()+"] ["+location.getLongitude()+"]");
 			// 배터리 절약 모드일경우 : update 2번하고 insert
 			if ( Preference.SETTING_LOCATION_SEARCH == Preference.SETTING_LOCATION_SEARCH_BATTERY ){
 				mUpdateCount++;
@@ -206,8 +188,7 @@ public class SendCurrentLocationService extends IntentService implements
 				if ( mUpdateCount >= 2 ){
 					if ( insertMessage(location) == true ){
 						if ( sendServer() == true ){
-							mIsContinue = false;
-							//this.stopSelf();
+							this.stopSelf();
 						}
 					}
 				}
@@ -219,7 +200,7 @@ public class SendCurrentLocationService extends IntentService implements
 				editor.putString("LONGITUDE", Double.toString(location.getLongitude()));
 				editor.putString("PROVIDER", location.getProvider());
 				editor.commit();
-					
+				Log.d("jiho", "SharedPreferences saved : ["+location.getLatitude()+"] ["+location.getLongitude()+"]");
 			}
 		}else{
 			Log.d("jiho", "onLocationChanged location null ):");
@@ -288,6 +269,12 @@ public class SendCurrentLocationService extends IntentService implements
 	@Override
 	public void onDisconnected() {
 		Log.d("jiho", "onDisconnected");
+	}
+
+	@Override
+	public IBinder onBind(Intent intent) {
+		// TODO Auto-generated method stub
+		return null;
 	};
 
 

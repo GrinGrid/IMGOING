@@ -18,6 +18,8 @@ import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -72,49 +74,56 @@ public class MessageListAdapter extends BaseAdapter{
 		
 		if (view == null)
 		{
-			view = inflater.inflate(R.layout.cell_message_list, null);
+			view = inflater.inflate(R.layout.cell_message, null);
 		}
 		
 		final MessageVO item = data.get(position);
 		
 		if (item != null)
 		{
-			RelativeLayout id_rl_cell = (RelativeLayout)view.findViewById(R.id.id_rl_cell);
+			Log.d("jiho", "/**************");
+			Log.d("jiho", "receiver : "+item.receiver);
+			Log.d("jiho", "send_time : "+item.send_time);
+			Log.d("jiho", "**************/");
+			LinearLayout id_rl_cell = (LinearLayout)view.findViewById(R.id.id_ll_cell);
 			TextView id_tv_sender = (TextView)view.findViewById(R.id.id_tv_sender);
-			TextView id_tv_receiver = (TextView)view.findViewById(R.id.id_tv_receiver);
-			TextView id_tv_start_time = (TextView)view.findViewById(R.id.id_tv_start_time);
+			//TextView id_tv_receiver = (TextView)view.findViewById(R.id.id_tv_receiver);
+			//TextView id_tv_start_time = (TextView)view.findViewById(R.id.id_tv_start_time);
 			TextView id_tv_send_time = (TextView)view.findViewById(R.id.id_tv_send_time);
-			TextView id_tv_provider = (TextView)view.findViewById(R.id.id_tv_provider);
-			TextView id_tv_latitude = (TextView)view.findViewById(R.id.id_tv_latitude);
-			TextView id_tv_longitude = (TextView)view.findViewById(R.id.id_tv_longitude);
-			TextView id_tv_location_name = (TextView)view.findViewById(R.id.id_tv_location_name);
-			Button id_bt_map = (Button)view.findViewById(R.id.id_bt_map);
-			Button id_bt_del = (Button)view.findViewById(R.id.id_bt_del);
-			Button id_bt_list = (Button)view.findViewById(R.id.id_bt_list);
+			//TextView id_tv_provider = (TextView)view.findViewById(R.id.id_tv_provider);
+			//TextView id_tv_latitude = (TextView)view.findViewById(R.id.id_tv_latitude);
+			//TextView id_tv_longitude = (TextView)view.findViewById(R.id.id_tv_longitude);
+			//TextView id_tv_location_name = (TextView)view.findViewById(R.id.id_tv_location_name);
+			ImageView id_iv_map = (ImageView)view.findViewById(R.id.id_iv_map);
+			ImageView id_iv_del = (ImageView)view.findViewById(R.id.id_iv_del);
+			//Button id_bt_del = (Button)view.findViewById(R.id.id_bt_del);
+			//Button id_bt_list = (Button)view.findViewById(R.id.id_bt_list);
 			
+			/*
 			if ( position % 2 == 0 ){
 				id_rl_cell.setBackgroundColor(Color.CYAN);
 			}else{
 				id_rl_cell.setBackgroundColor(Color.WHITE);
 			}
+			*/
 			
-			id_tv_sender.setText(item.sender);
-			id_tv_receiver.setText(item.receiver);
-			id_tv_start_time.setText(item.start_time);
+			id_tv_sender.setText(item.receiver);
+			//id_tv_receiver.setText(item.receiver);
+			//id_tv_start_time.setText(item.start_time);
 			id_tv_send_time.setText(item.send_time);
-			id_tv_provider.setText(item.provider);
-			id_tv_latitude.setText(item.latitude);
-			id_tv_longitude.setText(item.longitude);
-			id_tv_location_name.setText(item.location_name);
+			//id_tv_provider.setText(item.provider);
+			//id_tv_latitude.setText(item.latitude);
+			//id_tv_longitude.setText(item.longitude);
+			//id_tv_location_name.setText(item.location_name);
 			
 			final String receiver = item.receiver;
 			final String start_time = item.start_time;
 			
-			id_bt_map.setOnClickListener(new OnClickListener() {
+			id_iv_map.setOnClickListener(new OnClickListener() {
 				
 				@Override
 				public void onClick(View v) {
-					if ( v.getId() == R.id.id_bt_map ){
+					if ( v.getId() == R.id.id_iv_map ){
 						Intent intent = new Intent(mContext, MapActivity.class);
 						intent.putExtra("RECEIVER", receiver);
 						intent.putExtra("START_TIME", start_time);
@@ -123,11 +132,11 @@ public class MessageListAdapter extends BaseAdapter{
 				}
 			});
 			
-			id_bt_del.setOnClickListener(new OnClickListener() {
+			id_iv_del.setOnClickListener(new OnClickListener() {
 				
 				@Override
 				public void onClick(View v) {
-					if ( v.getId() == R.id.id_bt_del ){
+					if ( v.getId() == R.id.id_iv_del ){
 						if ( item.sender == null ){
 							MessageDao dao = new MessageDao(mContext);
 							dao.deleteReceiveOne(item.receiver, item.start_time);
@@ -142,7 +151,7 @@ public class MessageListAdapter extends BaseAdapter{
 					}
 				}
 			});
-			
+			/*
 			id_bt_list.setOnClickListener(new OnClickListener() {
 				
 				@Override
@@ -181,6 +190,7 @@ public class MessageListAdapter extends BaseAdapter{
 					}
 				}
 			});
+			*/
 			
 		}
 		

@@ -150,27 +150,25 @@ public class Util {
 	    */
 	}
 	
-	
+	/**
+	 * 과거 보낸사람 목록을 환경변수에 저장한다.
+	 * @param context
+	 */
 	public static void setSendHistoryContactList(Context context){
 		Preference.SEND_HISTORY_CONTACTS_LIST = new Vector<ContactsVO>();
     	MessageDao messageDao = new MessageDao(context);
-		Cursor cursor = messageDao.querySendPersonList();
-		int index_receiver = cursor.getColumnIndex("receiver");
+    	ArrayList<String> receiverList = messageDao.querySendPersonList();
 		
-		if ( cursor.moveToFirst() ) {
-			do{
-				String receiver = cursor.getString(index_receiver);
-				ContactsVO contact = null;
-				if ( Util.isEmpty(receiver) == false ){
-					contact = Util.getContactsVOByPhoneNumber(context, receiver);
-					contact.isHistory = true;
-				}
-				if ( contact != null ){
-					Preference.SEND_HISTORY_CONTACTS_LIST.add(contact);
-				}
-			}while(cursor.moveToNext());
+		for ( String receiver : receiverList ){
+			ContactsVO contact = null;
+			contact = Util.getContactsVOByPhoneNumber(context, receiver);
+			contact.isHistory = true;
+			
+			if ( contact != null ){
+				Preference.SEND_HISTORY_CONTACTS_LIST.add(contact);
+			}
 		}
-	}
+    }
 	
 	
 	/**
@@ -270,8 +268,16 @@ public class Util {
 		SharedPreferences settings = context.getSharedPreferences(Constants.PREFS_NAME, 0);
 		SharedPreferences.Editor editor = settings.edit();
 		Preference.SETTING_LOCATION_SEARCH = settings.getInt("SETTING_LOCATION_SEARCH", Preference.SETTING_LOCATION_SEARCH_ACCURATE);
-		Preference.SETTING_LOCATION_SEARCH = settings.getInt("SETTING_LOCATION_SEARCH", Preference.SETTING_LOCATION_SEARCH_BATTERY);
+		//Preference.SETTING_LOCATION_SEARCH = settings.getInt("SETTING_LOCATION_SEARCH", Preference.SETTING_LOCATION_SEARCH_BATTERY);
 		editor.commit();
 		
+	}
+	
+	public static int getPxFromDp(Context context, int dp){
+		int px;
+		final float scale = context.getResources().getDisplayMetrics().density;
+        px = (int) (dp * scale + 0.5f);
+		
+		return px;
 	}
 }

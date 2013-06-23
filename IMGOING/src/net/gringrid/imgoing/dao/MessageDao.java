@@ -1,5 +1,7 @@
 package net.gringrid.imgoing.dao;
 
+import java.util.ArrayList;
+
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -74,6 +76,7 @@ public class MessageDao {
 			String.format("SELECT "+
 					"receiver "+
 					",start_time "+
+					",max(send_time) last_send_time "+
 					"FROM MESSAGE "+
 					"WHERE sender = ? "+
 					"GROUP BY receiver, start_time "+
@@ -190,27 +193,41 @@ public class MessageDao {
 		mDB = dbHelper.getDB();
 
 		cursor = mDB.rawQuery(SQL_SELECT_ALL, null);
-
-		if(cursor != null){
-			cursor.moveToFirst();
+		try{
+			if(cursor != null){
+				cursor.moveToFirst();
+			}
+			return cursor;
+		}finally{
+			cursor.close();
 		}
 		
-		return cursor;
 	}
 	
 
 	/**
 	 * 보낸 사람 목록 조회 
 	 */
-	public Cursor querySendPersonList(){
+	public ArrayList<String> querySendPersonList(){
+		ArrayList<String> result = new ArrayList<String>();
+		
 		Cursor cursor = null;
 		mDB = dbHelper.getDB();
 		cursor = mDB.rawQuery(SQL_SEND_PERSON_LIST, new String[]{ Util.getMyPhoneNymber(mContext) });
-
-		if(cursor != null){
-			cursor.moveToFirst();
+		
+		int index_receiver = cursor.getColumnIndex("receiver");
+		
+		try{
+			if ( cursor.moveToFirst() ) {
+				do{
+					result.add( cursor.getString(index_receiver) );
+				}while( cursor.moveToNext() );
+			}
+			return result;
+		}finally{
+			cursor.close();
 		}
-		return cursor;
+		
 	}
 	
 	
@@ -221,11 +238,12 @@ public class MessageDao {
 		Cursor cursor = null;
 		mDB = dbHelper.getDB();
 		cursor = mDB.rawQuery(SQL_SEND_LIST, new String[]{ Util.getMyPhoneNymber(mContext) });
-
+		
 		if(cursor != null){
 			cursor.moveToFirst();
 		}
 		return cursor;
+	
 	}
 	
 	
@@ -241,6 +259,7 @@ public class MessageDao {
 			cursor.moveToFirst();
 		}
 		return cursor;
+
 	}
 	
 	
@@ -258,6 +277,7 @@ public class MessageDao {
 			cursor.moveToFirst();
 		}
 		return cursor;
+
 	}
 	
 	
@@ -270,11 +290,11 @@ public class MessageDao {
 		mDB = dbHelper.getDB();
 		cursor = mDB.rawQuery(SQL_SEND_LIST_FOR_ONE, new String[]{ receiver, start_time });
 		
-
 		if(cursor != null){
 			cursor.moveToFirst();
 		}
 		return cursor;
+
 	}
 
 	/**

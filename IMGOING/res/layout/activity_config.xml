@@ -2,123 +2,157 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:focusable="true"
     android:focusableInTouchMode="true"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin">
-    
-	<!-- Main Menu Start -->
+    android:paddingTop="@dimen/activity_vertical_margin" >
+
+    <!-- Main Menu Start -->
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="100"
-        android:orientation="horizontal"
-        android:background="#000000" 
-        >
-        	<net.gringrid.imgoing.controller.MainMenu
-				android:layout_width="fill_parent"
-				android:layout_height="fill_parent"
-				android:layout_weight="1"
-				/>
+        android:background="#da4936"
+        android:gravity="center"
+        android:orientation="horizontal" >
+
+        <net.gringrid.imgoing.controller.MainMenu
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center" />
     </LinearLayout>
     <!-- Main Menu end -->
-    
-    
-    <!-- Menu Indicator Start -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="20" 
-        >
-        <LinearLayout 
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:gravity="center_horizontal"
-            android:layout_weight="1">
-	        <ImageView
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:src="@drawable/menu_selector"/>
-        </LinearLayout>
-        <LinearLayout 
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
-	    </LinearLayout>
-	    <LinearLayout 
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
-	    </LinearLayout>
-    </LinearLayout>
-    <!-- Menu Indicator End -->
-    
-    
+
+
     <!-- Body Start -->
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="680"
         android:orientation="horizontal"
-        android:weightSum="480"
-        >
-       <LinearLayout
-           android:layout_width="match_parent" 
-           android:layout_height="wrap_content"
-           android:orientation="vertical"
-           android:background="@drawable/config_body_bg"
-           >
-           <TextView
-		        android:layout_width="fill_parent"
-		        android:layout_height="fill_parent"
-		        android:layout_weight="1"
-		        android:padding="5dp"
-		        android:gravity="center_vertical"
-		        android:text="이용안내"
-		        style="@style/ConfigContent"
-		        />
-           <TextView
-		        android:layout_width="fill_parent"
-		        android:layout_height="fill_parent"
-		        android:layout_weight="1"
-		        android:padding="5dp"
-		        android:gravity="center_vertical"
-		        android:text="현재위치 검색 방법"
-		        style="@style/ConfigContent"
-		        />
-           <TextView
-		        android:layout_width="fill_parent"
-		        android:layout_height="fill_parent"
-		        android:layout_weight="1"
-		        android:padding="5dp"
-		        android:gravity="center_vertical"
-		        android:text="보낸메시지 최대 보관수"
-		        style="@style/ConfigContent"
-		        />
-           <TextView
-		        android:layout_width="fill_parent"
-		        android:layout_height="fill_parent"
-		        android:layout_weight="1"
-		        android:padding="5dp"
-		        android:gravity="center_vertical"
-		        android:text="받은메시지 최대 보관수"
-		        style="@style/ConfigContent"
-		        />
-           <TextView
-		        android:layout_width="fill_parent"
-		        android:layout_height="fill_parent"
-		        android:layout_weight="1"
-		        android:padding="5dp"
-		        android:gravity="center_vertical"
-		        android:text="메시지 도착 알림"
-		        style="@style/ConfigContent"
-		        />
-       </LinearLayout>        
-        
+        android:weightSum="480" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/config_body_bg"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal" >
+
+                <TextView
+                    style="@style/ConfigContent"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:padding="5dp"
+                    android:text="이용안내" />
+
+                <CheckBox
+                    android:id="@+id/id_ck_setting_account_pw"
+                    style="@style/CheckBox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal" >
+
+                <TextView
+                    style="@style/ConfigContent"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:padding="5dp"
+                    android:text="보낸메시지 최대 보관수" />
+
+                <net.gringrid.imgoing.controller.Sector
+                    android:id="@+id/id_selector_setting_timeout"
+                    android:layout_width="120sp"
+                    android:layout_height="fill_parent"
+                    android:layout_gravity="center_vertical"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal" >
+
+                <TextView
+                    style="@style/ConfigContent"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:padding="5dp"
+                    android:text="보낸메시지 최대 보관수" />
+
+                <net.gringrid.imgoing.controller.Sector
+                    android:id="@+id/id_selector_setting_timeout"
+                    android:layout_width="120sp"
+                    android:layout_height="fill_parent"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="18sp"
+                    android:paddingBottom="5sp"
+                    android:paddingTop="5sp" />
+            </LinearLayout>
+
+            <TextView
+                style="@style/ConfigContent"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:padding="5dp"
+                android:text="받은메시지 최대 보관수" />
+
+            
+            <!-- 메시지 도착알림 시작 -->
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal" >
+
+                <TextView
+                    style="@style/ConfigContent"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:padding="5dp"
+                    android:text="메시지 도착알림" />
+
+                <net.gringrid.imgoing.controller.Sector
+                    android:id="@+id/id_selector_setting_timeout"
+                    android:layout_width="120sp"
+                    android:layout_height="fill_parent"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="18sp"
+                    android:paddingBottom="5sp"
+                    android:paddingTop="5sp" />
+            </LinearLayout>
+            <!-- 메시지 도착알림 끝  -->
+            
+            
+        </LinearLayout>
     </LinearLayout>
     <!-- Body End -->
-    
+
 </LinearLayout>

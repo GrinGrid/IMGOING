@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<color name="color_transparent">#00000000</color>
+	<color name="color_white">#FFFFFFFF</color>
+	<color name="color_black">#FF000000</color>
+	<color name="color_red">#FFFF0000</color>
+	<color name="color_green">#FF00FF00</color>
+	<color name="color_blue">#FF006AFE</color>
+	<color name="color_yellow">#FFFFFF00</color>
+	<color name="color_gray">#FF808080</color>
+	<color name="color_dark_gray">#FF5D6574</color>
+	<color name="color_salmon">#FFFA8072</color>
+	<color name="color_indigo">#FF4B0082</color>
+	<color name="color_plum">#FFDDA0DD</color>
+	
+	<color name="color_black50">#7F000000</color>
+	
+	<!-- 종목검색, 리서치 등의 화면 상단 영역 배경색 -->
+	<color name="color_combo_bg">#FFDCD4C4</color>
+	
+	<!-- 컨텐츠뷰 연한 회색 배경 -->
+	<color name="color_content_bg01">#FFF0EFED</color>
+	
+	<!-- 컨텐츠뷰 회색 배경 -->
+	<color name="color_content_bg02">#FFEBE8E4</color>
+	
+	<!-- 컨텐츠뷰 연한 회색 배경 - 선택 가능한 배경색 -->
+	<color name="color_content_bg11">#CCF0EFED</color>
+	
+	<!-- 컨텐츠뷰 회색 배경 - 선택 가능한 배경색 -->
+	<color name="color_content_bg12">#CCEBE8E4</color>
+	
+	<!-- 컨텐츠뷰 컬럼 배경 -->
+	<color name="color_content_column_bg01">#FF929496</color>
+	
+	<!-- 지도, 설정 화면 배경 -->
+	<color name="color_map_bg">#FFD5B99C</color>
+	
+	<!-- 보합 -->
+	<color name="color_steady">#FF000000</color>
+	
+	<!-- 상승 -->
+	<color name="color_rise">#FFEE2E21</color>
+	
+	<!-- 하락 -->
+	<color name="color_drop">#FF0E81D1</color>
+
+	<!-- IMGOING Red 계열 -->
+	<color name="imgoing_red">#da4936</color>
+	
+	<!-- IMGOING Red 계열 진한색 -->
+	<color name="imgoing_red_bottom">#b44534</color>
+	
+	<!-- IMGOING Sky 계열 -->
+	<color name="imgoing_sky">#7bc1bf</color>
+	
+	<!-- IMGOING 배경색 -->
+	<color name="imgoing_content">#efece3</color>
+	
+	
+	
+</resources>

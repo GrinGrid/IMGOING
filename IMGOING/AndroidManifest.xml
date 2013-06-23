@@ -42,6 +42,7 @@
 	
 	<!-- 네트워크 상태 접근 권한. -->
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+	<uses-permission android:name="android.permission.WAKE_LOCK"/>
     
     
     <application
@@ -99,7 +100,8 @@
 		android:name="com.google.android.maps.v2.API_KEY"
 		android:value="AIzaSyAIymjx_Hc1fo3LDwHKpNUGd9gglUVvZTk"/>
         <activity android:name="MapActivity"></activity>
-        <receiver android:name=".location.AlarmReceiver" android:process=":remote"></receiver>	
+        <receiver android:name=".location.AlarmReceiver" android:process=":remote"></receiver>
+       	
     </application>
     
 	<uses-feature

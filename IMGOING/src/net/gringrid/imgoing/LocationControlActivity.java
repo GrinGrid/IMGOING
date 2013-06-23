@@ -300,9 +300,13 @@ public class LocationControlActivity extends Base implements 	OnClickListener,
 		        boolean isWifiAvail = ni.isAvailable();
 		        boolean isWifiConn = ni.isConnected();
 		        ni = cm.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
-		        boolean isMobileAvail = ni.isAvailable();
-		        boolean isMobileConn = ni.isConnected();
-				
+		        // TODO방어코드 삭제하고 모바일 가능한지 체크해야 할 것 같음
+		        boolean isMobileAvail = false;
+		        boolean isMobileConn = false;
+		        if ( ni != null ){
+			        isMobileAvail = ni.isAvailable();
+			        isMobileConn = ni.isConnected();
+		        }
 		        Log.d("jiho", "isWifiAvail : "+isWifiAvail);
 		        Log.d("jiho", "isMobileAvail : "+isMobileAvail);
 		        
@@ -454,62 +458,6 @@ public class LocationControlActivity extends Base implements 	OnClickListener,
 			startNewActivity(intent);
 			break;
 			
-		case R.id.id_tv_send_person_list:
-			// 보낸사람 목록을 리스트뷰에 출력한다.
-			MessageDao messageDao = new MessageDao(this);
-			Cursor cursor = messageDao.querySendPersonList();
-			
-			int index_receiver = cursor.getColumnIndex("receiver");
-			int index_receiver_id = cursor.getColumnIndex("receiver_id");
-			
-			Vector<ContactsVO> contactList = new Vector<ContactsVO>();
-			if ( cursor.moveToFirst() ) {
-				do{
-					Log.d("jiho", "cursor.getString(index_receiver) : "+cursor.getString(index_receiver));
-					for ( ContactsVO contact : Preference.CONTACTS_LIST ){
-						if ( contact.id.equals(cursor.getString(index_receiver_id)) ){
-							contactList.add(contact);
-						}
-					}
-					/*
-					// 받은사람 전화번호로 연락처 정보 조회 
-					String selection = ContactsContract.CommonDataKinds.Phone.CONTACT_ID + "="+ cursor.getString(index_receiver_id);
-			    	CursorLoader phoneLoader = new CursorLoader(this,ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, selection, null, null);
-			    	Cursor phoneCursor = phoneLoader.loadInBackground();
-				    
-			    	while ( phoneCursor.moveToNext() ){
-				    	
-				    	String number = phoneCursor.getString(phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-				    	String numberType = phoneCursor.getString(phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.TYPE));
-				    	String numberId = phoneCursor.getString(phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.CONTACT_ID));
-				    	String numberName = phoneCursor.getString(phoneCursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-				    	
-				    	//01로 시작하는지 체크 해야함
-				    	if ( Integer.parseInt(numberType) == Phone.TYPE_MOBILE && number.substring(0, 2).equals("01") ){
-				    		receiverPhoneNumber = number.replace("-", "");
-				    		
-				    		Log.d("jiho", "receiverPhoneNumber : "+receiverPhoneNumber);
-				    		
-				    		if ( receiverPhoneNumber.equals(cursor.getString(index_receiver)) ){
-				    			Log.d("jiho", "receiverPhoneNumber : "+receiverPhoneNumber);
-				    			ContactsVO contactsVO = new ContactsVO();
-								contactsVO.id = numberId;
-								contactsVO.phoneNumber = receiverPhoneNumber;
-								contactsVO.name = numberName; 
-								contactList.add(contactsVO);
-				    		}
-				    	}
-				    	
-				    
-				    }
-				    */
-			    	
-					
-				}while(cursor.moveToNext());
-			}
-			contactsListAdapter.setAll( contactList );
-			cursor.close();
-			break;
 		}
 	}
 

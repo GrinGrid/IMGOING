@@ -23,5 +23,11 @@
 		<item name="android:textStyle">bold</item>
 		<item name="android:textColor">#DE672C</item>
 	</style>
+	
+    
+    <!-- CheckBox -->
+	<style name="CheckBox" parent="android:Widget.CompoundButton.CheckBox">
+		<item name="android:button">@drawable/checkbox</item>
+	</style>
 
 </resources>

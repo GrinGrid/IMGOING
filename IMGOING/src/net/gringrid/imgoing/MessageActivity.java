@@ -9,6 +9,8 @@ import com.google.android.gcm.GCMRegistrar;
 import net.gringrid.imgoing.adapter.MessageListAdapter;
 import net.gringrid.imgoing.dao.MessageDao;
 import net.gringrid.imgoing.util.DBHelper;
+import net.gringrid.imgoing.util.Util;
+import net.gringrid.imgoing.vo.ContactsVO;
 import net.gringrid.imgoing.vo.MessageVO;
 
 import android.os.Bundle;
@@ -95,16 +97,24 @@ public class MessageActivity extends Base implements OnClickListener, OnItemClic
 		Cursor cursor = messageDao.querySendList();
 		int index_receiver = cursor.getColumnIndex("receiver");
 		int index_start_time = cursor.getColumnIndex("start_time");
+		int index_last_send_time = cursor.getColumnIndex("last_send_time");
+		
 		message_data.clear();
 		if ( cursor.moveToFirst() ) {
 			do{
+				ContactsVO contactsVO = Util.getContactsVOByPhoneNumber(getApplication(), cursor.getString(index_receiver));
+				String receiver = Util.isEmpty(contactsVO.name)?cursor.getString(index_receiver):contactsVO.name;
 				MessageVO messageVO = new MessageVO();
-				messageVO.receiver = cursor.getString(index_receiver);
+				messageVO.receiver = receiver;
 				messageVO.start_time = cursor.getString(index_start_time);
+				messageVO.send_time = cursor.getString(index_last_send_time);
+				
+				Log.d("jiho", "last_send_time : "+messageVO.send_time);
 				
 				message_data.add(messageVO);
 			}while(cursor.moveToNext());
 		}
+		if ( cursor != null ) cursor.close();
 		messageListAdapter.setAll(message_data);
 	}
 	
@@ -129,6 +139,7 @@ public class MessageActivity extends Base implements OnClickListener, OnItemClic
 				message_data.add(messageVO);
 			}while(cursor.moveToNext());
 		}
+		if ( cursor != null ) cursor.close();
 		messageListAdapter.setAll(message_data);
 	}
 
@@ -201,6 +212,7 @@ public class MessageActivity extends Base implements OnClickListener, OnItemClic
 			message_data.add(messageVO);	
 		
 		}while(cursor.moveToNext());
+		if ( cursor != null ) cursor.close();
 		messageListAdapter.setAll(message_data);
 		
 		
