@@ -33,4 +33,14 @@
 	<string name="alert_title">알림</string>
 	<string name="alert_confirm">확인</string>
 	<string name="alert_need_login">로그인이 필요한 메뉴 입니다.</string>
+	
+	<!-- 설정화면 시작 -->
+	<string name="config_guide">이용안내</string>
+	<string name="config_alarm">위치수신 알림설정</string>
+	<string name="config_max_send">보낸메시지 최대보관수</string>
+	<string name="config_max_receive">받은메시지 최대보관수</string>
+	
+	
+	
+	<!-- 설정화면 끝 -->
 </resources>

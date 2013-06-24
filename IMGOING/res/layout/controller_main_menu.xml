@@ -1,46 +1,71 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    
-	<!-- Main Menu Start -->
-    <ImageView
-		android:id="@+id/id_iv_current_menu"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_centerInParent="true"
-		android:src="@drawable/location_control" 
-		/>
+    android:layout_height="75dp"
+    android:orientation="vertical" 
+    android:background="@color/imgoing_red"
+    >
+	<RelativeLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="65dp">
+	    
+		<!-- Main Menu Start -->
+	    <ImageView
+			android:id="@+id/id_iv_current_menu"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_centerInParent="true"
+			android:src="@drawable/location_control" 
+			/>
+	
+		<ImageView
+			android:id="@+id/id_iv_menu"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_centerVertical="true"
+			android:layout_alignParentRight="true"
+			android:src="@drawable/bt_menu"
+			/>
+		<ImageView
+			android:id="@+id/id_iv_hide_menu2"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_centerVertical="true"
+			android:layout_alignParentRight="true"
+			android:src="@drawable/config"
+			android:padding="5dp"
+			android:visibility="visible"
+			/>
+		<ImageView
+			android:id="@+id/id_iv_hide_menu1"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_centerVertical="true"
+			android:layout_toLeftOf="@id/id_iv_hide_menu2"
+			android:src="@drawable/location_list"
+			android:padding="5dp"
+			android:visibility="visible"
+			/>
+	</RelativeLayout>		
+	    
+	    <!-- Main Menu end -->
+	    <!-- Bottom Line Start -->
+	    <LinearLayout
+	        android:layout_width="match_parent"
+	        android:layout_height="10dp"
+	        android:background="@color/imgoing_red_bottom"
+	        >
+	        <TextView
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:textSize="5dp"
+	            android:text="Buboo"
+	            android:textColor="@color/imgoing_red_bottom">
+	            
+	        </TextView>
+	        
+	    </LinearLayout>
+	    <!-- Bottom Line End -->
+	    
 
-	<ImageView
-		android:id="@+id/id_iv_menu"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_centerVertical="true"
-		android:layout_alignParentRight="true"
-		android:src="@drawable/bt_menu"
-		/>
-	<ImageView
-		android:id="@+id/id_iv_hide_menu2"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_centerVertical="true"
-		android:layout_alignParentRight="true"
-		android:src="@drawable/config"
-		android:padding="5dp"
-		android:visibility="visible"
-		/>
-	<ImageView
-		android:id="@+id/id_iv_hide_menu1"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_centerVertical="true"
-		android:layout_toLeftOf="@id/id_iv_hide_menu2"
-		android:src="@drawable/location_list"
-		android:padding="5dp"
-		android:visibility="visible"
-		/>
-    <!-- Main Menu end -->
-    
-    
-</RelativeLayout>
+</LinearLayout>

@@ -1,4 +1,5 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -33,6 +34,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginTop="10dp"
         android:layout_weight="680"
         android:orientation="horizontal"
         android:weightSum="480" >
@@ -44,113 +46,96 @@
             android:orientation="vertical" >
 
             <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
                 android:layout_weight="1"
-                android:orientation="horizontal" >
+                android:orientation="horizontal"
+                android:padding="5dp" >
 
                 <TextView
                     style="@style/ConfigContent"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
-                    android:padding="5dp"
-                    android:text="이용안내" />
+                    android:text="@string/config_guide" />
 
                 <CheckBox
-                    android:id="@+id/id_ck_setting_account_pw"
+                    android:id="@+id/id_cb_config_guide"
                     style="@style/CheckBox"
                     android:layout_width="wrap_content"
-                    android:layout_height="fill_parent" />
+                    android:layout_height="match_parent" />
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
                 android:layout_weight="1"
-                android:orientation="horizontal" >
+                android:orientation="horizontal"
+                android:padding="5dp" >
 
                 <TextView
                     style="@style/ConfigContent"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
-                    android:padding="5dp"
-                    android:text="보낸메시지 최대 보관수" />
+                    android:text="@string/config_alarm" />
 
-                <net.gringrid.imgoing.controller.Sector
-                    android:id="@+id/id_selector_setting_timeout"
+                <net.gringrid.imgoing.controller.Selector
+                    android:id="@+id/id_selector_config_alarm"
                     android:layout_width="120sp"
-                    android:layout_height="fill_parent"
-                    android:layout_gravity="center_vertical"
-                    />
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical" />
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
                 android:layout_weight="1"
-                android:orientation="horizontal" >
+                android:orientation="horizontal"
+                android:padding="5dp" >
 
                 <TextView
                     style="@style/ConfigContent"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
-                    android:padding="5dp"
-                    android:text="보낸메시지 최대 보관수" />
+                    android:text="@string/config_max_receive" />
 
-                <net.gringrid.imgoing.controller.Sector
-                    android:id="@+id/id_selector_setting_timeout"
+                <net.gringrid.imgoing.controller.Selector
+                    android:id="@+id/id_selector_config_max_receive"
                     android:layout_width="120sp"
-                    android:layout_height="fill_parent"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginRight="18sp"
-                    android:paddingBottom="5sp"
-                    android:paddingTop="5sp" />
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical" />
             </LinearLayout>
 
-            <TextView
-                style="@style/ConfigContent"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_weight="1"
-                android:gravity="center_vertical"
-                android:padding="5dp"
-                android:text="받은메시지 최대 보관수" />
-
-            
             <!-- 메시지 도착알림 시작 -->
+
             <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
                 android:layout_weight="1"
-                android:orientation="horizontal" >
+                android:orientation="horizontal"
+                android:padding="5dp" >
 
                 <TextView
                     style="@style/ConfigContent"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
-                    android:padding="5dp"
-                    android:text="메시지 도착알림" />
+                    android:text="@string/config_max_send" />
 
-                <net.gringrid.imgoing.controller.Sector
-                    android:id="@+id/id_selector_setting_timeout"
+                <net.gringrid.imgoing.controller.Selector
+                    android:id="@+id/id_selector_config_max_send"
                     android:layout_width="120sp"
-                    android:layout_height="fill_parent"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginRight="18sp"
-                    android:paddingBottom="5sp"
-                    android:paddingTop="5sp" />
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical" />
             </LinearLayout>
-            <!-- 메시지 도착알림 끝  -->
-            
-            
+            <!-- 메시지 도착알림 끝 -->
+
         </LinearLayout>
     </LinearLayout>
     <!-- Body End -->
