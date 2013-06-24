@@ -81,10 +81,6 @@ public class MessageListAdapter extends BaseAdapter{
 		
 		if (item != null)
 		{
-			Log.d("jiho", "/**************");
-			Log.d("jiho", "receiver : "+item.receiver);
-			Log.d("jiho", "send_time : "+item.send_time);
-			Log.d("jiho", "**************/");
 			LinearLayout id_rl_cell = (LinearLayout)view.findViewById(R.id.id_ll_cell);
 			TextView id_tv_sender = (TextView)view.findViewById(R.id.id_tv_sender);
 			//TextView id_tv_receiver = (TextView)view.findViewById(R.id.id_tv_receiver);
@@ -107,7 +103,7 @@ public class MessageListAdapter extends BaseAdapter{
 			}
 			*/
 			
-			id_tv_sender.setText(item.receiver);
+			id_tv_sender.setText(item.receiver_name);
 			//id_tv_receiver.setText(item.receiver);
 			//id_tv_start_time.setText(item.start_time);
 			id_tv_send_time.setText(item.send_time);

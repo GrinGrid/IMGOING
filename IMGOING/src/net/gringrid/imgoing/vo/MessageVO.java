@@ -8,7 +8,9 @@ public class MessageVO implements Parcelable{
 	
 	public int no;						// 일련번호
 	public String sender;				// 보낸사람 email
+	public String sender_name;			// 보낸사람 이름
 	public String receiver;				// 받는사람 email
+	public String receiver_name;		// 받는사람 이름
 	public String receiver_id;			// 받는사람 id
 	public String start_time;			// 시작시간
 	public String send_time;			// 보낸시간
@@ -36,8 +38,10 @@ public class MessageVO implements Parcelable{
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
 		dest.writeInt(no);
-		dest.writeString(sender);			
-		dest.writeString(receiver);			
+		dest.writeString(sender);		
+		dest.writeString(sender_name);
+		dest.writeString(receiver);
+		dest.writeString(receiver_name);
 		dest.writeString(receiver_id);		
 		dest.writeString(start_time);		
 		dest.writeString(send_time);		
@@ -52,8 +56,10 @@ public class MessageVO implements Parcelable{
 	
 	public void readFromParcel(Parcel in) {
 		no = in.readInt();
-		sender = in.readString();			
+		sender = in.readString();
+		sender_name = in.readString();
 		receiver = in.readString();
+		receiver_name = in.readString();
 		receiver_id = in.readString();		
 		start_time = in.readString();		
 		send_time = in.readString();		
@@ -78,8 +84,9 @@ public class MessageVO implements Parcelable{
 		
 	public void print(){
 		Log.d("jiho", "MessageVO.no 				: "+no					);
-		Log.d("jiho", "MessageVO.sender 			: "+sender				);
+		Log.d("jiho", "MessageVO.sender_name		: "+sender_name			);
 		Log.d("jiho", "MessageVO.receiver 			: "+receiver			);
+		Log.d("jiho", "MessageVO.receiver_name		: "+receiver_name		);
 		Log.d("jiho", "MessageVO.receiver_id 		: "+receiver_id			);
 		Log.d("jiho", "MessageVO.start_time 		: "+start_time			);
 		Log.d("jiho", "MessageVO.send_time 			: "+send_time			);

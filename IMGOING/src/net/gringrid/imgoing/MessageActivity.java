@@ -103,9 +103,10 @@ public class MessageActivity extends Base implements OnClickListener, OnItemClic
 		if ( cursor.moveToFirst() ) {
 			do{
 				ContactsVO contactsVO = Util.getContactsVOByPhoneNumber(getApplication(), cursor.getString(index_receiver));
-				String receiver = Util.isEmpty(contactsVO.name)?cursor.getString(index_receiver):contactsVO.name;
+				String receiver_name = Util.isEmpty(contactsVO.name)?cursor.getString(index_receiver):contactsVO.name;
 				MessageVO messageVO = new MessageVO();
-				messageVO.receiver = receiver;
+				messageVO.receiver_name = receiver_name;
+				messageVO.receiver = cursor.getString(index_receiver);
 				messageVO.start_time = cursor.getString(index_start_time);
 				messageVO.send_time = cursor.getString(index_last_send_time);
 				

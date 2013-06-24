@@ -115,12 +115,13 @@ public class MapActivity extends FragmentActivity{
     			Log.d("jiho", "["+data.provider+"] ["+latitude+"] ["+longitude+"]");
     			rectOptions.add( latLng );
     			
-    	    	mMap.addMarker(new MarkerOptions()
+    			Marker marker = mMap.addMarker(new MarkerOptions()
     			.position(latLng)
     			.title(Integer.toString(markerIndex++))    			
     			.snippet("1")
     			.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))    			
     			);
+    			marker.showInfoWindow();
     			
     			
     		}
