@@ -71,14 +71,6 @@ public class MessageActivity extends Base implements OnClickListener, OnItemClic
 		if ( view != null ){
 			view.setOnClickListener(this);
 		}
-		view = findViewById(R.id.id_menu_location_control);
-		if ( view != null ){
-			view.setOnClickListener(this);
-		}
-		view = findViewById(R.id.id_menu_location_list);
-		if ( view != null ){
-			view.setOnClickListener(this);
-		}
 		view = findViewById(R.id.id_bt_send);
 		if ( view != null ){
 			view.setOnClickListener(this);
@@ -156,14 +148,6 @@ public class MessageActivity extends Base implements OnClickListener, OnItemClic
 			MessageDao messageDao = new MessageDao(this);
 			messageDao.deleteAll();
 			messageListAdapter.notifyDataSetChanged();
-			break;
-		case R.id.id_menu_location_control:
-			intent = new Intent(this, LocationControlActivity.class);
-			startNewActivity(intent);
-			break;
-		case R.id.id_menu_location_list:
-			intent = new Intent(this, MessageActivity.class);
-			startNewActivity(intent);
 			break;
 		case R.id.id_bt_send:
 			viewSendMessage();

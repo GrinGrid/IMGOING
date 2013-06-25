@@ -10,115 +10,54 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin">
     
-	<!-- Main Menu Start -->
+    <!-- Main Menu Start -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="100"
-        android:orientation="horizontal"
-        android:background="#000000" 
-        >
-        <LinearLayout
-            android:layout_width="0dp"
-	        android:layout_height="match_parent"
-	        android:layout_weight="1"
-	        android:gravity="center" 
-            >
-            <ImageView
-                android:id="@+id/id_menu_location_control"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/location_control" 
-                />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="wrap_content"
-	        android:layout_height="match_parent"
-            >
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:src="@drawable/menu_line_height" 
-                />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="0dp"
-	        android:layout_height="match_parent"
-	        android:layout_weight="1" 
-	        android:gravity="center" 
+        android:background="@color/imgoing_red"
+        android:gravity="center"
+        android:orientation="vertical" >
+
+        <net.gringrid.imgoing.controller.MainMenu
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center" />
+		
+		<!-- Bottom Line Start -->
+	    <LinearLayout
+	        android:layout_width="match_parent"
+	        android:layout_height="5dp"
+	        android:background="@color/imgoing_red_bottom"
+	        >
+	        <TextView
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:textSize="5sp"
+	            android:text="Buboo"
+	            android:textColor="@color/imgoing_red_bottom">
+	            
+	        </TextView>
 	        
-            >
-            <ImageView
-                android:id="@+id/id_menu_location_list"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/location_list" 
-                />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="wrap_content"
-	        android:layout_height="match_parent"
-            >
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:src="@drawable/menu_line_height" 
-                />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="0dp"
-	        android:layout_height="match_parent"
-	        android:layout_weight="1"
-	        android:gravity="center" 
-            >
-            <ImageView
-                android:id="@+id/id_menu_config"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/config" 
-                />
-        </LinearLayout>
+	    </LinearLayout>
+	    <!-- Bottom Line End -->
+		    
     </LinearLayout>
     <!-- Main Menu end -->
     
     
-    <!-- Menu Indicator Start -->
+    <!-- Body Start before action -->
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="20" 
-        >
-        <LinearLayout 
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:gravity="center_horizontal"
-            android:layout_weight="1">
-	        <ImageView
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:src="@drawable/menu_selector"/>
-        </LinearLayout>
-        <LinearLayout 
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
-	    </LinearLayout>
-	    <LinearLayout 
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
-	    </LinearLayout>
-    </LinearLayout>
-    <!-- Menu Indicator End -->
-    
-    
-    <!-- Body Start -->
-    <LinearLayout
+        android:id="@+id/id_ll_before_start"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="680"
         android:orientation="horizontal"
         android:weightSum="480"
+        android:background="@color/imgoing_content"
+        android:paddingTop="5dp"
+        android:visibility="visible"
         >
         
         
@@ -129,12 +68,13 @@
         	android:layout_weight="160"
         	android:orientation="vertical"
         	android:weightSum="680"
-        	android:background="@drawable/location_control_body_bg"
+        	android:background="@color/color_white"
             >
             <LinearLayout
                 android:layout_width="match_parent"
 	        	android:layout_height="0dp"
 	        	android:layout_weight="50"
+	        	android:background="@color/imgoing_sky"
 	        	android:gravity="center"
                 >
                 <ImageView
@@ -147,6 +87,7 @@
 	                android:layout_width="wrap_content"
 	                android:layout_height="wrap_content"
 	                android:layout_marginLeft="10px"
+	                android:textColor="@color/color_white"
 	                android:text="친구목록" />
             </LinearLayout>
             <LinearLayout
@@ -209,12 +150,13 @@
         	android:layout_marginLeft="10px"
         	android:orientation="vertical"
         	android:weightSum="680"
-        	android:background="@drawable/location_control_body_bg"
+        	android:background="@color/imgoing_content"
             >
             <LinearLayout
                 android:layout_width="match_parent"
 	        	android:layout_height="0dp"
 	        	android:layout_weight="50"
+	        	android:background="@color/imgoing_sky"
 	        	android:gravity="center"
                 >
                 <ImageView
@@ -226,6 +168,7 @@
 	                android:layout_width="wrap_content"
 	                android:layout_height="wrap_content"
 	                android:layout_marginLeft="10px"
+	                android:textColor="@color/color_white"
 	                android:text="시간설정" />
             </LinearLayout>
             <LinearLayout
@@ -305,13 +248,9 @@
                 </LinearLayout>
 				<Button
 				    android:id="@+id/id_bt_control"
-				    android:layout_width="0dp"
+				    android:layout_width="wrap_content"
 	        		android:layout_height="wrap_content"
-	        		android:layout_weight="3"
-	        		android:background="@drawable/start_bt"
-	        		android:textColor="#FFFFFF"
-	        		android:textStyle="bold"
-	        		android:text="Start" />
+	        		android:background="@drawable/start_bt"/>
 				<LinearLayout
                     android:layout_width="0dp"
 	        		android:layout_height="match_parent"
@@ -345,6 +284,75 @@
         
         
     </LinearLayout>
-    <!-- Body End -->
+    <!-- Body End before action -->
     
+    
+    <!-- Body Start after action -->
+    <LinearLayout
+        android:id="@+id/id_ll_after_start"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="680"
+        android:orientation="vertical"
+        android:weightSum="480"
+        android:background="@color/imgoing_content"
+        android:paddingTop="5dp"
+        android:visibility="gone"
+        >
+        
+        <LinearLayout
+            android:layout_width="match_parent"
+        	android:layout_height="0dp"
+         	android:layout_weight="200"
+         	android:gravity="center_vertical"
+            >
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/image_footprint1"
+                />
+        </LinearLayout>
+        
+        <LinearLayout
+            android:layout_width="match_parent"
+        	android:layout_height="0dp"
+         	android:layout_weight="100"
+         	android:gravity="center"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="05분 간격으로 [ 최지호 ]님에게 위치가 전송되고 있습니다."
+                />
+        </LinearLayout>
+        
+        <LinearLayout
+            android:layout_width="match_parent"
+        	android:layout_height="0dp"
+         	android:layout_weight="150"
+         	android:gravity="center"
+            >
+            <ImageView
+                android:id="@+id/id_iv_stop"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/stop_bt"
+                />
+        </LinearLayout>
+        
+        <LinearLayout
+            android:layout_width="match_parent"
+        	android:layout_height="0dp"
+         	android:layout_weight="30"
+            >
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+        </LinearLayout>
+        
+    
+	</LinearLayout>
+	<!-- Body End after action -->
 </LinearLayout>

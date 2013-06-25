@@ -5,6 +5,7 @@
     android:orientation="vertical" 
     android:background="@color/imgoing_red"
     >
+    
 	<RelativeLayout
 	    android:layout_width="match_parent"
 	    android:layout_height="0dp"
@@ -51,23 +52,6 @@
 	</RelativeLayout>		
 	    
     <!-- Main Menu end -->
-    <!-- Bottom Line Start -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="10dp"
-        android:background="@color/imgoing_red_bottom"
-        >
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="5dp"
-            android:text="Buboo"
-            android:textColor="@color/imgoing_red_bottom">
-            
-        </TextView>
-        
-    </LinearLayout>
-    <!-- Bottom Line End -->
-	    
+    
 
 </LinearLayout>

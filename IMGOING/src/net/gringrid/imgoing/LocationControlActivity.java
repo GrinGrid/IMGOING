@@ -175,23 +175,16 @@ public class LocationControlActivity extends Base implements 	OnClickListener,
 		if ( view != null ){
 			view.setOnClickListener(this);
 		}
+		view = findViewById(R.id.id_iv_stop);
+		if ( view != null ){
+			view.setOnClickListener(this);
+		}
+		
 		view = findViewById(R.id.id_iv_number_up);
 		if ( view != null ){
 			view.setOnClickListener(this);
 		}
 		view = findViewById(R.id.id_iv_number_down);
-		if ( view != null ){
-			view.setOnClickListener(this);
-		}
-		view = findViewById(R.id.id_menu_location_control);
-		if ( view != null ){
-			view.setOnClickListener(this);
-		}
-		view = findViewById(R.id.id_menu_location_list);
-		if ( view != null ){
-			view.setOnClickListener(this);
-		}
-		view = findViewById(R.id.id_menu_config);
 		if ( view != null ){
 			view.setOnClickListener(this);
 		}
@@ -213,14 +206,19 @@ public class LocationControlActivity extends Base implements 	OnClickListener,
 		Button id_bt_control = (Button)findViewById(R.id.id_bt_control);
 		TextView id_tv_min = (TextView)findViewById(R.id.id_tv_min);
 		
+		View beforeView = findViewById(R.id.id_ll_before_start);
+		View afterView = findViewById(R.id.id_ll_after_start);
+		
+		beforeView.setVisibility(View.GONE);
+		afterView.setVisibility(View.GONE);
 		
 		if ( isStarted ){
-			id_bt_control.setText("Stop");
+			afterView.setVisibility(View.VISIBLE);
 			id_lv_contacts.setEnabled(false);
 			findViewById(R.id.id_iv_number_up).setEnabled(false);
 			findViewById(R.id.id_iv_number_down).setEnabled(false);
 		}else{
-			id_bt_control.setText("Start");
+			beforeView.setVisibility(View.VISIBLE);
 			id_lv_contacts.setEnabled(true);
 			findViewById(R.id.id_iv_number_up).setEnabled(true);
 			findViewById(R.id.id_iv_number_down).setEnabled(true);
@@ -262,150 +260,158 @@ public class LocationControlActivity extends Base implements 	OnClickListener,
 		TextView id_tv_min = null;
 		SharedPreferences settings = getSharedPreferences(Constants.PREFS_NAME, 0);
 		SharedPreferences.Editor editor = settings.edit();
+		PendingIntent pIntent = null;
+		NotificationManager notificationManager = null; 
 		
 		switch( v.getId() ){
+		
+		// 시작버튼 Click 했을 경우.
 		case R.id.id_bt_control:
 			
-			boolean isStarted = settings.getBoolean("IS_START", false);
 			int userSelectInterval = 0;
 			
-			// 시작버튼 Click 했을 경우.
-			if ( isStarted == false ){
-				userSelectInterval = currentTime;
-				
-				if ( receiverPhoneNumber == null ){
-					Toast.makeText(this, "위치를 전송할 사람을 선택하세요.", Toast.LENGTH_SHORT).show();
-					return;
-				}
-				
-				// GPS체크
-				LocationManager locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-				
-				if( locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) == false ) {
-					AlertDialog.Builder builder = new AlertDialog.Builder(this);
-					builder.setTitle(R.string.alert_title);
-					builder.setMessage("GPS 기능을 활성화 시키면 보다 정확한 위치정보를 얻을 수 있습니다. GPS기능을 설정 하시겠습니까?");
-					builder.setPositiveButton(R.string.alert_confirm,
-							new android.content.DialogInterface.OnClickListener() {
-								@Override
-								public void onClick(DialogInterface dialog, int which) {
-									Intent gpsOptionsIntent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-							        startActivity(gpsOptionsIntent);
-								}
-							});
-					builder.setNegativeButton("취소", null);
-					builder.show();
-				}
-				
-				// 네트워크 체크
-				ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-		        NetworkInfo ni = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-		        boolean isWifiAvail = ni.isAvailable();
-		        boolean isWifiConn = ni.isConnected();
-		        ni = cm.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
-		        // TODO방어코드 삭제하고 모바일 가능한지 체크해야 할 것 같음
-		        boolean isMobileAvail = false;
-		        boolean isMobileConn = false;
-		        if ( ni != null ){
-			        isMobileAvail = ni.isAvailable();
-			        isMobileConn = ni.isConnected();
-		        }
-		        Log.d("jiho", "isWifiAvail : "+isWifiAvail);
-		        Log.d("jiho", "isMobileAvail : "+isMobileAvail);
-		        
-		        if (!isWifiConn && !isMobileConn) {
-		        	showAlert("Wifi 혹은 3G망이 연결되지 않았거나 원활하지 않습니다.네트워크 확인후 다시 접속해 주세요!");
-		        	return;
-		        }
-		        
-		        // 알람등록을 위한 데이타 세팅
-				AlarmManager alarmManager = (AlarmManager)this.getSystemService(Context.ALARM_SERVICE);
-				MessageVO messageVO = new MessageVO();
-				messageVO.receiver = receiverPhoneNumber;
-				messageVO.receiver_id = receiverNumberId;
-				messageVO.interval = Integer.toString(currentTime);
-				messageVO.start_time = Util.getCurrentTime();
-				
-				intent = new Intent(getApplicationContext(), AlarmReceiver.class);
-				intent.putExtra(AlarmReceiver.ACTION_ALARM, AlarmReceiver.ACTION_ALARM);
-				intent.putExtra("MESSAGEVO", messageVO);
-				/*
-				intent.putExtra("RECEIVER", receiverPhoneNumber);
-				intent.putExtra("RECEIVER_ID", receiverNumberId);
-				intent.putExtra("INTERVAL", currentTime);
-				intent.putExtra("START_TIME", Util.getCurrentTime());
-				*/
-				PendingIntent pIntent = PendingIntent.getBroadcast(this, 1234567, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-				int term = currentTime * 60 * 1000;
-				// 설정한 시간 간격으로 알람 호출
-				alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), currentTime * 60 * 1000, pIntent);
-				
-				editor.putInt("INTERVAL", userSelectInterval);
-				
-				// Notification 생성
-				//Notification noti = NotificationCompat.Builder.build();
-				Intent resultIntent = new Intent(this, IntroActivity.class);
-				resultIntent.putExtra("IS_FROM_NOTIFICATION", true);
-				// 앱 실행하고 다른 메뉴로 이동후 noti 클릭하면 새로 앱을 띄움
-				//resultIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-				resultIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-				
-				PendingIntent notifyIntent =
-				        PendingIntent.getActivity(
-				        this,
-				        0,
-				        resultIntent,
-				        PendingIntent.FLAG_UPDATE_CURRENT
-				);
-				
-				
-				NotificationCompat.Builder notiBuilder = new NotificationCompat.Builder(this);
-				notiBuilder.setSmallIcon(R.drawable.ic_launcher);
-				notiBuilder.setContentTitle("I'm Going");
-				notiBuilder.setContentText("I'm going is running ~");
-				notiBuilder.setOngoing(true);
-				notiBuilder.setContentIntent(notifyIntent);
-				
-				Notification notification = notiBuilder.build();
-				notification.ledARGB = 1;
-				
-				
-				NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-				notificationManager.notify(NOTIFICATION_ID_MAIN, notiBuilder.build());
-				
-				
-			// 정지버튼 Click 했을 경우
-			// 알람 중지
-			// 서비스가 실행중일경우 서비스 중지
-			}else if ( isStarted == true ){
-				receiverName = null;
-				receiverPhoneNumber = null;
-				
-				intent = new Intent(getApplicationContext(), AlarmReceiver.class);
-				intent.putExtra(AlarmReceiver.ACTION_ALARM, AlarmReceiver.ACTION_ALARM);
-				 
-				final PendingIntent pIntent = PendingIntent.getBroadcast(this, 1234567,intent, PendingIntent.FLAG_UPDATE_CURRENT);
-				 
-				AlarmManager alarms = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
-				alarms.cancel(pIntent);
-				
-				if ( isLocationServiceRunning() ){
-					this.stopService(new Intent(this, SendCurrentLocationService.class));
-				}
-				
-				// Notification dismiss
-				NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-				notificationManager.cancel(NOTIFICATION_ID_MAIN);
-				
-				
+			userSelectInterval = currentTime;
+			
+			if ( receiverPhoneNumber == null ){
+				Toast.makeText(this, "위치를 전송할 사람을 선택하세요.", Toast.LENGTH_SHORT).show();
+				return;
 			}
+			
+			// GPS체크
+			LocationManager locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+			
+			if( locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) == false ) {
+				AlertDialog.Builder builder = new AlertDialog.Builder(this);
+				builder.setTitle(R.string.alert_title);
+				builder.setMessage("GPS 기능을 활성화 시키면 보다 정확한 위치정보를 얻을 수 있습니다. GPS기능을 설정 하시겠습니까?");
+				builder.setPositiveButton(R.string.alert_confirm,
+						new android.content.DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								Intent gpsOptionsIntent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+						        startActivity(gpsOptionsIntent);
+							}
+						});
+				builder.setNegativeButton("취소", null);
+				builder.show();
+			}
+			
+			// 네트워크 체크
+			ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+	        NetworkInfo ni = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+	        boolean isWifiAvail = ni.isAvailable();
+	        boolean isWifiConn = ni.isConnected();
+	        ni = cm.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+	        // TODO방어코드 삭제하고 모바일 가능한지 체크해야 할 것 같음
+	        boolean isMobileAvail = false;
+	        boolean isMobileConn = false;
+	        if ( ni != null ){
+		        isMobileAvail = ni.isAvailable();
+		        isMobileConn = ni.isConnected();
+	        }
+	        Log.d("jiho", "isWifiAvail : "+isWifiAvail);
+	        Log.d("jiho", "isMobileAvail : "+isMobileAvail);
+	        
+	        if (!isWifiConn && !isMobileConn) {
+	        	showAlert("Wifi 혹은 3G망이 연결되지 않았거나 원활하지 않습니다.네트워크 확인후 다시 접속해 주세요!");
+	        	return;
+	        }
+	        
+	        // 알람등록을 위한 데이타 세팅
+			AlarmManager alarmManager = (AlarmManager)this.getSystemService(Context.ALARM_SERVICE);
+			MessageVO messageVO = new MessageVO();
+			messageVO.receiver = receiverPhoneNumber;
+			messageVO.receiver_id = receiverNumberId;
+			messageVO.interval = Integer.toString(currentTime);
+			messageVO.start_time = Util.getCurrentTime();
+			
+			intent = new Intent(getApplicationContext(), AlarmReceiver.class);
+			intent.putExtra(AlarmReceiver.ACTION_ALARM, AlarmReceiver.ACTION_ALARM);
+			intent.putExtra("MESSAGEVO", messageVO);
+			/*
+			intent.putExtra("RECEIVER", receiverPhoneNumber);
+			intent.putExtra("RECEIVER_ID", receiverNumberId);
+			intent.putExtra("INTERVAL", currentTime);
+			intent.putExtra("START_TIME", Util.getCurrentTime());
+			*/
+			pIntent = PendingIntent.getBroadcast(this, 1234567, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+			int term = currentTime * 60 * 1000;
+			// 설정한 시간 간격으로 알람 호출
+			alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), currentTime * 60 * 1000, pIntent);
+			
+			editor.putInt("INTERVAL", userSelectInterval);
+			
+			// Notification 생성
+			//Notification noti = NotificationCompat.Builder.build();
+			Intent resultIntent = new Intent(this, IntroActivity.class);
+			resultIntent.putExtra("IS_FROM_NOTIFICATION", true);
+			// 앱 실행하고 다른 메뉴로 이동후 noti 클릭하면 새로 앱을 띄움
+			//resultIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			resultIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			
+			PendingIntent notifyIntent =
+			        PendingIntent.getActivity(
+			        this,
+			        0,
+			        resultIntent,
+			        PendingIntent.FLAG_UPDATE_CURRENT
+			);
+			
+			
+			NotificationCompat.Builder notiBuilder = new NotificationCompat.Builder(this);
+			notiBuilder.setSmallIcon(R.drawable.ic_launcher);
+			notiBuilder.setContentTitle("I'm Going");
+			notiBuilder.setContentText("I'm going is running ~");
+			notiBuilder.setOngoing(true);
+			notiBuilder.setContentIntent(notifyIntent);
+			
+			Notification notification = notiBuilder.build();
+			notification.ledARGB = 1;
+			
+			
+			notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+			notificationManager.notify(NOTIFICATION_ID_MAIN, notiBuilder.build());
+				
 			editor.putString("RECEIVER", receiverName);
-			editor.putBoolean("IS_START", !isStarted);
+			editor.putBoolean("IS_START", true);
 			editor.commit();
 			
 			setStartStopMode();
 			
 			//toggleControlButton();
+			break;
+			
+		case R.id.id_iv_stop:
+			// 정지버튼 Click 했을 경우
+			// 알람 중지
+			// 서비스가 실행중일경우 서비스 중지
+			
+			receiverName = null;
+			receiverPhoneNumber = null;
+			
+			intent = new Intent(getApplicationContext(), AlarmReceiver.class);
+			intent.putExtra(AlarmReceiver.ACTION_ALARM, AlarmReceiver.ACTION_ALARM);
+			 
+			pIntent = PendingIntent.getBroadcast(this, 1234567,intent, PendingIntent.FLAG_UPDATE_CURRENT);
+			 
+			AlarmManager alarms = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
+			alarms.cancel(pIntent);
+			
+			if ( isLocationServiceRunning() ){
+				this.stopService(new Intent(this, SendCurrentLocationService.class));
+			}
+			
+			// Notification dismiss
+			notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+			notificationManager.cancel(NOTIFICATION_ID_MAIN);
+			
+			editor.putString("RECEIVER", receiverName);
+			editor.putBoolean("IS_START", false);
+			editor.commit();
+			
+			setStartStopMode();
+			
+		
 			break;
 			
 		case R.id.id_iv_number_up:
@@ -445,21 +451,6 @@ public class LocationControlActivity extends Base implements 	OnClickListener,
 			}
 			id_tv_min.setText(Integer.toString(currentTime));
     		id_tv_send_message.setText( makeLocationAlertMessage() );
-			break;
-			
-		case R.id.id_menu_location_control:
-			intent = new Intent(this, LocationControlActivity.class);
-			startNewActivity(intent);
-			break;
-			
-		case R.id.id_menu_location_list:
-			intent = new Intent(this, MessageActivity.class);
-			startNewActivity(intent);
-			break;
-		
-		case R.id.id_menu_config:
-			intent = new Intent(this, ConfigActivity.class);
-			startNewActivity(intent);
 			break;
 			
 		}

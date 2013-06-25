@@ -27,14 +27,6 @@ public class Base extends Activity implements OnClickListener{
 	
 	private void regEvent() {
 		
-		View view = findViewById(R.id.id_menu_location_control);
-		if ( view != null ){
-			view.setOnClickListener(this);
-		}
-		view = findViewById(R.id.id_menu_location_list);
-		if ( view != null ){
-			view.setOnClickListener(this);
-		}
 	}
 
 	
@@ -105,6 +97,7 @@ public class Base extends Activity implements OnClickListener{
 	public void onClick(View v) {
 		Intent intent;
 		switch ( v.getId() ) {
+		/*
 		case R.id.id_menu_location_control:
 			if ( Preference.IS_LOGIN == false ){
 				showAlert(R.string.alert_need_login);
@@ -124,7 +117,7 @@ public class Base extends Activity implements OnClickListener{
 			intent = new Intent(this, MessageActivity.class);
 			startNewActivity(intent);
 			break;
-			
+		*/	
 		default:
 			break;
 		}// TODO Auto-generated method stub

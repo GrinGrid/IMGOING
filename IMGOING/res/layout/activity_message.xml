@@ -13,82 +13,36 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="100"
-        android:orientation="horizontal"
-        android:background="@color/imgoing_red" 
-        >
-        <LinearLayout
-            android:layout_width="0dp"
-	        android:layout_height="match_parent"
-	        android:layout_weight="1"
-	        android:gravity="center" 
-            >
-            <ImageView
-                android:id="@+id/id_menu_location_control"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/location_control" 
-                />
-        </LinearLayout>
-        
-        <LinearLayout
-            android:layout_width="0dp"
-	        android:layout_height="match_parent"
-	        android:layout_weight="1" 
-	        android:gravity="center" 
+        android:background="@color/imgoing_red"
+        android:gravity="center"
+        android:orientation="vertical" >
+
+        <net.gringrid.imgoing.controller.MainMenu
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center" />
+		
+		<!-- Bottom Line Start -->
+	    <LinearLayout
+	        android:layout_width="match_parent"
+	        android:layout_height="5dp"
+	        android:background="@color/imgoing_red_bottom"
+	        >
+	        <TextView
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:textSize="5sp"
+	            android:text="Buboo"
+	            android:textColor="@color/imgoing_red_bottom">
+	            
+	        </TextView>
 	        
-            >
-            <ImageView
-                android:id="@+id/id_menu_location_list"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/location_list" 
-                />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="wrap_content"
-	        android:layout_height="match_parent"
-            >
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:src="@drawable/menu_line_height"
-                android:visibility="invisible" 
-                />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="0dp"
-	        android:layout_height="match_parent"
-	        android:layout_weight="1"
-	        android:gravity="center" 
-            >
-            <ImageView
-                android:id="@+id/id_menu_config"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/config" 
-                />
-        </LinearLayout>
+	    </LinearLayout>
+	    <!-- Bottom Line End -->
+		    
     </LinearLayout>
     <!-- Main Menu end -->
-    
-    <!-- Menu Indicator Start -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="10" 
-        android:background="@color/imgoing_red_bottom"
-        >
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="5dp"
-            android:text="Buboo"
-            android:textColor="@color/imgoing_red_bottom">
-            
-        </TextView>
-        
-    </LinearLayout>
-    <!-- Menu Indicator End -->
     
     
     <!-- Body Start -->
@@ -98,18 +52,19 @@
         android:layout_weight="690"
         android:orientation="vertical"
         android:weightSum="480"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
         >
 		<LinearLayout 
 		    android:layout_width="match_parent"
 		    android:layout_height="0dp"
-		    android:layout_weight="50">
+		    android:layout_weight="40">
             <LinearLayout
                 android:id="@+id/id_bt_send"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@drawable/msg_bt_send_msg" 
+                android:background="@drawable/bt_message_tap_off"
+                android:layout_marginRight="5dp" 
                 >
                 <TextView 
                     android:layout_width="match_parent"
@@ -124,7 +79,8 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@drawable/msg_bt_rcv_msg" 
+                android:background="@drawable/bt_message_tap_off"
+                android:layout_marginLeft="5dp" 
                 >
                 <TextView 
                     android:layout_width="match_parent"
@@ -140,7 +96,7 @@
 		<LinearLayout 
 		    android:layout_width="match_parent"
 		    android:layout_height="0dp"
-		    android:layout_weight="380">
+		    android:layout_weight="390">
 			<ListView
 			    android:id="@+id/id_lv_message"
 			    android:layout_width="match_parent"

@@ -102,14 +102,6 @@ public class ConfigActivity extends Base implements OnClickListener{
 		if ( view != null ){
 			view.setOnClickListener(this);
 		}
-		view = findViewById(R.id.id_menu_location_control);
-		if ( view != null ){
-			view.setOnClickListener(this);
-		}
-		view = findViewById(R.id.id_menu_location_list);
-		if ( view != null ){
-			view.setOnClickListener(this);
-		}
 		view = findViewById(R.id.id_tv_send_person_list);
 		if ( view != null ){
 			view.setOnClickListener(this);
