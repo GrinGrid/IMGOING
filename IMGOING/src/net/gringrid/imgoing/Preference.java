@@ -45,4 +45,31 @@ public class Preference {
 	public static final int SETTING_LOCATION_SEARCH_BATTERY = 1;
 	public static final int SETTING_LOCATION_SEARCH_DEFAULT = SETTING_LOCATION_SEARCH_ACCURATE;
 	
+	
+	/**
+	 * 위치수신 알림 설정 
+	 * 0 : 진동
+	 * 1 : 소음
+	 * 2 : 무음
+	 * 3 : 알리지 않음
+	 */
+	public static int CONFIG_ALARM_METHOD = 0;	
+	
+	/**
+	 * 받은메시지 최대보관수
+	 * 0 : 500
+	 * 1 : 1000
+	 * 2 : 2000 	 
+	 */
+	public static int CONFIG_MAX_RECEIVE_COUNT = 0;
+	
+	/**
+	 * 보낸메시지 최대보관수
+	 * 0 : 500
+	 * 1 : 1000
+	 * 2 : 2000	 
+	 */
+	public static int CONFIG_MAX_SEND_COUNT = 0;
+	
+	
 }

@@ -366,6 +366,9 @@ public class LocationControlActivity extends Base implements 	OnClickListener,
 				notiBuilder.setOngoing(true);
 				notiBuilder.setContentIntent(notifyIntent);
 				
+				Notification notification = notiBuilder.build();
+				notification.ledARGB = 1;
+				
 				
 				NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 				notificationManager.notify(NOTIFICATION_ID_MAIN, notiBuilder.build());

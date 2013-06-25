@@ -1,13 +1,16 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="75dp"
+    android:layout_height="match_parent"
     android:orientation="vertical" 
     android:background="@color/imgoing_red"
     >
 	<RelativeLayout
 	    android:layout_width="match_parent"
-	    android:layout_height="65dp">
+	    android:layout_height="0dp"
+	    android:layout_weight="1"
+	    android:paddingTop="10dp"
+	    android:paddingBottom="10dp">
 	    
 		<!-- Main Menu Start -->
 	    <ImageView
@@ -16,8 +19,7 @@
 			android:layout_height="wrap_content"
 			android:layout_centerInParent="true"
 			android:src="@drawable/location_control" 
-			/>
-	
+			/>	
 		<ImageView
 			android:id="@+id/id_iv_menu"
 			android:layout_width="wrap_content"
@@ -48,24 +50,24 @@
 			/>
 	</RelativeLayout>		
 	    
-	    <!-- Main Menu end -->
-	    <!-- Bottom Line Start -->
-	    <LinearLayout
-	        android:layout_width="match_parent"
-	        android:layout_height="10dp"
-	        android:background="@color/imgoing_red_bottom"
-	        >
-	        <TextView
-	            android:layout_width="match_parent"
-	            android:layout_height="wrap_content"
-	            android:textSize="5dp"
-	            android:text="Buboo"
-	            android:textColor="@color/imgoing_red_bottom">
-	            
-	        </TextView>
-	        
-	    </LinearLayout>
-	    <!-- Bottom Line End -->
+    <!-- Main Menu end -->
+    <!-- Bottom Line Start -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="@color/imgoing_red_bottom"
+        >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="5dp"
+            android:text="Buboo"
+            android:textColor="@color/imgoing_red_bottom">
+            
+        </TextView>
+        
+    </LinearLayout>
+    <!-- Bottom Line End -->
 	    
 
 </LinearLayout>

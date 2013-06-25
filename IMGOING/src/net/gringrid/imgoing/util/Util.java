@@ -273,6 +273,16 @@ public class Util {
 		
 	}
 	
+	public static void saveConfig(Context context){
+		SharedPreferences settings = context.getSharedPreferences(Constants.PREFS_NAME, 0);
+		SharedPreferences.Editor editor = settings.edit();
+		editor.putInt("CONFIG_ALARM_METHOD"		, Preference.CONFIG_ALARM_METHOD);
+		editor.putInt("CONFIG_MAX_RECEIVE_COUNT", Preference.CONFIG_MAX_RECEIVE_COUNT);
+		editor.putInt("CONFIG_MAX_SEND_COUNT"	, Preference.CONFIG_MAX_SEND_COUNT);
+		editor.commit();
+		
+	}
+	
 	public static int getPxFromDp(Context context, int dp){
 		int px;
 		final float scale = context.getResources().getDisplayMetrics().density;

@@ -17,7 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="100"
-        android:background="#da4936"
+        android:background="#FFFFFF"
         android:gravity="center"
         android:orientation="horizontal" >
 
@@ -45,6 +45,8 @@
             android:background="@drawable/config_body_bg"
             android:orientation="vertical" >
 
+            
+            <!-- 이용안내 시작 -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
@@ -66,7 +68,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent" />
             </LinearLayout>
+            <!-- 이용안내 끝 -->
 
+
+            <!-- 위치수신 알림 설정 시작 -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
@@ -88,7 +93,10 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical" />
             </LinearLayout>
+            <!-- 위치수신 알림 설정 끝 -->
 
+
+            <!-- 받은메시지 최대보관수 시작 -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
@@ -110,9 +118,10 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center_vertical" />
             </LinearLayout>
+            <!-- 받은메시지 최대보관수 끝 -->
 
-            <!-- 메시지 도착알림 시작 -->
 
+            <!-- 보낸메시지 최대보관수 시작 -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
@@ -134,7 +143,7 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center_vertical" />
             </LinearLayout>
-            <!-- 메시지 도착알림 끝 -->
+            <!-- 보낸메시지 최대보관수 끝 -->
 
         </LinearLayout>
     </LinearLayout>
