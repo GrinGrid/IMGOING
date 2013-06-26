@@ -2,184 +2,163 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical" 
+    android:background="@color/imgoing_content">
     
     <!-- Body Start -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:weightSum="480"
         >
-        <!-- 왼쪽여백 시작 -->
-		<LinearLayout
-		    android:layout_width="0dp"
-		    android:layout_height="match_parent"
-		    android:layout_weight="80">
-		    
-		</LinearLayout>
-		<!-- 왼쪽여백 끝 -->
 		
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="80"
+            android:orientation="vertical" >
+			<TextView
+			    android:id="@+id/id_tv_login_email"
+			    android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:paddingTop="10dp"
+                android:textColor="@color/imgoing_main_font"
+                android:visibility="gone"
+			    />
+            <ImageView
+                android:id="@+id/id_bt_join"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/bt_join"
+                android:paddingLeft="10dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="5dp"/>
+			<ImageView
+			    android:id="@+id/id_bt_login"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/bt_login"
+                android:paddingLeft="10dp"
+                android:paddingTop="5dp"/>
+            
+        </LinearLayout>
+        
+        
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="80"
+            android:orientation="vertical" 
+            android:gravity="center">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/intro_title"/>
+			
+        </LinearLayout>
+        
+        
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="140"
+            android:orientation="vertical"
+            android:gravity="center" >
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" 
+                >
+	            <!-- 가운데 메뉴 버튼 시작 -->
+	            <LinearLayout
+	                android:id="@+id/id_ll_main"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:orientation="horizontal"
+		            android:gravity="center" 
+		            android:background="@drawable/bg_main_bt">
+		            
+	                <!-- 위치전송 시작 -->
+					<LinearLayout
+					    android:id="@+id/id_ll_location_control"
+					    android:layout_width="0dp"
+					    android:layout_height="match_parent"
+					    android:layout_weight="1" 
+					    android:gravity="center"
+					    >
+					    <ImageView
+					        android:layout_width="wrap_content"
+					        android:layout_height="wrap_content"
+					        android:src="@drawable/location_control"
+					        />
+					</LinearLayout>
+					<!-- 위치전송 끝 -->
+					
+					<!-- 위치확인 시작 -->
+					<LinearLayout
+					    android:id="@+id/id_ll_location_list"
+					    android:layout_width="0dp"
+					    android:layout_height="match_parent"
+					    android:layout_weight="1"
+					    android:gravity="center" 
+					    >
+					    <ImageView
+					        android:layout_width="wrap_content"
+					        android:layout_height="wrap_content"
+					        android:src="@drawable/location_list"
+					        />
+					</LinearLayout>
+					<!-- 위치확인 끝 -->
+					
+					<!-- 설정 시작 -->
+					<LinearLayout
+					    android:id="@+id/id_ll_config"
+					    android:layout_width="0dp"
+					    android:layout_height="match_parent"
+					    android:layout_weight="1"
+					    android:gravity="center" 
+					    >
+					    <ImageView
+					        android:layout_width="wrap_content"
+					        android:layout_height="wrap_content"
+					        android:src="@drawable/config"
+					        />
+					</LinearLayout>
+					<!-- 설정  -->
+				</LinearLayout>
+				
+	            <!-- 가운데 메뉴 버튼  -->
+	            <ImageView
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:src="@drawable/buboo" 
+	                android:layout_marginTop="3dp"
+	                android:layout_marginRight="10dp"
+	                android:layout_alignRight="@id/id_ll_main"
+	                android:layout_below="@id/id_ll_main"
+	                />
+			</RelativeLayout>
+            
+            
+        </LinearLayout>
+        
+
+        
+        
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="180"
+            android:orientation="vertical" >
+
+			
+        </LinearLayout>        
+        
+        
 		
-		<!-- 가운데 내용 시작 -->
-		<LinearLayout
-		    android:layout_width="0dp"
-		    android:layout_height="match_parent"
-		    android:layout_weight="320"
-		    android:weightSum="800"
-		    android:orientation="vertical">
-		    <LinearLayout
-		        android:layout_width="match_parent"
-			    android:layout_height="0dp"
-			    android:layout_weight="200"
-		        >
-		    	<ImageView 
-				    android:layout_width="wrap_content"
-				    android:layout_height="wrap_content"
-				    android:layout_gravity="bottom"
-				    android:src="@drawable/intro_title"/>
-		    </LinearLayout>
-		    
-		    <LinearLayout
-		        android:layout_width="match_parent"
-			    android:layout_height="0dp"
-			    android:layout_weight="300"
-			    android:orientation="vertical"
-		        >
-		    	<LinearLayout
-		    	    android:layout_width="match_parent"
-			    	android:layout_height="wrap_content"
-			    	android:weightSum="3"
-			    	android:background="@drawable/intro_bg">
-			    	
-			    	<!-- 위치전송 버튼 -->
-		    	    <LinearLayout
-		    	        android:id="@+id/id_ll_location_control"
-		    	        android:layout_width="0dp"
-		    	        android:layout_height="match_parent"
-		    	        android:layout_weight="1"
-		    	        android:gravity="center"
-		    	        android:orientation="vertical"
-		    	        >
-		    	        <ImageView
-			                android:layout_width="wrap_content"
-			                android:layout_height="wrap_content"
-			                android:src="@drawable/location_control" 
-			                />
-		    	        <TextView 
-		    	            android:layout_width="wrap_content"
-		    	            android:layout_height="wrap_content"
-		    	            android:textColor="#FFFFFF"
-		    	            android:textSize="10dp"
-		    	            android:textStyle="bold"
-		    	            android:layout_marginTop="5dp"
-		    	            android:text="위치전송"/>
-		    	    </LinearLayout>
-		    	    
-		    	    <!-- 위치확인 버튼 -->
-		    	    <LinearLayout
-		    	        android:id="@+id/id_ll_location_list"
-		    	        android:layout_width="0dp"
-		    	        android:layout_height="match_parent"
-		    	        android:layout_weight="1"
-		    	        android:gravity="center"
-		    	        android:orientation="vertical"
-		    	        >
-		    	        <ImageView
-			                android:layout_width="wrap_content"
-			                android:layout_height="wrap_content"
-			                android:src="@drawable/location_list" 
-			                />
-		    	        <TextView 
-		    	            android:layout_width="wrap_content"
-		    	            android:layout_height="wrap_content"
-		    	            android:textColor="#FFFFFF"
-		    	            android:textSize="10dp"
-		    	            android:textStyle="bold"
-		    	            android:layout_marginTop="5dp"
-		    	            android:text="위치확인"/>
-		    	    </LinearLayout>
-		    	    
-		    	    <!-- 설정 버튼 -->
-		    	    <LinearLayout
-		    	        android:id="@+id/id_ll_config"
-		    	        android:layout_width="0dp"
-		    	        android:layout_height="match_parent"
-		    	        android:layout_weight="1"
-		    	        android:gravity="center"
-		    	        android:orientation="vertical"
-		    	        >
-		    	        <ImageView
-			                android:layout_width="wrap_content"
-			                android:layout_height="wrap_content"
-			                android:src="@drawable/config" 
-			                />
-		    	        <TextView 
-		    	            android:layout_width="wrap_content"
-		    	            android:layout_height="wrap_content"
-		    	            android:textColor="#FFFFFF"
-		    	            android:textSize="10dp"
-		    	            android:textStyle="bold"
-		    	            android:layout_marginTop="5dp"
-		    	            android:text="설정"/>
-		    	    </LinearLayout>
-		    	</LinearLayout>
-		        <ImageView 
-				    android:layout_width="wrap_content"
-				    android:layout_height="wrap_content"
-				    android:layout_gravity="right"
-				    android:src="@drawable/buboo"/>
-		    </LinearLayout>
-		    
-		    <LinearLayout
-		        android:layout_width="match_parent"
-			    android:layout_height="0dp"
-			    android:layout_weight="300"
-			    android:orientation="vertical"
-		        >
-		        <TextView 
-		            android:id="@+id/id_bt_join"
-				    android:layout_width="wrap_content"
-				    android:layout_height="wrap_content"
-				    android:layout_gravity="center"
-				    android:text="      회원가입"
-				    android:background="@drawable/intro_bt_join"/>
-		        <TextView 
-		            android:id="@+id/id_bt_login"
-				    android:layout_width="wrap_content"
-				    android:layout_height="wrap_content"
-				    android:layout_gravity="center"
-				    android:layout_marginTop="20dp"
-				    android:text="       로그인"
-				    android:background="@drawable/intro_bt_login"/>
-		        <TextView 
-		            android:id="@+id/id_login_email"
-				    android:layout_width="wrap_content"
-				    android:layout_height="wrap_content"
-				    android:layout_gravity="center"
-				    android:layout_marginTop="20dp"
-				    android:text="nisclan@hotmail.com"/>
-		        <TextView 
-		            android:id="@+id/id_bt_logout"
-				    android:layout_width="wrap_content"
-				    android:layout_height="wrap_content"
-				    android:layout_gravity="center"
-				    android:layout_marginTop="20dp"
-				    android:text="다른아이디로 로그인"/>
-		    </LinearLayout>
-		    
-		</LinearLayout>
-		<!-- 가운데 내용 끝 -->
-		
-		
-		<!-- 오른쪽 여백 시작 -->
-		<LinearLayout
-		    android:layout_width="0dp"
-		    android:layout_height="match_parent"
-		    android:layout_weight="80">
-		    
-		</LinearLayout>
-		<!-- 오른쪽 여백 끝 -->
 		
 	</LinearLayout>
 	<!-- Body End -->	

@@ -96,10 +96,12 @@ public class MainActivity extends Base implements OnClickListener {
 		}
 		
 		// 로그아웃 버튼
+		/*
 		view = findViewById(R.id.id_bt_logout);
 		if ( view != null ){
 			view.setOnClickListener(this);
 		}
+		*/
 	}
 	
 	
@@ -115,21 +117,24 @@ public class MainActivity extends Base implements OnClickListener {
 		
 		View id_bt_join = findViewById(R.id.id_bt_join);
 		View id_bt_login = findViewById(R.id.id_bt_login);
-		View id_bt_logout = findViewById(R.id.id_bt_logout);
-		View id_login_email = findViewById(R.id.id_login_email);
+		TextView id_tv_login_email = (TextView)findViewById(R.id.id_tv_login_email);
+		//View id_bt_logout = findViewById(R.id.id_bt_logout);
+		
 		
 		id_bt_join.setVisibility(View.GONE);
 		id_bt_login.setVisibility(View.GONE);
-		id_bt_logout.setVisibility(View.GONE);
-		id_login_email.setVisibility(View.GONE);
+		id_tv_login_email.setVisibility(View.GONE);
+		//id_bt_logout.setVisibility(View.GONE);
+		
 		
 		// 저장된 로그인 정보가 있는경우
 		// 로그인된 이메일과 로그아웃 버튼을 보여주고 회원가입,로그인 버튼은 숨긴다.
 		if ( isAutoLogin && loginEmail != null ){
 			// 로그인된 이메일 주소와 로그아웃 버튼을 보여준다.
 			Preference.IS_LOGIN = true;
-			id_bt_logout.setVisibility(View.VISIBLE);
-			id_login_email.setVisibility(View.VISIBLE);
+			//id_bt_logout.setVisibility(View.VISIBLE);
+			id_tv_login_email.setText(loginEmail);
+			id_tv_login_email.setVisibility(View.VISIBLE);
 		}else{
 			// 회원가입, 로그인 버튼을 보여준다
 			Preference.IS_LOGIN = false;
@@ -167,8 +172,8 @@ public class MainActivity extends Base implements OnClickListener {
 			break;
 		case REQUEST_LOGIN:
 			if ( resultCode == RESULT_OK ){
-				TextView id_login_email = (TextView)findViewById(R.id.id_login_email);
-				id_login_email.setText(data.getStringExtra("EMAIL"));
+				TextView id_tv_login_email = (TextView)findViewById(R.id.id_tv_login_email);
+				id_tv_login_email.setText(data.getStringExtra("EMAIL"));
 			}
 			inflateLoginInfo();
 			break;
@@ -217,7 +222,8 @@ public class MainActivity extends Base implements OnClickListener {
 			intent = new Intent(this, LoginActivity.class);
 			startActivityForResult(intent, REQUEST_LOGIN);
 			break;
-			
+		
+		/*	
 		case R.id.id_bt_logout:
 			SharedPreferences settings = getSharedPreferences(Constants.PREFS_NAME, 0);
 			SharedPreferences.Editor editor = settings.edit();
@@ -229,6 +235,7 @@ public class MainActivity extends Base implements OnClickListener {
 			showAlert("로그아웃 되었습니다.");
 			inflateLoginInfo();
 			break;
+		*/
 			
 		}
 	}

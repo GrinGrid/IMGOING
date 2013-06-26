@@ -57,6 +57,8 @@
 	<!-- IMGOING 배경색 -->
 	<color name="imgoing_content">#efece3</color>
 	
+	<!-- IMGOING 메인폰트 -->
+	<color name="imgoing_main_font">#8b8783</color>
 	
 	
 </resources>

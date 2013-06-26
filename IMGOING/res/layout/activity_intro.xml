@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:weightSum="100"
-    android:background="#000000"
+    android:background="@color/imgoing_content"
     android:gravity="center" >
     
 	<LinearLayout
@@ -39,13 +39,16 @@
 	        android:id="@+id/id_pb_loading"
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
+	        android:paddingLeft="10dp"
+	        android:paddingRight="10dp"
 	        style="@android:style/Widget.ProgressBar.Horizontal"/>
 	    
 	    <TextView
 	        android:id="@+id/id_tv_pb_text"
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
-	        android:textColor="#FFFFFF"
+	        android:textColor="@color/imgoing_main_font"
+	        android:textSize="12sp"
 	        android:gravity="center"
 	        android:text="data loading.."
 	        />    
