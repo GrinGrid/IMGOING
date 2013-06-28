@@ -47,6 +47,12 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.RotateAnimation;
+import android.view.animation.TranslateAnimation;
+import android.view.animation.Animation.AnimationListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.TextView.OnEditorActionListener;
@@ -62,7 +68,8 @@ import android.widget.Toast;
 public class LocationControlActivity extends Base implements 	OnClickListener, 
 																OnItemClickListener,
 																OnFocusChangeListener,
-																OnEditorActionListener{
+																OnEditorActionListener,
+																AnimationListener{
 	
 	// 주소록 Listview
 	private ListView id_lv_contacts;
@@ -217,6 +224,7 @@ public class LocationControlActivity extends Base implements 	OnClickListener,
 			id_lv_contacts.setEnabled(false);
 			findViewById(R.id.id_iv_number_up).setEnabled(false);
 			findViewById(R.id.id_iv_number_down).setEnabled(false);
+			playAnimation();
 		}else{
 			beforeView.setVisibility(View.VISIBLE);
 			id_lv_contacts.setEnabled(true);
@@ -227,6 +235,7 @@ public class LocationControlActivity extends Base implements 	OnClickListener,
 		currentTime = interval;
 		id_tv_send_message.setText( makeLocationAlertMessage() );
 		id_tv_min.setText(Integer.toString(currentTime));
+		
 	}
 	
 	/**
@@ -238,6 +247,83 @@ public class LocationControlActivity extends Base implements 	OnClickListener,
 		}	
 	}
 	
+	/**
+	 * Animation을 실행한다.
+	 */
+	private void playAnimation(){
+		
+		int startOffset = 0;
+		
+		
+		ImageView foot1 = (ImageView)findViewById(R.id.foot1);
+		ImageView foot2 = (ImageView)findViewById(R.id.foot2);
+		ImageView foot3 = (ImageView)findViewById(R.id.foot3);
+		ImageView foot4 = (ImageView)findViewById(R.id.foot4);
+		ImageView foot5 = (ImageView)findViewById(R.id.foot5);
+		ImageView foot6 = (ImageView)findViewById(R.id.foot6);
+		ImageView foot7 = (ImageView)findViewById(R.id.foot7);
+		ImageView foot8 = (ImageView)findViewById(R.id.foot8);
+		ImageView foot9 = (ImageView)findViewById(R.id.foot9);
+		ImageView foot10 = (ImageView)findViewById(R.id.foot10);
+		ImageView foot11 = (ImageView)findViewById(R.id.foot11);
+		ImageView foot12 = (ImageView)findViewById(R.id.foot12);
+		/*
+		foot1.setAlpha(0);
+		foot2.setAlpha(0);
+		foot3.setAlpha(0);
+		foot4.setAlpha(0);
+		foot5.setAlpha(0);
+		foot6.setAlpha(0);
+		foot7.setAlpha(0);
+		foot8.setAlpha(0);
+		foot9.setAlpha(0);
+		foot10.setAlpha(0);
+		foot11.setAlpha(0);
+		foot12.setAlpha(0);
+		*/
+				
+		
+		foot1.startAnimation(makeAnimation(foot1, startOffset+=400));
+		foot2.startAnimation(makeAnimation(foot2, startOffset+=400));
+		foot3.startAnimation(makeAnimation(foot3, startOffset+=400));
+		foot4.startAnimation(makeAnimation(foot4, startOffset+=400));
+		foot5.startAnimation(makeAnimation(foot5, startOffset+=400));
+		foot6.startAnimation(makeAnimation(foot6, startOffset+=400));
+		foot7.startAnimation(makeAnimation(foot7, startOffset+=400));
+		foot8.startAnimation(makeAnimation(foot8, startOffset+=400));
+		foot9.startAnimation(makeAnimation(foot9, startOffset+=400));
+		foot10.startAnimation(makeAnimation(foot10, startOffset+=400));
+		foot11.startAnimation(makeAnimation(foot11, startOffset+=400));
+		foot12.startAnimation(makeAnimation(foot12, startOffset+=400));
+		
+	}
+	
+	private AnimationSet makeAnimation(View view, int startOffset){
+		
+		AnimationSet animationSet = new AnimationSet(false);
+				
+		view.setVisibility(View.VISIBLE);
+		
+		Animation alphaShowAnimation = new AlphaAnimation(0, 1);
+		alphaShowAnimation.setDuration(400);
+		alphaShowAnimation.setStartOffset(startOffset);
+		
+		Animation alphaHideAnimation = new AlphaAnimation(1, 0);
+		alphaHideAnimation.setDuration(400);
+		alphaHideAnimation.setStartOffset(startOffset+400);
+		
+		animationSet.addAnimation(alphaShowAnimation);
+		animationSet.addAnimation(alphaHideAnimation);
+		
+		return animationSet;
+	}
+	
+	/**
+	 * Animation을 정지한다.
+	 */
+	private void stopAnimation(){
+		
+	}
 	
 	/**
 	 * 서비스가 수행중인지 확인한다.
@@ -621,6 +707,27 @@ public class LocationControlActivity extends Base implements 	OnClickListener,
 
 	@Override
 	public void onFocusChange(View v, boolean hasFocus) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void onAnimationStart(Animation animation) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void onAnimationEnd(Animation animation) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void onAnimationRepeat(Animation animation) {
 		// TODO Auto-generated method stub
 		
 	}

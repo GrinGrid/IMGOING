@@ -25,6 +25,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import net.gringrid.imgoing.Constants;
+import net.gringrid.imgoing.IntroActivity;
 import net.gringrid.imgoing.Preference;
 import net.gringrid.imgoing.R;
 import net.gringrid.imgoing.dao.MessageDao;
@@ -34,6 +35,8 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -56,6 +59,34 @@ public class Util {
 	    return (network == NetworkInfo.State.CONNECTED || network == NetworkInfo.State.CONNECTING);
 	}
 	
+	
+	/**
+	 * 버전코드
+	 * @param context
+	 * @return
+	 */
+	public static int getVersionCode(Context context){		
+		try {
+			PackageInfo pInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
+			return pInfo.versionCode;
+		} catch (NameNotFoundException e) {
+			e.printStackTrace();
+			return 0;
+		}		
+	}
+	
+	
+	/**
+	 * 버전명
+	 */
+	public static String getVersionName(Context context) {
+		try {
+			PackageInfo pInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
+			return pInfo.versionName;
+		} catch(Exception e) {
+			return "";
+		}
+	}
 	
 	
 	/**

@@ -61,6 +61,11 @@ public class IntroActivity extends Activity{
 	                while (mProgressStatus < 100) {
 	                	mProgressStatus = doWork();
 	                	
+	                	// 버전을 얻어온다.
+	                	if ( mProgressStatus == 6 ){
+	                		Log.d("jiho", "Version Name : "+Util.getVersionName(mContext));
+	                	}
+	                	
 	                	// setting 정보를 로딩한다.
 	                	if ( mProgressStatus == 13 ){
 	                		Util.loadSetting(mContext);
