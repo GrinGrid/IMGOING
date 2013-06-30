@@ -35,7 +35,7 @@ public class MainActivity extends Base implements OnClickListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		
+		Log.d("jiho", "MainActivity Oncreage : "+Preference.GCM_REGISTRATION_ID);
 		init();
 		regEvent();
 		setBroadCastReceiver();

@@ -109,6 +109,7 @@ public class MessageDao {
 			String.format("SELECT "+
 					"sender "+
 					",start_time "+
+					",max(send_time) last_send_time "+
 					"FROM MESSAGE "+
 					"WHERE receiver = ? "+
 					"GROUP BY sender, start_time "+

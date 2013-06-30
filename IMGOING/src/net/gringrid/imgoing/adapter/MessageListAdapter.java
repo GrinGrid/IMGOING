@@ -25,6 +25,10 @@ import android.widget.TextView;
 
 public class MessageListAdapter extends BaseAdapter{
 
+	private static int TRANS_MODE;
+	private final static int TRANS_MODE_SENDER = 0;
+	private final static int TRANS_MODE_RECEIVER = 1;
+	
 	Vector<MessageVO> data = new Vector<MessageVO>();
 	Context mContext;
 	/**

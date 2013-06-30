@@ -1,6 +1,7 @@
 package net.gringrid.imgoing;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
@@ -68,8 +69,8 @@ import android.widget.Toast;
 public class LocationControlActivity extends Base implements 	OnClickListener, 
 																OnItemClickListener,
 																OnFocusChangeListener,
-																OnEditorActionListener,
-																AnimationListener{
+																OnEditorActionListener
+																{
 	
 	// 주소록 Listview
 	private ListView id_lv_contacts;
@@ -91,6 +92,9 @@ public class LocationControlActivity extends Base implements 	OnClickListener,
 	
 	// Notification ID 
 	private static final int NOTIFICATION_ID_MAIN = 7575;
+	
+	private ArrayList<View> mViewList;
+	private int mCurrentFootPrintIndex;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -252,9 +256,6 @@ public class LocationControlActivity extends Base implements 	OnClickListener,
 	 */
 	private void playAnimation(){
 		
-		int startOffset = 0;
-		
-		
 		ImageView foot1 = (ImageView)findViewById(R.id.foot1);
 		ImageView foot2 = (ImageView)findViewById(R.id.foot2);
 		ImageView foot3 = (ImageView)findViewById(R.id.foot3);
@@ -267,63 +268,65 @@ public class LocationControlActivity extends Base implements 	OnClickListener,
 		ImageView foot10 = (ImageView)findViewById(R.id.foot10);
 		ImageView foot11 = (ImageView)findViewById(R.id.foot11);
 		ImageView foot12 = (ImageView)findViewById(R.id.foot12);
-		/*
-		foot1.setAlpha(0);
-		foot2.setAlpha(0);
-		foot3.setAlpha(0);
-		foot4.setAlpha(0);
-		foot5.setAlpha(0);
-		foot6.setAlpha(0);
-		foot7.setAlpha(0);
-		foot8.setAlpha(0);
-		foot9.setAlpha(0);
-		foot10.setAlpha(0);
-		foot11.setAlpha(0);
-		foot12.setAlpha(0);
-		*/
-				
 		
-		foot1.startAnimation(makeAnimation(foot1, startOffset+=400));
-		foot2.startAnimation(makeAnimation(foot2, startOffset+=400));
-		foot3.startAnimation(makeAnimation(foot3, startOffset+=400));
-		foot4.startAnimation(makeAnimation(foot4, startOffset+=400));
-		foot5.startAnimation(makeAnimation(foot5, startOffset+=400));
-		foot6.startAnimation(makeAnimation(foot6, startOffset+=400));
-		foot7.startAnimation(makeAnimation(foot7, startOffset+=400));
-		foot8.startAnimation(makeAnimation(foot8, startOffset+=400));
-		foot9.startAnimation(makeAnimation(foot9, startOffset+=400));
-		foot10.startAnimation(makeAnimation(foot10, startOffset+=400));
-		foot11.startAnimation(makeAnimation(foot11, startOffset+=400));
-		foot12.startAnimation(makeAnimation(foot12, startOffset+=400));
+		mViewList = new ArrayList<View>();
+		mViewList.add(foot1);
+		mViewList.add(foot2);
+		mViewList.add(foot3);
+		mViewList.add(foot4);
+		mViewList.add(foot5);
+		mViewList.add(foot6);
+		mViewList.add(foot7);
+		mViewList.add(foot8);
+		mViewList.add(foot9);
+		mViewList.add(foot10);
+		mViewList.add(foot11);
+		mViewList.add(foot12);
+		
+		playFootPrintAnimation();
 		
 	}
 	
-	private AnimationSet makeAnimation(View view, int startOffset){
+	private void playFootPrintAnimation(){
+		
+		if ( mCurrentFootPrintIndex > mViewList.size()-1 ){
+			mCurrentFootPrintIndex = 0;
+		}
+		
+		final View finalView = mViewList.get(mCurrentFootPrintIndex++); 
 		
 		AnimationSet animationSet = new AnimationSet(false);
-				
-		view.setVisibility(View.VISIBLE);
-		
-		Animation alphaShowAnimation = new AlphaAnimation(0, 1);
-		alphaShowAnimation.setDuration(400);
-		alphaShowAnimation.setStartOffset(startOffset);
-		
 		Animation alphaHideAnimation = new AlphaAnimation(1, 0);
-		alphaHideAnimation.setDuration(400);
-		alphaHideAnimation.setStartOffset(startOffset+400);
+		alphaHideAnimation.setDuration(600);
+		//alphaHideAnimation.setStartOffset(400);
 		
-		animationSet.addAnimation(alphaShowAnimation);
+		
+		alphaHideAnimation.setAnimationListener(new AnimationListener() {
+			
+			@Override
+			public void onAnimationStart(Animation animation) {
+				// TODO Auto-generated method stub
+				finalView.setVisibility(View.VISIBLE);
+			}
+			
+			@Override
+			public void onAnimationRepeat(Animation animation) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void onAnimationEnd(Animation animation) {
+				// TODO Auto-generated method stub
+				finalView.setVisibility(View.INVISIBLE);
+				playFootPrintAnimation();
+			}
+		});
+		
 		animationSet.addAnimation(alphaHideAnimation);
-		
-		return animationSet;
+		finalView.startAnimation(animationSet);
 	}
 	
-	/**
-	 * Animation을 정지한다.
-	 */
-	private void stopAnimation(){
-		
-	}
 	
 	/**
 	 * 서비스가 수행중인지 확인한다.
@@ -707,27 +710,6 @@ public class LocationControlActivity extends Base implements 	OnClickListener,
 
 	@Override
 	public void onFocusChange(View v, boolean hasFocus) {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-	@Override
-	public void onAnimationStart(Animation animation) {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-	@Override
-	public void onAnimationEnd(Animation animation) {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-	@Override
-	public void onAnimationRepeat(Animation animation) {
 		// TODO Auto-generated method stub
 		
 	}

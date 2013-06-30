@@ -66,6 +66,9 @@ public class SendCurrentLocationService extends Service implements
     private static final long FASTEST_INTERVAL =
             MILLISECONDS_PER_SECOND * FASTEST_INTERVAL_IN_SECONDS;
 	
+    // screen 
+    private BroadcastReceiver mScreenReceiver;
+    
 	@Override
 	public void onCreate() {
 		/*
@@ -77,8 +80,8 @@ public class SendCurrentLocationService extends Service implements
 		filter.addAction(Intent.ACTION_SCREEN_ON);
         filter.addAction(Intent.ACTION_SCREEN_OFF);
         filter.setPriority(Integer.MAX_VALUE);
-        BroadcastReceiver mReceiver = new ScreenReceiver();
-        registerReceiver(mReceiver, filter);
+        mScreenReceiver = new ScreenReceiver();
+        registerReceiver(mScreenReceiver, filter);
         
 		mLocationClient = new LocationClient(this, this, this);
 		mLocationRequest = LocationRequest.create();
@@ -131,6 +134,8 @@ public class SendCurrentLocationService extends Service implements
 		editor.putString("LONGITUDE", null);
 		editor.putString("PROVIDER", null);
 		editor.commit();
+	
+		unregisterReceiver(mScreenReceiver);
 		
 		/*
 		Intent localIntent = new Intent(Constants.BROADCAST_ACTION)

@@ -28,7 +28,7 @@ public class LoginActivity extends Base implements OnClickListener{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);		
 		this.setTitle(R.string.login_title);
-		
+		Log.d("jiho", "LoginActivity Oncreage : "+Preference.GCM_REGISTRATION_ID);
 		init();
 		regEvent();
 		
@@ -93,8 +93,10 @@ public class LoginActivity extends Base implements OnClickListener{
 				return;
 			}
 			
+        	
 			Log.d("jiho", "email : "+user.email);
 			Log.d("jiho", "password : "+user.password);
+			Log.d("jiho", "GCM id : "+Preference.GCM_REGISTRATION_ID);
 			
 			String sharedEmail = settings.getString("EMAIL", "EMAIL EMPTY");
 			Log.d("jiho", "sharedEmail : "+sharedEmail);
@@ -107,6 +109,13 @@ public class LoginActivity extends Base implements OnClickListener{
 	        inputData.add(new BasicNameValuePair("gcm_reg_id",user.gcm_reg_id));
 			
 	        JSONObject resultData = Util.requestHttp(url, inputData);
+			
+
+			if ( Util.isPossibleNetwork(this) == false || resultData == null ){
+				showAlert("Wifi 혹은 3G망이 연결되지 않았거나 원활하지 않습니다.네트워크 확인후 다시 접속해 주세요!");
+	        	return;
+			}
+        	
 			
 			try {
 				// result_cd 가 0000 이면 로그인 처리
@@ -124,6 +133,8 @@ public class LoginActivity extends Base implements OnClickListener{
 						user.phone_number = serverPhoneNumber;
 					}
 					
+					Log.d("jiho", "LOCAL GCM ID : "+user.gcm_reg_id);
+					Log.d("jiho", "serverGcmRegId : "+serverGcmRegId);
 					// 스마트폰 GCM ID 와 서버 GCM ID 가 다른경우
 					if ( user.gcm_reg_id != null && user.gcm_reg_id.equals(serverGcmRegId) == false ){
 						// GCM ID 서버로 전송하여 update

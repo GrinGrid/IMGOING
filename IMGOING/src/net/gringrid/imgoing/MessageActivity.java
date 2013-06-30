@@ -122,12 +122,14 @@ public class MessageActivity extends Base implements OnClickListener, OnItemClic
 		
 		int index_sender = cursor.getColumnIndex("sender");
 		int index_start_time = cursor.getColumnIndex("start_time");
+		int index_last_send_time = cursor.getColumnIndex("last_send_time");
 		message_data.clear();
 		if ( cursor.moveToFirst() ) {
 			do{
 				MessageVO messageVO = new MessageVO();
 				messageVO.sender = cursor.getString(index_sender);
 				messageVO.start_time = cursor.getString(index_start_time);
+				messageVO.send_time = cursor.getString(index_last_send_time);
 				
 				message_data.add(messageVO);
 			}while(cursor.moveToNext());

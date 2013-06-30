@@ -321,4 +321,28 @@ public class Util {
 		
 		return px;
 	}
+	
+	public static boolean isPossibleNetwork(Context context){
+		// 네트워크 체크
+		ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo ni = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        boolean isWifiAvail = ni.isAvailable();
+        boolean isWifiConn = ni.isConnected();
+        ni = cm.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+        // TODO 방어코드 삭제하고 모바일 가능한지 체크해야 할 것 같음
+        boolean isMobileAvail = false;
+        boolean isMobileConn = false;
+        if ( ni != null ){
+	        isMobileAvail = ni.isAvailable();
+	        isMobileConn = ni.isConnected();
+        }
+        Log.d("jiho", "isWifiAvail : "+isWifiAvail);
+        Log.d("jiho", "isMobileAvail : "+isMobileAvail);
+        
+        if (!isWifiConn && !isMobileConn) {
+        	return false;
+        }else{
+        	return true;
+        }
+	}
 }

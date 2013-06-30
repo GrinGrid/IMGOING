@@ -1,5 +1,13 @@
 package net.gringrid.imgoing.location;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import net.gringrid.imgoing.Constants;
 import net.gringrid.imgoing.Preference;
 import net.gringrid.imgoing.dao.MessageDao;
@@ -46,8 +54,6 @@ public class AlarmReceiver extends BroadcastReceiver {
 			String longitude = settings.getString("LONGITUDE", null);
 			String provider = settings.getString("PROVIDER", null);
 			
-			
-			
 			if ( latitude != null && longitude != null && provider !=null ){
 				messageVO.sender = Util.getMyPhoneNymber(mContext);
 				messageVO.send_time = Util.getCurrentTime();
@@ -62,10 +68,37 @@ public class AlarmReceiver extends BroadcastReceiver {
 				if ( resultCd == 0 ){
 					Log.d("jiho", "AlarmReceiver insert success! ["+latitude+"] ["+longitude+"]");
 					
+					
+					// 서버로 전송
+					String url = "http://choijiho.com/gringrid/imgoing/imgoing.php";
+			        List < NameValuePair > inputData = new ArrayList < NameValuePair > (9);
+			        inputData.add(new BasicNameValuePair("mode","SEND_GCM"));
+			        inputData.add(new BasicNameValuePair("sender",messageVO.sender));
+			        inputData.add(new BasicNameValuePair("receiver_phone_number",messageVO.receiver));
+			        inputData.add(new BasicNameValuePair("receiver_id",messageVO.receiver_id));
+			        inputData.add(new BasicNameValuePair("start_time",messageVO.start_time));
+			        inputData.add(new BasicNameValuePair("send_time",messageVO.send_time));
+			        inputData.add(new BasicNameValuePair("latitude",messageVO.latitude));
+			        inputData.add(new BasicNameValuePair("longitude",messageVO.longitude));
+			        inputData.add(new BasicNameValuePair("interval",messageVO.interval));
+			        inputData.add(new BasicNameValuePair("provider",messageVO.provider));
+			        
+			        JSONObject resultData = Util.requestHttp(url, inputData);
+					
+			        try {
+			        	Log.d("jiho", "success : "+resultData.getString("success"));
+						
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}					
+					
+					
 					editor.putString("LATITUDE", null);
 					editor.putString("LONGITUDE", null);
 					editor.putString("PROVIDER", null);
 					editor.commit();
+					
 				}else{
 					Log.d("jiho", "[ERROR] insert fail!");
 				}

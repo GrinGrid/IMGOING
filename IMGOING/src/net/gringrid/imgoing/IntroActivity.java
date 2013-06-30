@@ -23,7 +23,7 @@ import android.widget.TextView;
 
 public class IntroActivity extends Activity{
 	
-	private final boolean DEBUG = false;
+	private final boolean DEBUG = true;
 	private ProgressBar mProgress;
 	private TextView mProgressText;
     private int mProgressStatus = 0;
@@ -40,10 +40,18 @@ public class IntroActivity extends Activity{
 		mProgressText = (TextView) findViewById(R.id.id_tv_pb_text);
 		
 		boolean isFromNotification = getIntent().getBooleanExtra("IS_FROM_NOTIFICATION", false);
+		boolean isFromReceiveLocation = getIntent().getBooleanExtra("IS_FROM_RECEIVE_LOCATION", false);
+		
 		Log.d("jiho", "isFromNotification : "+isFromNotification);
+		
 		if ( isFromNotification == true ){
 			getIntent().removeExtra("IS_FROM_NOTIFICATION");
 			mIntent = new Intent(IntroActivity.this, LocationControlActivity.class);
+			
+		}else if ( isFromReceiveLocation == true ){
+			getIntent().removeExtra("IS_FROM_RECEIVE_LOCATION");
+			mIntent = new Intent(IntroActivity.this, MessageActivity.class);
+			
 		}else{
 			mIntent = new Intent(IntroActivity.this, MainActivity.class);
 		}
