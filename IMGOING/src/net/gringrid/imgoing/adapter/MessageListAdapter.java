@@ -25,9 +25,10 @@ import android.widget.TextView;
 
 public class MessageListAdapter extends BaseAdapter{
 
-	private static int TRANS_MODE;
-	private final static int TRANS_MODE_SENDER = 0;
-	private final static int TRANS_MODE_RECEIVER = 1;
+	private int MESSAGE_MODE;
+	private final int MESSAGE_MODE_RECEIVE = 0;	// 받은메시지
+	private final int MESSAGE_MODE_SEND = 1;		// 보낸메시지 
+	
 	
 	Vector<MessageVO> data = new Vector<MessageVO>();
 	Context mContext;
@@ -71,6 +72,10 @@ public class MessageListAdapter extends BaseAdapter{
 		notifyDataSetChanged();
 	}
 	
+	public void setMode(int MODE){
+		MESSAGE_MODE = MODE;
+	}
+	
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		View view = convertView;
@@ -86,10 +91,10 @@ public class MessageListAdapter extends BaseAdapter{
 		if (item != null)
 		{
 			LinearLayout id_rl_cell = (LinearLayout)view.findViewById(R.id.id_ll_cell);
-			TextView id_tv_sender = (TextView)view.findViewById(R.id.id_tv_sender);
+			TextView id_tv_person_name = (TextView)view.findViewById(R.id.id_tv_person_name);
 			//TextView id_tv_receiver = (TextView)view.findViewById(R.id.id_tv_receiver);
 			//TextView id_tv_start_time = (TextView)view.findViewById(R.id.id_tv_start_time);
-			TextView id_tv_send_time = (TextView)view.findViewById(R.id.id_tv_send_time);
+			TextView id_tv_wrk_time = (TextView)view.findViewById(R.id.id_tv_wrk_time);
 			//TextView id_tv_provider = (TextView)view.findViewById(R.id.id_tv_provider);
 			//TextView id_tv_latitude = (TextView)view.findViewById(R.id.id_tv_latitude);
 			//TextView id_tv_longitude = (TextView)view.findViewById(R.id.id_tv_longitude);
@@ -106,27 +111,37 @@ public class MessageListAdapter extends BaseAdapter{
 				id_rl_cell.setBackgroundColor(Color.WHITE);
 			}
 			*/
+			String person = null;
+			if ( MESSAGE_MODE == MESSAGE_MODE_RECEIVE ){
+				id_tv_person_name.setText(item.receiver_name);
+				person = item.receiver;
+			}else if ( MESSAGE_MODE == MESSAGE_MODE_SEND ){
+				id_tv_person_name.setText(item.sender_name);
+				person = item.sender;
+			}
 			
-			id_tv_sender.setText(item.receiver_name);
 			//id_tv_receiver.setText(item.receiver);
 			//id_tv_start_time.setText(item.start_time);
-			id_tv_send_time.setText(item.send_time);
+			id_tv_wrk_time.setText(item.wrk_time);
 			//id_tv_provider.setText(item.provider);
 			//id_tv_latitude.setText(item.latitude);
 			//id_tv_longitude.setText(item.longitude);
 			//id_tv_location_name.setText(item.location_name);
 			
-			final String receiver = item.receiver;
-			final String start_time = item.start_time;
+			
+			
+			final String fPerson = person;
+			final String fStart_time = item.start_time;
 			
 			id_iv_map.setOnClickListener(new OnClickListener() {
 				
 				@Override
 				public void onClick(View v) {
 					if ( v.getId() == R.id.id_iv_map ){
-						Intent intent = new Intent(mContext, MapActivity.class);
-						intent.putExtra("RECEIVER", receiver);
-						intent.putExtra("START_TIME", start_time);
+						Intent intent = new Intent(mContext, MapActivity.class);						
+						intent.putExtra("MODE", MESSAGE_MODE);
+						intent.putExtra("PERSON", fPerson);
+						intent.putExtra("START_TIME", fStart_time);						
 						mContext.startActivity(intent);
 					}
 				}

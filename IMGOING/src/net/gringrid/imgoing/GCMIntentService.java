@@ -62,16 +62,13 @@ public class GCMIntentService extends GCMBaseIntentService{
 		
 		messageVO.sender = bundle.get("sender").toString();
 		messageVO.receiver = Util.getMyPhoneNymber(context);
-		messageVO.receiver_id = "";
-		messageVO.start_time = bundle.get("start_time").toString();
-		messageVO.send_time = bundle.get("send_time").toString();;
-		messageVO.receive_time = Util.getCurrentTime();
+		messageVO.start_time = bundle.get("start_time").toString();				
 		messageVO.latitude = bundle.get("latitude").toString();
 		messageVO.longitude	= bundle.get("longitude").toString();
 		messageVO.interval = bundle.get("interval").toString();;
 		messageVO.provider = "";
-		messageVO.location_name = locationUtil.getLocationName(latitude, longitude);
-		messageVO.near_metro_name = "";
+		messageVO.wrk_time = bundle.get("wrk_time").toString();;
+		messageVO.trans_yn = "";
 				
 		resultCd = messageDAO.insert(messageVO);
 		
@@ -96,7 +93,7 @@ public class GCMIntentService extends GCMBaseIntentService{
 			NotificationCompat.Builder notiBuilder = new NotificationCompat.Builder(this);
 			notiBuilder.setSmallIcon(R.drawable.ic_launcher);
 			notiBuilder.setContentTitle("I'm Going");
-			notiBuilder.setContentText("Last : "+messageVO.receive_time);
+			notiBuilder.setContentText("Last : "+messageVO.wrk_time);
 			notiBuilder.setContentIntent(notifyIntent);
 			notiBuilder.setNumber(10);
 			

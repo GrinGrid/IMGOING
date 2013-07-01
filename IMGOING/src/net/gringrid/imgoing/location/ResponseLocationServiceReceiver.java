@@ -43,18 +43,14 @@ public class ResponseLocationServiceReceiver extends BroadcastReceiver {
 			int resultCd = 0;
 			
 			messageVO.sender = Util.getMyPhoneNymber(context);
-			messageVO.receiver = mBundle.getString("RECEIVER");
-			messageVO.receiver_id = mBundle.getString("RECEIVER_ID");
-			messageVO.start_time = mBundle.getString("START_TIME");
-			messageVO.send_time = Util.getCurrentTime();
-			messageVO.receive_time = "";
+			messageVO.receiver = mBundle.getString("RECEIVER");			
+			messageVO.start_time = mBundle.getString("START_TIME");						
 			messageVO.latitude = Double.toString(location.getLatitude());
 			messageVO.longitude	= Double.toString(location.getLongitude());
 			messageVO.interval = Integer.toString(mBundle.getInt("INTERVAL"));
 			messageVO.provider = location.getProvider();
-			//messageVO.location_name = getLocationName(location.getLatitude(), location.getLongitude());
-			messageVO.location_name = "";
-			messageVO.near_metro_name = "";
+			messageVO.wrk_time = Util.getCurrentTime();
+			messageVO.trans_yn = "";			
 					
 			resultCd = messageDAO.insert(messageVO);
 			

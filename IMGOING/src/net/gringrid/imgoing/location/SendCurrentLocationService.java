@@ -223,17 +223,13 @@ public class SendCurrentLocationService extends Service implements
 		
 		messageVO.sender = Util.getMyPhoneNymber(this);
 		messageVO.receiver = mMessageVO.receiver;
-		messageVO.receiver_id = mMessageVO.receiver_id;
 		messageVO.start_time = mMessageVO.start_time;
-		messageVO.send_time = Util.getCurrentTime();
-		messageVO.receive_time = "";
 		messageVO.latitude = Double.toString(location.getLatitude());
 		messageVO.longitude	= Double.toString(location.getLongitude());
 		messageVO.interval = mMessageVO.interval;
 		messageVO.provider = location.getProvider();
-		//messageVO.location_name = getLocationName(location.getLatitude(), location.getLongitude());
-		messageVO.location_name = "";
-		messageVO.near_metro_name = "";
+		messageVO.wrk_time = Util.getCurrentTime();
+		messageVO.trans_yn = "";		
 				
 		resultCd = messageDAO.insert(messageVO);
 		
@@ -264,7 +260,6 @@ public class SendCurrentLocationService extends Service implements
 		Intent localIntent = new Intent(Constants.BROADCAST_ACTION);
 		localIntent.putExtra("START_TIME", mMessageVO.start_time);
 		localIntent.putExtra("RECEIVER", mMessageVO.receiver);
-		localIntent.putExtra("RECEIVER_ID", mMessageVO.receiver_id);
 		localIntent.putExtra("INTERVAL", mMessageVO.interval);
 		localIntent.putExtra("MODE", "START");
 		localIntent.putExtra("LOCATION", mLocation);

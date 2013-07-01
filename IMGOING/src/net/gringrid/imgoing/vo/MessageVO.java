@@ -10,17 +10,14 @@ public class MessageVO implements Parcelable{
 	public String sender;				// 보낸사람 email
 	public String sender_name;			// 보낸사람 이름
 	public String receiver;				// 받는사람 email
-	public String receiver_name;		// 받는사람 이름
-	public String receiver_id;			// 받는사람 id
+	public String receiver_name;		// 받는사람 이름	
 	public String start_time;			// 시작시간
-	public String send_time;			// 보낸시간
-	public String receive_time;			// 받은시간
 	public String latitude;				// 위도
 	public String longitude	;			// 경도
-	public String interval;				// 전송간격(분)
 	public String provider;				// 제공자(GPS / NETWORK)
-	public String location_name;		// 장소명
-	public String near_metro_name;		// 주변지하철역
+	public String interval;				// 전송간격(분)	
+	public String wrk_time;				// 입력된 시간
+	public String trans_yn;				// 전송확인
 	
 	public MessageVO() {
 		
@@ -42,16 +39,13 @@ public class MessageVO implements Parcelable{
 		dest.writeString(sender_name);
 		dest.writeString(receiver);
 		dest.writeString(receiver_name);
-		dest.writeString(receiver_id);		
 		dest.writeString(start_time);		
-		dest.writeString(send_time);		
-		dest.writeString(receive_time);		
 		dest.writeString(latitude);			
-		dest.writeString(longitude);		
-		dest.writeString(interval);			
-		dest.writeString(provider);			
-		dest.writeString(location_name);	
-		dest.writeString(near_metro_name);
+		dest.writeString(longitude);
+		dest.writeString(provider);
+		dest.writeString(interval);
+		dest.writeString(wrk_time);	
+		dest.writeString(trans_yn);
 	}
 	
 	public void readFromParcel(Parcel in) {
@@ -60,16 +54,13 @@ public class MessageVO implements Parcelable{
 		sender_name = in.readString();
 		receiver = in.readString();
 		receiver_name = in.readString();
-		receiver_id = in.readString();		
 		start_time = in.readString();		
-		send_time = in.readString();		
-		receive_time = in.readString();
 		latitude = in.readString();
-		longitude = in.readString();
-		interval = in.readString();
+		longitude = in.readString();		
 		provider = in.readString();
-		location_name = in.readString();
-		near_metro_name = in.readString();	
+		interval = in.readString();		
+		wrk_time = in.readString();
+		trans_yn = in.readString();	
 	}
 	
 	@SuppressWarnings("rawtypes")
@@ -87,16 +78,13 @@ public class MessageVO implements Parcelable{
 		Log.d("jiho", "MessageVO.sender_name		: "+sender_name			);
 		Log.d("jiho", "MessageVO.receiver 			: "+receiver			);
 		Log.d("jiho", "MessageVO.receiver_name		: "+receiver_name		);
-		Log.d("jiho", "MessageVO.receiver_id 		: "+receiver_id			);
 		Log.d("jiho", "MessageVO.start_time 		: "+start_time			);
-		Log.d("jiho", "MessageVO.send_time 			: "+send_time			);
-		Log.d("jiho", "MessageVO.receive_time 		: "+receive_time		);		
 		Log.d("jiho", "MessageVO.latitude 			: "+latitude			);
 		Log.d("jiho", "MessageVO.longitude 			: "+longitude			);
-		Log.d("jiho", "MessageVO.interval 			: "+interval			);
 		Log.d("jiho", "MessageVO.provider 			: "+provider			);
-		Log.d("jiho", "MessageVO.location_name 		: "+location_name		);
-		Log.d("jiho", "MessageVO.near_metro_name 	: "+near_metro_name		);
+		Log.d("jiho", "MessageVO.interval 			: "+interval			);		
+		Log.d("jiho", "MessageVO.wrk_time 			: "+wrk_time			);
+		Log.d("jiho", "MessageVO.trans_yn 			: "+trans_yn			);
 	}
 }
 

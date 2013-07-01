@@ -30,6 +30,11 @@ import android.widget.TextView;
 
 public class MessageActivity extends Base implements OnClickListener, OnItemClickListener{
 
+	private int MESSAGE_MODE;
+	private final int MESSAGE_MODE_RECEIVE = 0;	// 받은메시지
+	private final int MESSAGE_MODE_SEND = 1;		// 보낸메시지 
+	
+	
 	private ListView messageList;
 	MessageListAdapter messageListAdapter;
 	Vector<MessageVO> message_data = new Vector<MessageVO>();
@@ -47,7 +52,12 @@ public class MessageActivity extends Base implements OnClickListener, OnItemClic
 	
 	@Override
 	protected void onResume() {
-		viewReceiveMessage();
+		
+		if ( MESSAGE_MODE == MESSAGE_MODE_RECEIVE ){
+			viewReceiveMessage();
+		}else if ( MESSAGE_MODE == MESSAGE_MODE_SEND ){
+			viewSendMessage();
+		}
 		super.onResume();
 	}
 	
@@ -85,6 +95,7 @@ public class MessageActivity extends Base implements OnClickListener, OnItemClic
 	 * 보낸 메시지 보이기
 	 */
 	private void viewSendMessage(){
+		MESSAGE_MODE = MESSAGE_MODE_SEND;
 		MessageDao messageDao = new MessageDao(this);
 		Cursor cursor = messageDao.querySendList();
 		int index_receiver = cursor.getColumnIndex("receiver");
@@ -100,15 +111,16 @@ public class MessageActivity extends Base implements OnClickListener, OnItemClic
 				messageVO.receiver_name = receiver_name;
 				messageVO.receiver = cursor.getString(index_receiver);
 				messageVO.start_time = cursor.getString(index_start_time);
-				messageVO.send_time = cursor.getString(index_last_send_time);
+				messageVO.wrk_time = cursor.getString(index_last_send_time);
 				
-				Log.d("jiho", "last_send_time : "+messageVO.send_time);
+				Log.d("jiho", "last_send_time : "+messageVO.wrk_time);
 				
 				message_data.add(messageVO);
 			}while(cursor.moveToNext());
 		}
 		if ( cursor != null ) cursor.close();
 		messageListAdapter.setAll(message_data);
+		messageListAdapter.setMode(MESSAGE_MODE);
 	}
 	
 	
@@ -116,8 +128,8 @@ public class MessageActivity extends Base implements OnClickListener, OnItemClic
 	 * 받은 메시지 보이기
 	 */
 	private void viewReceiveMessage(){
+		MESSAGE_MODE = MESSAGE_MODE_RECEIVE;
 		MessageDao messageDao = new MessageDao(this);
-		//Cursor cursor = messageDao.queryMessageAll();
 		Cursor cursor = messageDao.queryReceiveList();
 		
 		int index_sender = cursor.getColumnIndex("sender");
@@ -126,16 +138,21 @@ public class MessageActivity extends Base implements OnClickListener, OnItemClic
 		message_data.clear();
 		if ( cursor.moveToFirst() ) {
 			do{
+				ContactsVO contactsVO = Util.getContactsVOByPhoneNumber(getApplication(), cursor.getString(index_sender));
+				String sender_name = Util.isEmpty(contactsVO.name)?cursor.getString(index_sender):contactsVO.name;
+								
 				MessageVO messageVO = new MessageVO();
+				messageVO.sender_name = sender_name;
 				messageVO.sender = cursor.getString(index_sender);
 				messageVO.start_time = cursor.getString(index_start_time);
-				messageVO.send_time = cursor.getString(index_last_send_time);
+				messageVO.wrk_time = cursor.getString(index_last_send_time);
 				
 				message_data.add(messageVO);
 			}while(cursor.moveToNext());
 		}
 		if ( cursor != null ) cursor.close();
 		messageListAdapter.setAll(message_data);
+		messageListAdapter.setMode(MESSAGE_MODE);
 	}
 
 	
@@ -178,23 +195,23 @@ public class MessageActivity extends Base implements OnClickListener, OnItemClic
 		int index_sender = cursor.getColumnIndex("sender"); 
 		int index_receiver = cursor.getColumnIndex("receiver"); 
 		int index_start_time = cursor.getColumnIndex("start_time"); 
-		int index_send_time = cursor.getColumnIndex("send_time"); 
 		int index_latitude = cursor.getColumnIndex("latitude");
 		int index_longitude = cursor.getColumnIndex("longitude");
 		int index_provider = cursor.getColumnIndex("provider");
-		int index_location_name = cursor.getColumnIndex("location_name");
+		int index_wrk_time = cursor.getColumnIndex("wrk_time");
+		int index_trans_yn = cursor.getColumnIndex("trans_yn");
 		
 		do{
 			MessageVO messageVO = new MessageVO();
 			messageVO.no = cursor.getInt(index_no);
 			messageVO.sender = cursor.getString(index_sender);
 			messageVO.receiver = cursor.getString(index_receiver);
-			messageVO.start_time = cursor.getString(index_start_time);
-			messageVO.send_time = cursor.getString(index_send_time);
+			messageVO.start_time = cursor.getString(index_start_time);			
 			messageVO.latitude = cursor.getString(index_latitude);
 			messageVO.longitude = cursor.getString(index_longitude);
 			messageVO.provider = cursor.getString(index_provider);
-			messageVO.location_name = cursor.getString(index_location_name);
+			messageVO.wrk_time = cursor.getString(index_wrk_time);
+			messageVO.trans_yn = cursor.getString(index_trans_yn);
 			
 			message_data.add(messageVO);	
 		

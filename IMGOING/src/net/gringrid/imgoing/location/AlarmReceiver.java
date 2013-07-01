@@ -39,8 +39,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 		// 서비스가 실행중이면 마지막위치 가져와서 DB Insert
 		if ( isLocationServiceRunning() ){
 			Log.d("jiho", "Service is running..");
-			Log.d("jiho", "RECEIVER : "+messageVO.receiver);
-			Log.d("jiho", "RECEIVER_ID : "+messageVO.receiver_id);
+			Log.d("jiho", "RECEIVER : "+messageVO.receiver);			
 			Log.d("jiho", "INTERVAL : "+messageVO.interval);
 			Log.d("jiho", "START_TIME : "+messageVO.start_time);
 			
@@ -56,13 +55,13 @@ public class AlarmReceiver extends BroadcastReceiver {
 			
 			if ( latitude != null && longitude != null && provider !=null ){
 				messageVO.sender = Util.getMyPhoneNymber(mContext);
-				messageVO.send_time = Util.getCurrentTime();
-				messageVO.receive_time = "";
+				messageVO.wrk_time = Util.getCurrentTime();				
 				messageVO.latitude = latitude;
 				messageVO.longitude	= longitude;
 				messageVO.provider = provider;
-				messageVO.location_name = "";
-				messageVO.near_metro_name = "";
+				messageVO.trans_yn = "N";
+				
+				
 				resultCd = messageDAO.insert(messageVO);		
 				
 				if ( resultCd == 0 ){
@@ -75,9 +74,8 @@ public class AlarmReceiver extends BroadcastReceiver {
 			        inputData.add(new BasicNameValuePair("mode","SEND_GCM"));
 			        inputData.add(new BasicNameValuePair("sender",messageVO.sender));
 			        inputData.add(new BasicNameValuePair("receiver_phone_number",messageVO.receiver));
-			        inputData.add(new BasicNameValuePair("receiver_id",messageVO.receiver_id));
 			        inputData.add(new BasicNameValuePair("start_time",messageVO.start_time));
-			        inputData.add(new BasicNameValuePair("send_time",messageVO.send_time));
+			        inputData.add(new BasicNameValuePair("wrk_time",messageVO.wrk_time));
 			        inputData.add(new BasicNameValuePair("latitude",messageVO.latitude));
 			        inputData.add(new BasicNameValuePair("longitude",messageVO.longitude));
 			        inputData.add(new BasicNameValuePair("interval",messageVO.interval));

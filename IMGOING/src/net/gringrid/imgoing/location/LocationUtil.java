@@ -154,17 +154,14 @@ public class LocationUtil implements LocationListener, GpsStatus.Listener{
 			int resultCd = 0;
 			
 			messageVO.sender = Util.getMyPhoneNymber(mContext);
-			messageVO.receiver = this.receiver;
-			messageVO.receiver_id = this.receiver_id;
+			messageVO.receiver = this.receiver;			
 			messageVO.start_time = this.start_time;
-			messageVO.send_time = Util.getCurrentTime();
-			messageVO.receive_time = "";
+			messageVO.wrk_time = Util.getCurrentTime();			
 			messageVO.latitude = Double.toString(location.getLatitude());
 			messageVO.longitude	= Double.toString(location.getLongitude());
 			messageVO.interval = Integer.toString(interval);
 			messageVO.provider = location.getProvider();
-			messageVO.location_name = getLocationName(location.getLatitude(), location.getLongitude());
-			messageVO.near_metro_name = "";
+			messageVO.trans_yn = "";
 					
 			resultCd = messageDAO.insert(messageVO);
 			
@@ -182,7 +179,7 @@ public class LocationUtil implements LocationListener, GpsStatus.Listener{
 	        inputData.add(new BasicNameValuePair("receiver_phone_number",receiver));
 	        inputData.add(new BasicNameValuePair("receiver_id",receiver_id));
 	        inputData.add(new BasicNameValuePair("start_time",messageVO.start_time));
-	        inputData.add(new BasicNameValuePair("send_time",messageVO.send_time));
+	        inputData.add(new BasicNameValuePair("wrk_time",messageVO.wrk_time));
 	        inputData.add(new BasicNameValuePair("latitude",messageVO.latitude));
 	        inputData.add(new BasicNameValuePair("longitude",messageVO.longitude));
 	        inputData.add(new BasicNameValuePair("interval",messageVO.interval));

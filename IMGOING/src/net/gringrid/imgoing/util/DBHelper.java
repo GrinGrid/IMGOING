@@ -24,7 +24,7 @@ public class DBHelper extends SQLiteOpenHelper{
 	 * 다를경우 : onCreate -> onUpgrade 실행
 	 * 같을경우 : onOpen 실행
 	 */
-	private static final int DATABASE_VERSION = 6;
+	private static final int DATABASE_VERSION = 7;
 	
 	
 	/**
@@ -44,18 +44,17 @@ public class DBHelper extends SQLiteOpenHelper{
 			"CREATE TABLE MESSAGE ("+
 				"no	    			INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL, "+
 				"sender 			TEXT NOT NULL, "+
-				"receiver			TEXT NOT NULL, "+
-				"receiver_id		TEXT NOT NULL, "+
+				"receiver			TEXT NOT NULL, "+				
 				"start_time			TEXT NOT NULL, "+
-				"send_time			TEXT NULL, "+
-				"receive_time		TEXT NULL, "+
 				"latitude	 		TEXT NULL, "+				
 				"longitude	 		TEXT NULL, "+
+				"provider	 		TEXT NULL, "+				
 				"interval			TEXT NULL, "+
-				"provider			TEXT NULL, "+
-				"location_name		TEXT NULL, "+
-				"near_metro_name	TEXT NULL  "+
+				"wrk_time			TEXT NULL, "+
+				"trans_yn			TEXT NULL  "+
 				")";
+	
+	
 	
 	/**
 	 * SingleTon으로 구현

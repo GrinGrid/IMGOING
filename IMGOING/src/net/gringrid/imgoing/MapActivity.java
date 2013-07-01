@@ -26,6 +26,13 @@ import android.util.Log;
 
 public class MapActivity extends FragmentActivity{
 
+	private int MESSAGE_MODE;
+	private final int MESSAGE_MODE_RECEIVE = 0;	// 받은메시지
+	private final int MESSAGE_MODE_SEND = 1;		// 보낸메시지 
+	
+	private String mPerson = null;
+	private String mStart_time = null;
+	
 	private GoogleMap mMap;
 	
 	// 송/수신된 위치 데이타
@@ -43,45 +50,86 @@ public class MapActivity extends FragmentActivity{
 	private void init(){
 		Intent intent = getIntent();
 		Bundle bundle = intent.getExtras();
-		String receiver = null;
-		String start_time = null;
+	
 		
 		if ( bundle != null ){
-			receiver = bundle.getString("RECEIVER");
-			start_time = bundle.getString("START_TIME");
-			Log.d("jiho", "MapActivity receiver : "+receiver);
+			MESSAGE_MODE = bundle.getInt("MODE");
+			mPerson = bundle.getString("PERSON");
+			mStart_time = bundle.getString("START_TIME");
+		}
 		
-		
-			MessageDao messageDao = new MessageDao(this);
-			Cursor cursor = messageDao.querySendListForOne(receiver, start_time);
-			
-			int index_no = cursor.getColumnIndex("no");
-			int index_sender = cursor.getColumnIndex("sender"); 
-			int index_receiver = cursor.getColumnIndex("receiver"); 
-			int index_send_time = cursor.getColumnIndex("send_time"); 
-			int index_latitude = cursor.getColumnIndex("latitude");
-			int index_longitude = cursor.getColumnIndex("longitude");
-			int index_provider = cursor.getColumnIndex("provider");
-			int index_location_name = cursor.getColumnIndex("location_name");
-			
-			do{
-				MessageVO messageVO = new MessageVO();
-				messageVO.no = cursor.getInt(index_no);
-				messageVO.sender = cursor.getString(index_sender);
-				messageVO.receiver = cursor.getString(index_receiver);
-				messageVO.send_time = cursor.getString(index_send_time);
-				messageVO.latitude = cursor.getString(index_latitude);
-				messageVO.longitude = cursor.getString(index_longitude);
-				messageVO.provider = cursor.getString(index_provider);
-				messageVO.location_name = cursor.getString(index_location_name);
-				
-				message_data.add(messageVO);	
-			
-			}while(cursor.moveToNext());
-		}else{
-			Log.d("jiho", "Bundle is null!!");
+		if ( MESSAGE_MODE == MESSAGE_MODE_RECEIVE ){
+			viewReceiveMode();	
+		}else if ( MESSAGE_MODE == MESSAGE_MODE_SEND ){
+			viewSendMode();
 		}
 	}
+	
+	
+	
+	private void viewReceiveMode(){
+		MessageDao messageDao = new MessageDao(this);
+		Cursor cursor = messageDao.queryReceiveListForOne(mPerson, mStart_time);
+		
+		int index_no = cursor.getColumnIndex("no");
+		int index_sender = cursor.getColumnIndex("sender"); 
+		int index_receiver = cursor.getColumnIndex("receiver"); 		 
+		int index_latitude = cursor.getColumnIndex("latitude");
+		int index_longitude = cursor.getColumnIndex("longitude");
+		int index_provider = cursor.getColumnIndex("provider");
+		int index_wrk_time = cursor.getColumnIndex("wrk_time");
+		int index_trans_yn = cursor.getColumnIndex("trans_yn");
+		
+		do{
+			MessageVO messageVO = new MessageVO();
+			messageVO.no = cursor.getInt(index_no);
+			messageVO.sender = cursor.getString(index_sender);
+			messageVO.receiver = cursor.getString(index_receiver);			
+			messageVO.latitude = cursor.getString(index_latitude);
+			messageVO.longitude = cursor.getString(index_longitude);
+			messageVO.provider = cursor.getString(index_provider);
+			messageVO.wrk_time = cursor.getString(index_wrk_time);
+			messageVO.trans_yn = cursor.getString(index_trans_yn);
+			
+			message_data.add(messageVO);	
+		
+		}while(cursor.moveToNext());
+	}
+	
+	
+	
+	private void viewSendMode(){
+		MessageDao messageDao = new MessageDao(this);
+		Cursor cursor = messageDao.querySendListForOne(mPerson, mStart_time);
+		
+		int index_no = cursor.getColumnIndex("no");
+		int index_sender = cursor.getColumnIndex("sender"); 
+		int index_receiver = cursor.getColumnIndex("receiver"); 		 
+		int index_latitude = cursor.getColumnIndex("latitude");
+		int index_longitude = cursor.getColumnIndex("longitude");
+		int index_provider = cursor.getColumnIndex("provider");
+		int index_wrk_time = cursor.getColumnIndex("wrk_time");
+		int index_trans_yn = cursor.getColumnIndex("trans_yn");
+		
+		do{
+			MessageVO messageVO = new MessageVO();
+			messageVO.no = cursor.getInt(index_no);
+			messageVO.sender = cursor.getString(index_sender);
+			messageVO.receiver = cursor.getString(index_receiver);
+			
+			messageVO.latitude = cursor.getString(index_latitude);
+			messageVO.longitude = cursor.getString(index_longitude);
+			messageVO.provider = cursor.getString(index_provider);
+			messageVO.wrk_time = cursor.getString(index_wrk_time);
+			messageVO.trans_yn = cursor.getString(index_trans_yn);
+			
+			message_data.add(messageVO);	
+		
+		}while(cursor.moveToNext());
+	}
+	
+	
+	
 	
 	private void regEvent(){
 		
@@ -109,8 +157,7 @@ public class MapActivity extends FragmentActivity{
     			continue;
     		}else{
     			latitude = data.latitude;
-    			longitude = data.longitude;
-    			location_name = data.location_name;
+    			longitude = data.longitude;    			
     			LatLng latLng = new LatLng(Double.parseDouble(latitude), Double.parseDouble(longitude));
     			Log.d("jiho", "["+data.provider+"] ["+latitude+"] ["+longitude+"]");
     			rectOptions.add( latLng );

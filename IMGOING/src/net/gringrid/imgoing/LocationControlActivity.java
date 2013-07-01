@@ -409,8 +409,7 @@ public class LocationControlActivity extends Base implements 	OnClickListener,
 	        // 알람등록을 위한 데이타 세팅
 			AlarmManager alarmManager = (AlarmManager)this.getSystemService(Context.ALARM_SERVICE);
 			MessageVO messageVO = new MessageVO();
-			messageVO.receiver = receiverPhoneNumber;
-			messageVO.receiver_id = receiverNumberId;
+			messageVO.receiver = receiverPhoneNumber;			
 			messageVO.interval = Integer.toString(currentTime);
 			messageVO.start_time = Util.getCurrentTime();
 			

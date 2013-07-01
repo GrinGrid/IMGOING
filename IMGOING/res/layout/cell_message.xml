@@ -13,13 +13,13 @@
         android:orientation="vertical" >
 
         <TextView
-            android:id="@+id/id_tv_sender"
+            android:id="@+id/id_tv_person_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="sender" />
 
         <TextView
-            android:id="@+id/id_tv_send_time"
+            android:id="@+id/id_tv_wrk_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="2013-06-20 22:31:26" />
