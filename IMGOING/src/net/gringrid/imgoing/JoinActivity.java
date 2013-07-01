@@ -38,6 +38,8 @@ public class JoinActivity extends Base implements OnClickListener{
 		setContentView(R.layout.activity_join);		
 		this.setTitle(R.string.join_title);
 		
+		Log.d("jiho", "JoinActivity GCM RegID : "+Preference.GCM_REGISTRATION_ID);
+		
 		init();
 		regEvent();
 		

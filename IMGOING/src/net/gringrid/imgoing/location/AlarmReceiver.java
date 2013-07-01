@@ -84,7 +84,9 @@ public class AlarmReceiver extends BroadcastReceiver {
 			        JSONObject resultData = Util.requestHttp(url, inputData);
 					
 			        try {
-			        	Log.d("jiho", "success : "+resultData.getString("success"));
+			        	if ( resultData != null ){
+			        		Log.d("jiho", "success : "+resultData.getString("success"));
+			        	}
 						
 					} catch (JSONException e) {
 						// TODO Auto-generated catch block

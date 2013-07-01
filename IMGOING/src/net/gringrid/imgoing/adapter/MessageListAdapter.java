@@ -113,11 +113,11 @@ public class MessageListAdapter extends BaseAdapter{
 			*/
 			String person = null;
 			if ( MESSAGE_MODE == MESSAGE_MODE_RECEIVE ){
-				id_tv_person_name.setText(item.receiver_name);
-				person = item.receiver;
-			}else if ( MESSAGE_MODE == MESSAGE_MODE_SEND ){
 				id_tv_person_name.setText(item.sender_name);
 				person = item.sender;
+			}else if ( MESSAGE_MODE == MESSAGE_MODE_SEND ){
+				id_tv_person_name.setText(item.receiver_name);
+				person = item.receiver;
 			}
 			
 			//id_tv_receiver.setText(item.receiver);

@@ -105,7 +105,9 @@ public class Util {
 				// KT일경우 +8210xxxxxxx 형식으로 리턴되므로 처리
 				phone_number = phone_number.replace("+82", "0");
 			}else{
-				phone_number = null;
+				
+				SharedPreferences settings = context.getSharedPreferences(Constants.PREFS_NAME, 0);
+				phone_number = settings.getString("PHONE_NUMBER", null);
 			}
 			Preference.PHONE_NUMBER = phone_number;
 		}else{

@@ -126,15 +126,17 @@ public class LoginActivity extends Base implements OnClickListener{
 					String serverGcmRegId = resultData.getString("result_gcm_reg_id");
 					
 					// 스마트폰 전화번호와 서버 전화번호가 다른경우
-					if ( user.phone_number != null && user.phone_number.equals(serverPhoneNumber) == false ){
+					if ( Util.isEmpty(user.phone_number) == false && user.phone_number.equals(serverPhoneNumber) == false ){
 						// 전화번호 서버로 전송하여 update
 						isNeedUpdate = true;
-					}else if ( user.phone_number == null ){
+					}else if ( Util.isEmpty(user.phone_number) ){
 						user.phone_number = serverPhoneNumber;
 					}
 					
 					Log.d("jiho", "LOCAL GCM ID : "+user.gcm_reg_id);
 					Log.d("jiho", "serverGcmRegId : "+serverGcmRegId);
+					Log.d("jiho", "user.phone_number : "+user.phone_number);
+					
 					// 스마트폰 GCM ID 와 서버 GCM ID 가 다른경우
 					if ( user.gcm_reg_id != null && user.gcm_reg_id.equals(serverGcmRegId) == false ){
 						// GCM ID 서버로 전송하여 update

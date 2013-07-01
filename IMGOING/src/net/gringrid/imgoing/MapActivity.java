@@ -27,7 +27,7 @@ import android.util.Log;
 public class MapActivity extends FragmentActivity{
 
 	private int MESSAGE_MODE;
-	private final int MESSAGE_MODE_RECEIVE = 0;	// 받은메시지
+	private final int MESSAGE_MODE_RECEIVE = 0;		// 받은메시지
 	private final int MESSAGE_MODE_SEND = 1;		// 보낸메시지 
 	
 	private String mPerson = null;

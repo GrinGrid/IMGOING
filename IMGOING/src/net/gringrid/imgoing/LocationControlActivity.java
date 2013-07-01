@@ -71,7 +71,9 @@ public class LocationControlActivity extends Base implements 	OnClickListener,
 																OnFocusChangeListener,
 																OnEditorActionListener
 																{
-	
+
+	// 위치전송 여부
+	boolean mIsStarted = false;
 	// 주소록 Listview
 	private ListView id_lv_contacts;
 	private ContactsListAdapter contactsListAdapter;
@@ -210,7 +212,7 @@ public class LocationControlActivity extends Base implements 	OnClickListener,
 	
 	private void setStartStopMode(){
 		SharedPreferences settings = getSharedPreferences(Constants.PREFS_NAME, 0);
-		boolean isStarted = settings.getBoolean("IS_START", false);
+		mIsStarted = settings.getBoolean("IS_START", false);
 		int interval = settings.getInt("INTERVAL", Preference.DEFAULT_INTERVAL);
 		receiverName = settings.getString("RECEIVER", null);
 
@@ -223,7 +225,7 @@ public class LocationControlActivity extends Base implements 	OnClickListener,
 		beforeView.setVisibility(View.GONE);
 		afterView.setVisibility(View.GONE);
 		
-		if ( isStarted ){
+		if ( mIsStarted ){
 			afterView.setVisibility(View.VISIBLE);
 			id_lv_contacts.setEnabled(false);
 			findViewById(R.id.id_iv_number_up).setEnabled(false);
@@ -282,23 +284,21 @@ public class LocationControlActivity extends Base implements 	OnClickListener,
 		mViewList.add(foot10);
 		mViewList.add(foot11);
 		mViewList.add(foot12);
-		
+		mCurrentFootPrintIndex = 0;
 		playFootPrintAnimation();
 		
 	}
 	
 	private void playFootPrintAnimation(){
-		
+		Log.d("jiho", "mCurrentFootPrintIndex : "+mCurrentFootPrintIndex);
 		if ( mCurrentFootPrintIndex > mViewList.size()-1 ){
 			mCurrentFootPrintIndex = 0;
 		}
 		
 		final View finalView = mViewList.get(mCurrentFootPrintIndex++); 
 		
-		AnimationSet animationSet = new AnimationSet(false);
 		Animation alphaHideAnimation = new AlphaAnimation(1, 0);
 		alphaHideAnimation.setDuration(600);
-		//alphaHideAnimation.setStartOffset(400);
 		
 		
 		alphaHideAnimation.setAnimationListener(new AnimationListener() {
@@ -319,12 +319,14 @@ public class LocationControlActivity extends Base implements 	OnClickListener,
 			public void onAnimationEnd(Animation animation) {
 				// TODO Auto-generated method stub
 				finalView.setVisibility(View.INVISIBLE);
-				playFootPrintAnimation();
+				if ( mIsStarted == true ){
+					playFootPrintAnimation();
+				}
+				
 			}
 		});
 		
-		animationSet.addAnimation(alphaHideAnimation);
-		finalView.startAnimation(animationSet);
+		finalView.startAnimation(alphaHideAnimation);
 	}
 	
 	
@@ -425,7 +427,7 @@ public class LocationControlActivity extends Base implements 	OnClickListener,
 			pIntent = PendingIntent.getBroadcast(this, 1234567, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 			int term = currentTime * 60 * 1000;
 			// 설정한 시간 간격으로 알람 호출
-			alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), currentTime * 60 * 1000, pIntent);
+			alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), currentTime * 30 * 1000, pIntent);
 			
 			editor.putInt("INTERVAL", userSelectInterval);
 			
@@ -496,6 +498,8 @@ public class LocationControlActivity extends Base implements 	OnClickListener,
 			editor.putString("RECEIVER", receiverName);
 			editor.putBoolean("IS_START", false);
 			editor.commit();
+			
+			mIsStarted = false;
 			
 			setStartStopMode();
 			
