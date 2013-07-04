@@ -2,6 +2,7 @@ package net.gringrid.imgoing;
 
 import java.util.Vector;
 import net.gringrid.imgoing.controller.Selector;
+import net.gringrid.imgoing.dao.MessageDao;
 import net.gringrid.imgoing.util.Util;
 import net.gringrid.imgoing.vo.SpinnerVO;
 
@@ -26,10 +27,12 @@ public class ConfigActivity extends Base implements OnClickListener{
 	private Selector mAlarmMethod= null;
 	private Selector mMaxReceiveCount = null;
 	private Selector mMaxSendCount = null;
+	private Selector mDelete = null;
 	
 	private final int SPINNER_TYPE_ALARM_METHOD = 0;
 	private final int SPINNER_TYPE_MAX_RECEIVE_COUNT = 1;
 	private final int SPINNER_TYPE_MAX_SEND_COUNT = 2;
+	private final int SPINNER_TYPE_DELETE = 3;
 	
 	
 	private static final Vector<SpinnerVO> ALARM_METHOD = new Vector<SpinnerVO>();
@@ -57,6 +60,15 @@ public class ConfigActivity extends Base implements OnClickListener{
 		MAX_SEND_COUNT.add(new SpinnerVO("2", "2000"));
 	}
 	
+	
+	private static final Vector<SpinnerVO> DELETE = new Vector<SpinnerVO>();
+	
+	static {
+		DELETE.add(new SpinnerVO("0", "선택"));
+		DELETE.add(new SpinnerVO("1", "전체삭제"));
+		DELETE.add(new SpinnerVO("2", "받은메시지 삭제"));
+		DELETE.add(new SpinnerVO("3", "보낸메시지 삭제"));
+	}
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -86,6 +98,10 @@ public class ConfigActivity extends Base implements OnClickListener{
 		if ( mMaxSendCount != null ){
 			mMaxSendCount.setText(MAX_SEND_COUNT.elementAt(Preference.CONFIG_MAX_SEND_COUNT).mName);
 		}
+		mDelete = (Selector)findViewById(R.id.id_selector_config_delete);	
+		if ( mDelete != null ){
+			mDelete.setText(DELETE.elementAt(0).mName);
+		}
 	}
 
 
@@ -99,6 +115,10 @@ public class ConfigActivity extends Base implements OnClickListener{
 			view.setOnClickListener(this);
 		}
 		view = findViewById(R.id.id_selector_config_max_send);
+		if ( view != null ){
+			view.setOnClickListener(this);
+		}
+		view = findViewById(R.id.id_selector_config_delete);
 		if ( view != null ){
 			view.setOnClickListener(this);
 		}
@@ -123,6 +143,11 @@ public class ConfigActivity extends Base implements OnClickListener{
 		case R.id.id_selector_config_max_send:
 			showSpinnerPopup(MAX_SEND_COUNT, SPINNER_TYPE_MAX_SEND_COUNT);
 			break;
+			
+		case R.id.id_selector_config_delete:
+			showSpinnerPopup(DELETE, SPINNER_TYPE_DELETE);
+			break;
+			
 			
 		}
 	}
@@ -155,6 +180,30 @@ public class ConfigActivity extends Base implements OnClickListener{
 					
 					
 				} else if(type == SPINNER_TYPE_MAX_SEND_COUNT) {
+					mMaxSendCount.setText(MAX_SEND_COUNT.elementAt(which).mName);
+					Preference.CONFIG_MAX_SEND_COUNT = Integer.parseInt( MAX_SEND_COUNT.elementAt(which).mCode );					
+					
+				} else if(type == SPINNER_TYPE_DELETE) {
+					MessageDao messageDao = new MessageDao(getApplicationContext());
+					switch ( which ) {
+					// 전체삭제 
+					case 1:
+						messageDao.deleteAll();
+						break;
+					
+					// 받은메시지 삭제 	
+					case 2:
+						messageDao.deleteReceiveMessage();
+						break;
+					
+					// 보낸메시지 삭제	
+					case 3:
+						messageDao.deleteSendMessage();
+						break;
+						
+					default:
+						break;
+					}
 					mMaxSendCount.setText(MAX_SEND_COUNT.elementAt(which).mName);
 					Preference.CONFIG_MAX_SEND_COUNT = Integer.parseInt( MAX_SEND_COUNT.elementAt(which).mCode );					
 					

@@ -39,6 +39,7 @@
 	<string name="config_alarm">위치수신 알림설정</string>
 	<string name="config_max_send">보낸메시지 최대보관수</string>
 	<string name="config_max_receive">받은메시지 최대보관수</string>
+	<string name="config_delete">메시지 삭제</string>
 	
 	
 	

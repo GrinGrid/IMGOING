@@ -155,6 +155,14 @@ public class MessageDao {
 	// 전체삭제
 	private static final String SQL_DELETE_ALL = 
 			"DELETE FROM MESSAGE";
+		
+	// 보낸메시지 삭제
+	private static final String SQL_DELETE_SEND_MESSAGE = 
+			String.format("DELETE FROM MESSAGE WHERE sender = ? ");
+	
+	// 받은메시지 삭제
+	private static final String SQL_DELETE_RECEIVE_MESSAGE = 
+			String.format("DELETE FROM MESSAGE WHERE receiver = ? ");
 	
 	/**
 	 * Constructor
@@ -383,6 +391,28 @@ public class MessageDao {
 		mDB = dbHelper.getDB();
 
 		mDB.execSQL(SQL_DELETE_ALL);		
+	}
+	
+	public void deleteSendMessage() {
+		SQLiteStatement stmt = null;
+		
+		mDB = dbHelper.getDB();	
+		stmt = mDB.compileStatement(SQL_DELETE_SEND_MESSAGE);
+				
+		stmt.bindString(1, Util.getMyPhoneNymber(mContext));
+		
+		stmt.execute();
+	}
+	
+	public void deleteReceiveMessage() { 
+		SQLiteStatement stmt = null;
+		
+		mDB = dbHelper.getDB();	
+		stmt = mDB.compileStatement(SQL_DELETE_RECEIVE_MESSAGE);
+				
+		stmt.bindString(1, Util.getMyPhoneNymber(mContext));
+		
+		stmt.execute();		
 	}
 	
 }

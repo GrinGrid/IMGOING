@@ -164,6 +164,30 @@
             </LinearLayout>
             <!-- 보낸메시지 최대보관수 끝 -->
 
+			<!-- 전체삭제 시작 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:padding="5dp" >
+
+                <TextView
+                    style="@style/ConfigContent"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:text="@string/config_delete" />
+
+                <net.gringrid.imgoing.controller.Selector
+                    android:id="@+id/id_selector_config_delete"
+                    android:layout_width="120sp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical" />
+            </LinearLayout>
+            <!-- 전체삭제 끝 -->
+
         </LinearLayout>
     </LinearLayout>
     <!-- Body End -->

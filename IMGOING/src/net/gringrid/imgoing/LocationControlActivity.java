@@ -290,7 +290,7 @@ public class LocationControlActivity extends Base implements 	OnClickListener,
 	}
 	
 	private void playFootPrintAnimation(){
-		Log.d("jiho", "mCurrentFootPrintIndex : "+mCurrentFootPrintIndex);
+
 		if ( mCurrentFootPrintIndex > mViewList.size()-1 ){
 			mCurrentFootPrintIndex = 0;
 		}
@@ -299,7 +299,6 @@ public class LocationControlActivity extends Base implements 	OnClickListener,
 		
 		Animation alphaHideAnimation = new AlphaAnimation(1, 0);
 		alphaHideAnimation.setDuration(600);
-		
 		
 		alphaHideAnimation.setAnimationListener(new AnimationListener() {
 			
@@ -327,8 +326,15 @@ public class LocationControlActivity extends Base implements 	OnClickListener,
 		});
 		
 		finalView.startAnimation(alphaHideAnimation);
+		
 	}
 	
+	private void clearAllAnimation(){
+		Log.d("jiho", "clearAllAnimation");
+		for ( View view : mViewList ){
+			view.clearAnimation();
+		}
+	}
 	
 	/**
 	 * 서비스가 수행중인지 확인한다.
@@ -473,9 +479,10 @@ public class LocationControlActivity extends Base implements 	OnClickListener,
 			
 		case R.id.id_iv_stop:
 			// 정지버튼 Click 했을 경우
+			// 애니메이션 중지
 			// 알람 중지
 			// 서비스가 실행중일경우 서비스 중지
-			
+			clearAllAnimation();
 			receiverName = null;
 			receiverPhoneNumber = null;
 			
