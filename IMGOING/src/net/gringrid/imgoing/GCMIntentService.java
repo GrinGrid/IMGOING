@@ -95,7 +95,7 @@ public class GCMIntentService extends GCMBaseIntentService{
 			notiBuilder.setContentTitle("I'm Going");
 			notiBuilder.setContentText("Last : "+messageVO.wrk_time);
 			notiBuilder.setContentIntent(notifyIntent);
-			notiBuilder.setNumber(10);
+			notiBuilder.setNumber((int)messageDAO.queryReceiveOneRouteCount());
 			
 			Notification notification = notiBuilder.build();
 			notification.ledARGB = 1;
@@ -119,6 +119,7 @@ public class GCMIntentService extends GCMBaseIntentService{
 
 	@Override
 	protected void onRegistered(Context arg0, String regId) {
+		Preference.GCM_REGISTRATION_ID = regId;
 		Log.d("jiho", "onRegistered - regId : "+regId);
 		
 	}

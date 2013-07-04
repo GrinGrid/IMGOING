@@ -94,6 +94,16 @@ public class MessageDao {
 					"ORDER BY start_time DESC");
 	
 	
+	// 한번 받은 경로 목록  수
+	private static final String SQL_RECEIVE_ONE_ROUTE_COUNT = 
+			String.format("SELECT "+
+					"count(*) cnt "+
+					"FROM MESSAGE "+
+					"WHERE sender = ? "+
+					"AND start_time = ?"
+					);
+	
+	
 	// 받은목록
 	private static final String SQL_RECEIVE_LIST = 
 			String.format("SELECT "+
@@ -263,8 +273,6 @@ public class MessageDao {
 	}
 	
 	
-	
-	
 	/**
 	 * 받은 메시지 목록 조회
 	 */
@@ -279,6 +287,24 @@ public class MessageDao {
 		return cursor;
 
 	}
+	
+	
+	/**
+	 * 한사람이 보낸 경로의 받은 메시지 수
+	 */
+	public long queryReceiveOneRouteCount(){
+		
+		mDB = dbHelper.getDB();
+		
+		SQLiteStatement s = mDB.compileStatement(SQL_RECEIVE_ONE_ROUTE_COUNT);
+    	long count = s.simpleQueryForLong();
+		
+		return count;
+
+	}
+	
+	
+	
 	
 	
 	

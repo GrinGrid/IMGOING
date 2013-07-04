@@ -143,7 +143,6 @@ public class MapActivity extends FragmentActivity{
 	}
 
 	private void drawLine() {
-		// TODO Auto-generated method stub
 		// Instantiates a new Polyline object and adds points to define a rectangle
     	PolylineOptions rectOptions = new PolylineOptions();
     	String latitude = "";
@@ -162,10 +161,12 @@ public class MapActivity extends FragmentActivity{
     			Log.d("jiho", "["+data.provider+"] ["+latitude+"] ["+longitude+"]");
     			rectOptions.add( latLng );
     			
+    			String snippet = data.wrk_time;
+    			
     			Marker marker = mMap.addMarker(new MarkerOptions()
     			.position(latLng)
     			.title(Integer.toString(markerIndex++))    			
-    			.snippet("1")
+    			.snippet(snippet)
     			.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))    			
     			);
     			marker.showInfoWindow();
@@ -213,13 +214,14 @@ public class MapActivity extends FragmentActivity{
     private void moveThere(double lat, double lng, String location_name){
     	LatLng latLng = new LatLng(lat, lng);
     	mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,17));
-    	
+    	/*
     	mMap.addMarker(new MarkerOptions()
     			.position(latLng)
     			.title("마지막위치")    			
     			.snippet(location_name)
     			.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))    			
     			);
+    	*/
     	
     }
 

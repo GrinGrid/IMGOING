@@ -97,7 +97,7 @@ public class IntroActivity extends Activity{
 	                	// GCM서버에 단말정보를 세팅한다.
 	                	if ( mProgressStatus == 72 ){
 	                		GCMRegistrar.checkDevice(mContext);
-	                		GCMRegistrar.checkManifest(mContext);		
+	                		GCMRegistrar.checkManifest(mContext);
 	                		
 	                		final String regId = GCMRegistrar.getRegistrationId(mContext);
 	                		
