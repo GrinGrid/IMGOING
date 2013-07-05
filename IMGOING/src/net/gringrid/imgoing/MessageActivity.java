@@ -138,6 +138,7 @@ public class MessageActivity extends Base implements OnClickListener, OnItemClic
 		message_data.clear();
 		if ( cursor.moveToFirst() ) {
 			do{
+				Log.d("jiho", "cursor.getString(index_sender) : "+cursor.getString(index_sender));
 				ContactsVO contactsVO = Util.getContactsVOByPhoneNumber(getApplication(), cursor.getString(index_sender));
 				String sender_name = contactsVO==null?cursor.getString(index_sender):contactsVO.name;
 								

@@ -95,7 +95,7 @@ public class GCMIntentService extends GCMBaseIntentService{
 			notiBuilder.setContentTitle("I'm Going");
 			notiBuilder.setContentText("Last : "+messageVO.wrk_time);
 			notiBuilder.setContentIntent(notifyIntent);
-			notiBuilder.setNumber((int)messageDAO.queryReceiveOneRouteCount());
+			notiBuilder.setNumber((int)messageDAO.queryReceiveOneRouteCount(messageVO.sender, messageVO.start_time));
 			
 			Notification notification = notiBuilder.build();
 			notification.ledARGB = 1;

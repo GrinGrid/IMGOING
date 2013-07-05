@@ -1,6 +1,8 @@
 package net.gringrid.imgoing;
 
 
+import com.google.analytics.tracking.android.EasyTracker;
+
 import net.gringrid.imgoing.util.MyActivityManager;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -20,6 +22,23 @@ public class Base extends Activity implements OnClickListener{
 	}
 
 
+	@Override
+	protected void onStart() {
+		EasyTracker.getInstance().activityStart(this); // Add this method.
+		//GoogleAnalytics mGaInstance = GoogleAnalytics.getInstance(this);
+		//Tracker mGaTracker1 = mGaInstance.getTracker("UA-XXXX-Y");
+		//mGaTracker1.sendView(this.getClass().getSimpleName());
+
+		super.onStart();
+	}
+	
+	@Override
+	protected void onStop() {
+		EasyTracker.getInstance().activityStop(this); // Add this method.
+		super.onStop();
+	}
+	
+	
 	private void init() {
 		
 	}

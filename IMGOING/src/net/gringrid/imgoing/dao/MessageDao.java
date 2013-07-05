@@ -300,13 +300,16 @@ public class MessageDao {
 	/**
 	 * 한사람이 보낸 경로의 받은 메시지 수
 	 */
-	public long queryReceiveOneRouteCount(){
+	public long queryReceiveOneRouteCount(String sender, String start_time){
 		
 		mDB = dbHelper.getDB();
 		
-		SQLiteStatement s = mDB.compileStatement(SQL_RECEIVE_ONE_ROUTE_COUNT);
-    	long count = s.simpleQueryForLong();
+		SQLiteStatement stmt = mDB.compileStatement(SQL_RECEIVE_ONE_ROUTE_COUNT);
 		
+		stmt.bindString(1, sender);
+		stmt.bindString(2, start_time);
+		
+    	long count = stmt.simpleQueryForLong();
 		return count;
 
 	}
