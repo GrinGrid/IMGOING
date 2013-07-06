@@ -126,6 +126,10 @@ public class ConfigActivity extends Base implements OnClickListener{
 		if ( view != null ){
 			view.setOnClickListener(this);
 		}
+		view = findViewById(R.id.id_ll_guide);
+		if ( view != null ){
+			view.setOnClickListener(this);
+		}
 	}
 	
 	@Override
@@ -148,7 +152,10 @@ public class ConfigActivity extends Base implements OnClickListener{
 			showSpinnerPopup(DELETE, SPINNER_TYPE_DELETE);
 			break;
 			
-			
+		case R.id.id_ll_guide:
+			Intent intent = new Intent(this, GuideActivity.class);
+			startActivity(intent);
+			break;
 		}
 	}
 	

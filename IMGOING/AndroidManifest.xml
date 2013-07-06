@@ -87,7 +87,11 @@
 		<activity 
 		    android:name="LoginActivity"
 		    android:theme="@android:style/Theme.Dialog">
-		</activity>		  
+		</activity>		 
+		<activity
+			android:name="GuideActivity"
+			android:theme="@android:style/Theme.Dialog">
+		</activity> 
 		    
 		<activity android:name="MessageActivity"></activity>
 		<activity android:name="ConfigActivity"></activity>

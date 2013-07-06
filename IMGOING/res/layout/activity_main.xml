@@ -86,14 +86,24 @@
 					    android:id="@+id/id_ll_location_control"
 					    android:layout_width="0dp"
 					    android:layout_height="match_parent"
-					    android:layout_weight="1" 
+					    android:layout_weight="1"
+					    android:orientation="vertical" 
 					    android:gravity="center"
 					    >
 					    <ImageView
 					        android:layout_width="wrap_content"
 					        android:layout_height="wrap_content"
+					        android:paddingTop="3dp"
 					        android:src="@drawable/location_control"
 					        />
+					    <TextView
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:textSize="13sp"
+							android:paddingTop="5dp"
+							android:textColor="#ffffff"
+							android:text="위치전송"
+							/>
 					</LinearLayout>
 					<!-- 위치전송 끝 -->
 					
@@ -103,13 +113,23 @@
 					    android:layout_width="0dp"
 					    android:layout_height="match_parent"
 					    android:layout_weight="1"
+					    android:orientation="vertical"
 					    android:gravity="center" 
 					    >
 					    <ImageView
 					        android:layout_width="wrap_content"
 					        android:layout_height="wrap_content"
+					        android:paddingTop="3dp"
 					        android:src="@drawable/location_list"
 					        />
+					    <TextView
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:textSize="13sp"
+							android:paddingTop="5dp"
+							android:textColor="#ffffff"
+							android:text="위치확인"
+							/>
 					</LinearLayout>
 					<!-- 위치확인 끝 -->
 					
@@ -119,13 +139,24 @@
 					    android:layout_width="0dp"
 					    android:layout_height="match_parent"
 					    android:layout_weight="1"
+					    android:orientation="vertical"
 					    android:gravity="center" 
 					    >
 					    <ImageView
 					        android:layout_width="wrap_content"
 					        android:layout_height="wrap_content"
+					        android:paddingTop="3dp"
 					        android:src="@drawable/config"
 					        />
+					    <TextView
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:textSize="13sp"
+							android:paddingTop="5dp"
+							android:textColor="#ffffff"
+							
+							android:text="설정"
+							/>
 					</LinearLayout>
 					<!-- 설정  -->
 				</LinearLayout>

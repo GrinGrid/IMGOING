@@ -1,4 +1,6 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:imgoing="http://schemas.android.com/apk/res/net.gringrid.imgoing"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -6,14 +8,15 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin">
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:background="@color/imgoing_content"
+    >
     
 	<!-- Main Menu Start -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="100"
-        android:background="@color/imgoing_red"
         android:gravity="center"
         android:orientation="vertical" >
 
@@ -21,26 +24,9 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
+            imgoing:current_menu="1"
             android:gravity="center" />
-		
-		<!-- Bottom Line Start -->
-	    <LinearLayout
-	        android:layout_width="match_parent"
-	        android:layout_height="5dp"
-	        android:background="@color/imgoing_red_bottom"
-	        >
-	        <TextView
-	            android:layout_width="match_parent"
-	            android:layout_height="wrap_content"
-	            android:textSize="5sp"
-	            android:text="Buboo"
-	            android:textColor="@color/imgoing_red_bottom">
-	            
-	        </TextView>
-	        
-	    </LinearLayout>
-	    <!-- Bottom Line End -->
-		    
+				    
     </LinearLayout>
     <!-- Main Menu end -->
     
@@ -100,23 +86,14 @@
 		<LinearLayout 
 		    android:layout_width="match_parent"
 		    android:layout_height="0dp"
-		    android:layout_weight="390">
+		    android:layout_weight="440">
 			<ListView
 			    android:id="@+id/id_lv_message"
 			    android:layout_width="match_parent"
 			    android:layout_height="match_parent"/>
 		</LinearLayout>
 		
-		<LinearLayout 
-		    android:layout_width="match_parent"
-		    android:layout_height="0dp"
-		    android:layout_weight="50">
-			<Button
-			    android:id="@+id/id_bt_delete"
-			    android:layout_width="wrap_content"
-			    android:layout_height="wrap_content"
-			    android:text="Delete All" />
-		</LinearLayout>
+		
 								    
 	</LinearLayout>
 	<!-- Body Start -->

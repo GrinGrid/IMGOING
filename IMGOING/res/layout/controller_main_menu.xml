@@ -2,56 +2,151 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" 
-    android:background="@color/imgoing_red"
+    android:orientation="vertical"
     >
     
-	<RelativeLayout
-	    android:layout_width="match_parent"
-	    android:layout_height="0dp"
-	    android:layout_weight="1"
-	    android:paddingTop="10dp"
-	    android:paddingBottom="10dp">
-	    
-		<!-- Main Menu Start -->
-	    <ImageView
-			android:id="@+id/id_iv_current_menu"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_centerInParent="true"
-			android:src="@drawable/location_control" 
-			/>	
-		<ImageView
-			android:id="@+id/id_iv_menu"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_centerVertical="true"
-			android:layout_alignParentRight="true"
-			android:src="@drawable/bt_menu"
-			/>
-		<ImageView
-			android:id="@+id/id_iv_hide_menu2"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_centerVertical="true"
-			android:layout_alignParentRight="true"
-			android:src="@drawable/config"
-			android:padding="5dp"
-			android:visibility="visible"
-			/>
-		<ImageView
-			android:id="@+id/id_iv_hide_menu1"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_centerVertical="true"
-			android:layout_toLeftOf="@id/id_iv_hide_menu2"
-			android:src="@drawable/location_list"
-			android:padding="5dp"
-			android:visibility="visible"
-			/>
-	</RelativeLayout>		
-	    
-    <!-- Main Menu end -->
-    
 
+    <!-- Main menu start  -->
+    <LinearLayout 
+       	android:layout_width="match_parent"
+       	android:layout_height="0dp"
+       	android:layout_weight="1"
+       	android:background="@color/imgoing_red"
+        >
+	    <!-- Location Control start -->
+		<LinearLayout
+		    android:id="@+id/id_ll_location_control"
+		    android:layout_width="0dp"
+		    android:layout_height="match_parent"
+		    android:layout_weight="1"
+		    android:orientation="vertical"
+		    android:gravity="center">
+		    
+		    <ImageView
+		        android:id="@+id/id_iv_location_control"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:src="@drawable/location_control"
+				/>
+		    
+		</LinearLayout>
+		<!-- Location Control end -->
+		
+		
+		<!-- Location List start -->
+		<LinearLayout
+		    android:id="@+id/id_ll_location_list"
+		    android:layout_width="0dp"
+		    android:layout_height="match_parent"
+		    android:layout_weight="1"
+		    android:orientation="vertical"
+		    android:gravity="center">
+		    
+			
+		    <ImageView
+		        android:id="@+id/id_iv_location_list"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:src="@drawable/location_list"
+				/>
+		  
+		</LinearLayout>
+		<!-- Location List end -->
+		
+		
+		<!-- Config start -->
+		<LinearLayout
+		    android:id="@+id/id_ll_config"
+		    android:layout_width="0dp"
+		    android:layout_height="match_parent"
+		    android:layout_weight="1"
+		    android:orientation="vertical"
+		    android:gravity="center">
+		    
+			
+		    <ImageView
+		        android:id="@+id/id_iv_config"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:src="@drawable/config"
+				/>
+		   
+		</LinearLayout>
+		<!-- Config end -->
+		    
+	</LinearLayout>
+	<!-- Main menu end  -->
+	
+	
+	<!-- Bottom Line Start -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/imgoing_red_bottom"
+        >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="5sp"
+            android:text="Buboo"
+            android:textColor="@color/imgoing_red_bottom">
+            
+        </TextView>
+    </LinearLayout>
+	<!-- Bottom Line End -->
+	    
+	<!-- Bottom Arrow Indicator Start -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+        <LinearLayout
+		    android:id="@+id/id_ll_location_control_arrow"
+		    android:layout_width="0dp"
+		    android:layout_height="match_parent"
+		    android:layout_weight="1"
+		    android:gravity="center_horizontal"
+		    android:visibility="invisible">
+		
+	        <ImageView
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:src="@drawable/arrow_bottom"/>
+	            
+        </LinearLayout>
+        <LinearLayout
+		    android:id="@+id/id_ll_location_list_arrow"
+		    android:layout_width="0dp"
+		    android:layout_height="match_parent"
+		    android:layout_weight="1"
+		    android:gravity="center_horizontal"
+		    android:visibility="invisible">
+		
+	        <ImageView
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:src="@drawable/arrow_bottom"/>
+	            
+        </LinearLayout>
+        <LinearLayout
+		    android:id="@+id/id_ll_config_arrow"
+		    android:layout_width="0dp"
+		    android:layout_height="match_parent"
+		    android:layout_weight="1"
+		    android:gravity="center_horizontal"
+		    android:visibility="invisible">
+		
+	        <ImageView
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:src="@drawable/arrow_bottom"/>
+	            
+        </LinearLayout>
+    </LinearLayout>
+	<!-- Bottom Arrow Indicator End -->
+	    
+	
+	
+	
 </LinearLayout>
