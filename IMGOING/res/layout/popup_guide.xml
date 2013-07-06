@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 
+	이용안내
+	date 2013/07/10
+	version 1.0.0
+	since 1.0.0
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/mysmartw.android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" 
+    android:background="#00000000"
+    android:padding="10dp"
+
+    >
+    
+    <!-- 타이틀바 시작 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+        <ImageView
+		 	android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:background="@drawable/popup_top_left"
+			android:layout_gravity="center_vertical"
+			/>
+		<TextView
+		    android:id="@+id/id_tv_title"
+		 	android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:background="@drawable/popup_top_middle"
+			android:layout_gravity="center_vertical"
+			android:text="IMGOING 이용안내"
+			android:textSize="16dp"
+			android:gravity="center"
+			style="@style/PopupTitle"
+			/>
+		<ImageView
+			android:id="@+id/id_iv_deselect_right"
+		 	android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:background="@drawable/popup_top_right"
+			android:layout_gravity="center_vertical"
+			/>    	
+	</LinearLayout>
+    <!-- 타이틀바 끝 -->
+    
+    <!-- start of BODY -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical" 
+        android:background="@drawable/push_popup_bg"
+        android:weightSum="100"
+        android:paddingBottom="10dp"
+        >
+		<ScrollView 
+		    android:layout_width="match_parent"
+		    android:layout_height="0dp"
+		    android:layout_weight="100"
+		    >
+		    
+		
+		<LinearLayout
+		    android:layout_width="match_parent"
+		    android:layout_height="0dp"
+		    android:layout_weight="100"
+		    android:orientation="vertical"
+		    >
+		    <LinearLayout
+			    android:layout_width="match_parent"
+			    android:layout_height="wrap_content"
+			    android:padding="5dp"	
+			    android:orientation="vertical"		     
+			    >
+			    <TextView
+			        android:layout_width="wrap_content"
+			    	android:layout_height="wrap_content"
+			    	style="@style/GuideTitle" 
+			    	android:text="1. 앱 제작 동기"
+			        />
+			    <TextView
+			        android:layout_width="match_parent"
+			    	android:layout_height="wrap_content"
+			    	style="@style/GuideContent"
+			    	android:paddingLeft="13dp"
+			    	android:text="IMGOING은 제가 필요해서 만들었습니다. 퇴근을 해서 집에 갈 때 와이프는 제가 집에 도착하면 바로 밥을 먹을 수 있도록 준비하기 위해 제가 어디쯤 오고있는지 항상 궁금해 했습니다. 그래서 '일정시간 간격으로 내 위치를 자동으로 알려줄 수 있으면 좋겠다' 라는 생각에 만들게 되었습니다. 꼭 이런 상황뿐 아니라 부모님댁에 갈때, 친구와의 약속, 자녀들의 위치가 궁금할때 등 여러모로 활용도가 있을 것 같아 앱으로 제작을 결심했습니다."
+			        />
+			</LinearLayout>
+		    
+			<LinearLayout
+			    android:layout_width="match_parent"
+			    android:layout_height="wrap_content"
+			    android:padding="5dp"			
+			    android:orientation="vertical"     
+			    >
+			    <TextView
+			        android:layout_width="wrap_content"
+			    	android:layout_height="wrap_content"
+			    	style="@style/GuideTitle" 
+			    	android:text="2. 기능"
+			        />
+			    <TextView
+			        android:layout_width="match_parent"
+			    	android:layout_height="wrap_content"
+			    	style="@style/GuideContent"
+			    	android:paddingLeft="13dp"
+			    	android:text="* 기능은 최대한 심플하게 만들려고 노력했습니다. 위치를 전송하고 위치를 수신하여 확인하고 그 과정에서 편의성을 위한 몇가지 설정이 끝입니다. "
+			        />
+			    <TextView
+			        android:layout_width="match_parent"
+			    	android:layout_height="wrap_content"
+			    	style="@style/GuideContent"
+			    	android:paddingLeft="13dp"
+			    	android:text="* 위치의 정확도에 있어서 많은 고민을 했지만 스마트폰 GPS의 특성상 GPS 위성신호를 받을 수 없는 지하철이나 실내 등은 wifi 나 통신사망을 통해 위치를 얻어야 하므로 비교적 정확하지 않을 수 있습니다."
+			        />
+			    <TextView
+			        android:layout_width="match_parent"
+			    	android:layout_height="wrap_content"
+			    	style="@style/GuideContent"
+			    	android:paddingLeft="13dp"
+			    	android:text="* 배터리소모를 최소화 하기위한 노력도 하였습니다."
+			        />
+			</LinearLayout>
+			
+		    
+		    <LinearLayout
+			    android:layout_width="match_parent"
+			    android:layout_height="wrap_content"
+			    android:padding="5dp"			
+			    android:orientation="vertical"     
+			    >
+			    <TextView
+			        android:layout_width="wrap_content"
+			    	android:layout_height="wrap_content"
+			    	style="@style/GuideTitle" 
+			    	android:text="3. 부탁의 말씀"
+			        />
+			    <TextView
+			        android:layout_width="match_parent"
+			    	android:layout_height="wrap_content"
+			    	style="@style/GuideContent"
+			    	android:paddingLeft="13dp"
+			    	android:text="사용상 부탁드리고 싶은점은 앱을 운영하기위한 서버등의 비용을 제 용돈으로 충당하고 있습니다. 돈을 벌려고 만든것이 아닌 스마트폰을 사용하는 사람들이 좀 더 편하게 생활하길 바라는 마음에서 만들었기에 많이 부족하지만 비난과 욕설 보다는 충고와 개선요청을 해주시면 저도 힘이나서 버그수정이나 개선에 관한 업데이트를 열심히 할 수 있을것 같습니다. "
+			        />
+			</LinearLayout>
+			
+		    
+		    <LinearLayout
+			    android:layout_width="match_parent"
+			    android:layout_height="wrap_content"
+			    android:orientation="vertical"
+			    android:padding="5dp"			     
+			    >
+			    <TextView
+			        android:layout_width="wrap_content"
+			    	android:layout_height="wrap_content"
+			    	style="@style/GuideTitle" 
+			    	android:text="4. Contacts"
+			        />
+			    <TextView
+			        android:layout_width="match_parent"
+			    	android:layout_height="wrap_content"
+			    	style="@style/GuideContent"
+			    	android:paddingLeft="13dp"
+			    	android:text="사용상의 문의나 불편한점 버그등은 gringridsoft@gmail.com으로 보내주시면 최대한 반영할 수 있도록 노력하겠습니다."
+			        />
+			</LinearLayout>
+			
+		</LinearLayout>
+		</ScrollView>
+		
+    </LinearLayout>
+    <!-- end of BODY -->
+    
+    <!-- 하단 테두리 시작 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+        <ImageView
+		 	android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:background="@drawable/popup_bottom_left"
+			android:layout_gravity="center_vertical"
+			/>
+		<ImageView		    
+		 	android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:background="@drawable/popup_bottom_middle"
+			android:layout_gravity="center_vertical"
+			android:gravity="center"			
+			/>
+		<ImageView
+			android:id="@+id/id_iv_deselect_right"
+		 	android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:background="@drawable/popup_bottom_right"
+			android:layout_gravity="center_vertical"
+			/>         
+    </LinearLayout>
+    <!-- 하단 테두리 끝 -->
+
+</LinearLayout>

@@ -15,8 +15,41 @@
      limitations under the License.
 -->
 <!-- This can go anywhere in your layout (see other demos for some examples). -->
-<fragment xmlns:android="http://schemas.android.com/apk/res/android"
-  android:id="@+id/map"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  class="com.google.android.gms.maps.SupportMapFragment"/>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" 
+    android:orientation="vertical"
+    >
+    <LinearLayout 
+        android:id="@+id/id_ll_top_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@color/imgoing_sky"
+        >
+    <TextView 
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="마지막 위치와의 거리 : "
+        android:paddingLeft="3dp"
+        style="@style/PopupTitle"/>
+    
+    <TextView
+        android:id="@+id/id_tv_distance" 
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="거리 계산중.."
+        style="@style/PopupTitle"/>
+	</LinearLayout>
+	
+	<LinearLayout 
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent">
+	<fragment 
+	  android:id="@+id/map"
+	  android:layout_width="match_parent"
+	  android:layout_height="match_parent"
+	  class="com.google.android.gms.maps.SupportMapFragment"/>
+    </LinearLayout>
+</LinearLayout>

@@ -9,6 +9,7 @@ import net.gringrid.imgoing.util.Util;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.util.AttributeSet;
@@ -42,6 +43,7 @@ public class MainMenu extends LinearLayout  implements OnClickListener, Animatio
 	private RelativeLayout.LayoutParams mBtMenuParams;
 	
 	boolean mIsOpen;
+	int mCurrentMenuIndex;
 	
 	public MainMenu(Context context) {
 		super(context);
@@ -52,7 +54,13 @@ public class MainMenu extends LinearLayout  implements OnClickListener, Animatio
 	public MainMenu(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		mContext = context;
-		initAnimation();
+		//initAnimation();
+		TypedArray ta = mContext.obtainStyledAttributes(attrs, R.styleable.MainMenu);
+		
+		mCurrentMenuIndex = ta.getInteger(R.styleable.MainMenu_current_menu, 0);
+		
+		
+		
 		drawMainMenu();
 	}
 
@@ -67,31 +75,45 @@ public class MainMenu extends LinearLayout  implements OnClickListener, Animatio
 	protected void drawMainMenu() {
 		mInflater = LayoutInflater.from(getContext());
 		View mainMenu = mInflater.inflate(R.layout.controller_main_menu, null);
+		mainMenu.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
 		addView(mainMenu);
 		
-		View view = findViewById(R.id.id_iv_current_menu);
+		View view = findViewById(R.id.id_ll_location_control);
 		if ( view != null ){
+			//view.setVisibility(View.GONE);
 			view.setOnClickListener(this);
-			mCurrentMenu = (ImageView) view;
+			//mHideMenu1 = (ImageView) view;
 		}
-		view = findViewById(R.id.id_iv_hide_menu1);
+		view = findViewById(R.id.id_ll_location_list);
 		if ( view != null ){
-			view.setVisibility(View.GONE);
+			//view.setVisibility(View.GONE);
 			view.setOnClickListener(this);
-			mHideMenu1 = (ImageView) view;
-		}
-		view = findViewById(R.id.id_iv_hide_menu2);
-		if ( view != null ){
-			view.setVisibility(View.GONE);
-			view.setOnClickListener(this);
-			mHideMenu2 = (ImageView) view;
+			//mHideMenu2 = (ImageView) view;
 		}
 		
-		view = findViewById(R.id.id_iv_menu);
+		view = findViewById(R.id.id_ll_config);
 		if ( view != null ){
 			view.setOnClickListener(this);
-			mBtMenu = (ImageView) view;
-			mBtMenuParams = (RelativeLayout.LayoutParams) mBtMenu.getLayoutParams();
+			//mBtMenu = (ImageView) view;
+			//mBtMenuParams = (RelativeLayout.LayoutParams) mBtMenu.getLayoutParams();
+		}
+		Log.d("jiho", "mCurrentMenuIndex : "+mCurrentMenuIndex);
+		
+		switch (mCurrentMenuIndex) {
+		case 0:
+			findViewById(R.id.id_ll_location_control_arrow).setVisibility(View.VISIBLE);
+			break;
+			
+		case 1:
+			findViewById(R.id.id_ll_location_list_arrow).setVisibility(View.VISIBLE);
+			break;
+			
+		case 2:
+			findViewById(R.id.id_ll_config_arrow).setVisibility(View.VISIBLE);
+			break;
+
+		default:
+			break;
 		}
 		
 	}
@@ -106,25 +128,32 @@ public class MainMenu extends LinearLayout  implements OnClickListener, Animatio
 	public void onClick(View v) {
 		Intent intent;
 		switch ( v.getId() ) {
+		/*
 		case R.id.id_iv_current_menu:
 			findViewById(R.id.id_iv_hide_menu1).setVisibility(View.VISIBLE);
 			findViewById(R.id.id_iv_hide_menu2).setVisibility(View.VISIBLE);
-			/*
+			
 			intent = new Intent(mContext, LocationControlActivity.class);
 			((Base)mContext).startNewActivity(intent);
-			*/
+			
+			break;
+		*/
+		case R.id.id_ll_location_control:
+			intent = new Intent(mContext, LocationControlActivity.class);
+			((Base)mContext).startNewActivity(intent);
 			break;
 			
-		case R.id.id_iv_hide_menu1:
+			
+		case R.id.id_ll_location_list:
 			intent = new Intent(mContext, MessageActivity.class);
 			((Base)mContext).startNewActivity(intent);
 			break;
 			
-		case R.id.id_iv_hide_menu2:
+		case R.id.id_ll_config:
 			intent = new Intent(mContext, ConfigActivity.class);
 			((Base)mContext).startNewActivity(intent);
 			break;
-			
+		/*	
 		case R.id.id_iv_menu:
 			mAnimationRotateRight.setAnimationListener(this);
 			
@@ -132,17 +161,13 @@ public class MainMenu extends LinearLayout  implements OnClickListener, Animatio
 			//mBtMenu.startAnimation(mAnimationRotateRight);
 			mIsOpen = !mIsOpen;
 			startMenuAnimation(mIsOpen);
-			/*
+			
 			intent = new Intent(mContext, MessageActivity.class);
 			((Base)mContext).startNewActivity(intent);
-			*/
-			break;
 			
-		case R.id.id_bt_cancel:
-			intent = new Intent(mContext, ConfigActivity.class);
-			((Base)mContext).startNewActivity(intent);
 			break;
-
+		*/
+			
 		default:
 			break;
 		}
@@ -190,8 +215,8 @@ public class MainMenu extends LinearLayout  implements OnClickListener, Animatio
 	@Override
 	public void onAnimationEnd(Animation animation) {
 		Log.d("jiho", "onAnimationEnd");
-		findViewById(R.id.id_iv_hide_menu1).setVisibility(View.VISIBLE);
-		findViewById(R.id.id_iv_hide_menu2).setVisibility(View.VISIBLE);
+		//findViewById(R.id.id_iv_hide_menu1).setVisibility(View.VISIBLE);
+		//findViewById(R.id.id_iv_hide_menu2).setVisibility(View.VISIBLE);
 		
 	}
 
@@ -201,4 +226,5 @@ public class MainMenu extends LinearLayout  implements OnClickListener, Animatio
 		
 	}
 
+	
 }

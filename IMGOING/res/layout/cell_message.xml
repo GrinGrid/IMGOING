@@ -7,9 +7,9 @@
 
     <LinearLayout
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_weight="4"
-        android:layout_gravity="center_vertical"
+        android:gravity="center_vertical"
         android:orientation="vertical" >
 
         <TextView
@@ -19,6 +19,12 @@
             android:text="sender" />
 
         <TextView
+            android:id="@+id/id_tv_start_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2013-06-20 22:31:26" />
+        
+        <TextView
             android:id="@+id/id_tv_wrk_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -26,13 +32,13 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/id_ll_map"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
         android:layout_weight="2" >
 
         <ImageView
-            android:id="@+id/id_iv_map"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/bt_map"
@@ -40,16 +46,15 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/id_ll_del"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
         android:layout_weight="1">
 
         <ImageView
-            android:id="@+id/id_iv_del"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
             android:src="@drawable/bt_delete"
             android:text="sender" />
     </LinearLayout>

@@ -93,14 +93,14 @@ public class MessageListAdapter extends BaseAdapter{
 			LinearLayout id_rl_cell = (LinearLayout)view.findViewById(R.id.id_ll_cell);
 			TextView id_tv_person_name = (TextView)view.findViewById(R.id.id_tv_person_name);
 			//TextView id_tv_receiver = (TextView)view.findViewById(R.id.id_tv_receiver);
-			//TextView id_tv_start_time = (TextView)view.findViewById(R.id.id_tv_start_time);
+			TextView id_tv_start_time = (TextView)view.findViewById(R.id.id_tv_start_time);
 			TextView id_tv_wrk_time = (TextView)view.findViewById(R.id.id_tv_wrk_time);
 			//TextView id_tv_provider = (TextView)view.findViewById(R.id.id_tv_provider);
 			//TextView id_tv_latitude = (TextView)view.findViewById(R.id.id_tv_latitude);
 			//TextView id_tv_longitude = (TextView)view.findViewById(R.id.id_tv_longitude);
 			//TextView id_tv_location_name = (TextView)view.findViewById(R.id.id_tv_location_name);
-			ImageView id_iv_map = (ImageView)view.findViewById(R.id.id_iv_map);
-			ImageView id_iv_del = (ImageView)view.findViewById(R.id.id_iv_del);
+			LinearLayout id_ll_map = (LinearLayout)view.findViewById(R.id.id_ll_map);
+			LinearLayout id_ll_del = (LinearLayout)view.findViewById(R.id.id_ll_del);
 			//Button id_bt_del = (Button)view.findViewById(R.id.id_bt_del);
 			//Button id_bt_list = (Button)view.findViewById(R.id.id_bt_list);
 			
@@ -121,7 +121,7 @@ public class MessageListAdapter extends BaseAdapter{
 			}
 			
 			//id_tv_receiver.setText(item.receiver);
-			//id_tv_start_time.setText(item.start_time);
+			id_tv_start_time.setText(item.start_time);
 			id_tv_wrk_time.setText(item.wrk_time);
 			//id_tv_provider.setText(item.provider);
 			//id_tv_latitude.setText(item.latitude);
@@ -133,11 +133,11 @@ public class MessageListAdapter extends BaseAdapter{
 			final String fPerson = person;
 			final String fStart_time = item.start_time;
 			
-			id_iv_map.setOnClickListener(new OnClickListener() {
+			id_ll_map.setOnClickListener(new OnClickListener() {
 				
 				@Override
 				public void onClick(View v) {
-					if ( v.getId() == R.id.id_iv_map ){
+					if ( v.getId() == R.id.id_ll_map ){
 						Intent intent = new Intent(mContext, MapActivity.class);						
 						intent.putExtra("MODE", MESSAGE_MODE);
 						intent.putExtra("PERSON", fPerson);
@@ -147,11 +147,11 @@ public class MessageListAdapter extends BaseAdapter{
 				}
 			});
 			
-			id_iv_del.setOnClickListener(new OnClickListener() {
+			id_ll_del.setOnClickListener(new OnClickListener() {
 				
 				@Override
 				public void onClick(View v) {
-					if ( v.getId() == R.id.id_iv_del ){
+					if ( v.getId() == R.id.id_ll_del ){
 						if ( item.sender == null ){
 							MessageDao dao = new MessageDao(mContext);
 							dao.deleteReceiveOne(item.receiver, item.start_time);

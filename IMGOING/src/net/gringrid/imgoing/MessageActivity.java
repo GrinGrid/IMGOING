@@ -34,7 +34,6 @@ public class MessageActivity extends Base implements OnClickListener, OnItemClic
 	private final int MESSAGE_MODE_RECEIVE = 0;	// 받은메시지
 	private final int MESSAGE_MODE_SEND = 1;		// 보낸메시지 
 	
-	
 	private ListView messageList;
 	MessageListAdapter messageListAdapter;
 	Vector<MessageVO> message_data = new Vector<MessageVO>();
@@ -52,12 +51,12 @@ public class MessageActivity extends Base implements OnClickListener, OnItemClic
 	
 	@Override
 	protected void onResume() {
-		
 		if ( MESSAGE_MODE == MESSAGE_MODE_RECEIVE ){
 			viewReceiveMessage();
 		}else if ( MESSAGE_MODE == MESSAGE_MODE_SEND ){
 			viewSendMessage();
 		}
+		setButton();
 		super.onResume();
 	}
 	
@@ -73,15 +72,26 @@ public class MessageActivity extends Base implements OnClickListener, OnItemClic
 	}
 	
 	
+	private void setButton(){
+		
+		View id_bt_receive = findViewById(R.id.id_bt_receive);
+		View id_bt_send = findViewById(R.id.id_bt_send);
+		
+		id_bt_receive.setBackgroundDrawable(getResources().getDrawable(R.drawable.bt_message_tap_off));
+		id_bt_send.setBackgroundDrawable(getResources().getDrawable(R.drawable.bt_message_tap_off));
+		
+		if ( MESSAGE_MODE == MESSAGE_MODE_RECEIVE ){
+			id_bt_receive.setBackgroundDrawable(getResources().getDrawable(R.drawable.bt_message_tap_on));
+		}else if ( MESSAGE_MODE == MESSAGE_MODE_SEND ){
+			id_bt_send.setBackgroundDrawable(getResources().getDrawable(R.drawable.bt_message_tap_on));
+		}
+	}
+	
 	// 이벤트 등록
 	private void regEvent() {
 		
 		// 서비스 시작 버튼
-		View view = findViewById(R.id.id_bt_delete);	
-		if ( view != null ){
-			view.setOnClickListener(this);
-		}
-		view = findViewById(R.id.id_bt_send);
+		View view = findViewById(R.id.id_bt_send);
 		if ( view != null ){
 			view.setOnClickListener(this);
 		}
@@ -121,6 +131,7 @@ public class MessageActivity extends Base implements OnClickListener, OnItemClic
 		if ( cursor != null ) cursor.close();
 		messageListAdapter.setAll(message_data);
 		messageListAdapter.setMode(MESSAGE_MODE);
+		setButton();
 	}
 	
 	
@@ -154,6 +165,7 @@ public class MessageActivity extends Base implements OnClickListener, OnItemClic
 		if ( cursor != null ) cursor.close();
 		messageListAdapter.setAll(message_data);
 		messageListAdapter.setMode(MESSAGE_MODE);
+		setButton();
 	}
 
 	
@@ -164,11 +176,6 @@ public class MessageActivity extends Base implements OnClickListener, OnItemClic
 		Intent intent = null;
 		
 		switch(v.getId()){
-		case R.id.id_bt_delete:
-			MessageDao messageDao = new MessageDao(this);
-			messageDao.deleteAll();
-			messageListAdapter.notifyDataSetChanged();
-			break;
 		case R.id.id_bt_send:
 			viewSendMessage();
 			break;
