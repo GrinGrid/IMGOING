@@ -28,7 +28,7 @@
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
 	    android:layout_below="@id/id_et_email"
-	    android:text="전화번호 : 상대방이 위치를 전송할 때 주소록에 저장된 전화번호를 입력합니다."/>
+	    android:text="전화번호 : 상대방이 위치를 전송할 때 주소록에 저장된 전화번호를 입력합니다. "/>
 	
 	<EditText
 	    android:id="@+id/id_et_phone_number"
