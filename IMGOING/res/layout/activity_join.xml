@@ -38,7 +38,7 @@
 	    android:inputType="number" 
 	    android:hint="예) 01012345678"/>
 	
-	<EditText
+	<EditText 
 	    android:id="@+id/id_et_password"
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
