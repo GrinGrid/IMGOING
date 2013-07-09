@@ -131,6 +131,7 @@ public class LoginActivity extends Base implements OnClickListener{
 						isNeedUpdate = true;
 					}else if ( Util.isEmpty(user.phone_number) ){
 						user.phone_number = serverPhoneNumber;
+						Preference.PHONE_NUMBER = serverPhoneNumber;
 					}
 					
 					Log.d("jiho", "LOCAL GCM ID : "+user.gcm_reg_id);

@@ -2,12 +2,15 @@ package net.gringrid.imgoing.adapter;
 
 import java.util.Vector;
 
+import net.gringrid.imgoing.Base;
 import net.gringrid.imgoing.MapActivity;
 import net.gringrid.imgoing.R;
 import net.gringrid.imgoing.dao.MessageDao;
 import net.gringrid.imgoing.vo.MessageVO;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
@@ -26,7 +29,7 @@ import android.widget.TextView;
 public class MessageListAdapter extends BaseAdapter{
 
 	private int MESSAGE_MODE;
-	private final int MESSAGE_MODE_RECEIVE = 0;	// 받은메시지
+	private final int MESSAGE_MODE_RECEIVE = 0;		// 받은메시지
 	private final int MESSAGE_MODE_SEND = 1;		// 보낸메시지 
 	
 	
@@ -132,6 +135,7 @@ public class MessageListAdapter extends BaseAdapter{
 			
 			final String fPerson = person;
 			final String fStart_time = item.start_time;
+			final int finalPosition = position;
 			
 			id_ll_map.setOnClickListener(new OnClickListener() {
 				
@@ -152,17 +156,31 @@ public class MessageListAdapter extends BaseAdapter{
 				@Override
 				public void onClick(View v) {
 					if ( v.getId() == R.id.id_ll_del ){
-						if ( item.sender == null ){
-							MessageDao dao = new MessageDao(mContext);
-							dao.deleteReceiveOne(item.receiver, item.start_time);
-							notifyDataSetChanged();
-						}
-						if ( item.receiver == null ){
-							MessageDao dao = new MessageDao(mContext);
-							dao.deleteSendOne(item.sender, item.start_time);
-							notifyDataSetChanged();
-							
-						}
+						AlertDialog.Builder builder = new AlertDialog.Builder( mContext );
+						builder.setTitle(R.string.alert_title);
+						builder.setMessage( "해당 메시지가 삭제됩니다. 정말 삭제 하시겠습니까?" );
+						builder.setPositiveButton(R.string.alert_confirm,
+								new android.content.DialogInterface.OnClickListener() {
+									@Override
+									public void onClick(DialogInterface dialog, int which) {
+										MessageDao dao = new MessageDao(mContext);
+										
+										if ( MESSAGE_MODE == MESSAGE_MODE_RECEIVE ){
+											Log.d("jiho", "sender : "+item.sender+", item.start_time : "+item.start_time);
+											dao.deleteSendOne(item.sender, item.start_time);
+											
+										}else if (  MESSAGE_MODE == MESSAGE_MODE_SEND ){
+											Log.d("jiho", "receiver : "+item.receiver+", item.start_time : "+item.start_time);
+											dao.deleteReceiveOne(item.receiver, item.start_time);
+										}
+										((Base)mContext).showAlert("정상적으로 삭제 되었습니다.");
+										data.remove(finalPosition);
+										notifyDataSetChanged();
+									}
+								});
+						builder.setNegativeButton("취소", null);
+						builder.show();
+						
 					}
 				}
 			});

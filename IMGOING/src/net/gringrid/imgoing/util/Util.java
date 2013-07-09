@@ -108,7 +108,7 @@ public class Util {
 			}else{
 				
 				SharedPreferences settings = context.getSharedPreferences(Constants.PREFS_NAME, 0);
-				phone_number = settings.getString("PHONE_NUMBER", null);
+				phone_number = settings.getString("PHONE_NUMBER", "");
 				Log.d("jiho", "phone_number : "+phone_number);
 			}
 			Preference.PHONE_NUMBER = phone_number;

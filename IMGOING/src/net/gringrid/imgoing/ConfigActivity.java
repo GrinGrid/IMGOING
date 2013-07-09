@@ -191,33 +191,61 @@ public class ConfigActivity extends Base implements OnClickListener{
 					Preference.CONFIG_MAX_SEND_COUNT = Integer.parseInt( MAX_SEND_COUNT.elementAt(which).mCode );					
 					
 				} else if(type == SPINNER_TYPE_DELETE) {
-					MessageDao messageDao = new MessageDao(getApplicationContext());
-					switch ( which ) {
-					// 전체삭제 
-					case 1:
-						messageDao.deleteAll();
-						break;
-					
-					// 받은메시지 삭제 	
-					case 2:
-						messageDao.deleteReceiveMessage();
-						break;
-					
-					// 보낸메시지 삭제	
-					case 3:
-						messageDao.deleteSendMessage();
-						break;
+					performDelete( which );
 						
-					default:
-						break;
-					}
-					mMaxSendCount.setText(MAX_SEND_COUNT.elementAt(which).mName);
-					Preference.CONFIG_MAX_SEND_COUNT = Integer.parseInt( MAX_SEND_COUNT.elementAt(which).mCode );					
-					
 				}
 				Util.saveConfig(context);
 			}
 		});
+		builder.show();
+	}
+	
+	private void performDelete(final int mode){
+		
+		final MessageDao messageDao = new MessageDao(getApplicationContext());
+		
+		String alertMessage = null;
+		
+		switch (mode) {
+		case 1:
+			alertMessage = "모든 메시지가 삭제됩니다. 삭제 하시겠습니까?";
+			break;
+		case 2:
+			alertMessage = "받은 메시지가 모두 삭제됩니다. 삭제 하시겠습니까?";
+			break;
+		case 3:
+			alertMessage = "보낸 메시지가 삭제됩니다. 삭제 하시겠습니까?";
+			break;
+
+		default:
+			break;
+		}
+		
+		AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
+		builder.setTitle(R.string.alert_title);
+		builder.setMessage( alertMessage );
+		builder.setPositiveButton(R.string.alert_confirm,
+				new android.content.DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						switch (mode) {
+						case 1:
+							messageDao.deleteAll();
+							break;
+						case 2:
+							messageDao.deleteReceiveMessage();
+							break;
+						case 3:
+							messageDao.deleteSendMessage();
+							break;
+
+						default:
+							break;
+						}
+						showAlert("정상적으로 삭제 되었습니다.");
+					}
+				});
+		builder.setNegativeButton("취소", null);
 		builder.show();
 	}
 
