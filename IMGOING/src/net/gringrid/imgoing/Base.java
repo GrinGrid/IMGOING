@@ -21,6 +21,7 @@ public class Base extends Activity implements OnClickListener{
 		//regEvent();
 	}
 
+	
 	@Override
 	protected void onStart() {
 		EasyTracker.getInstance().activityStart(this); // Add this method.
