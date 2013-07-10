@@ -64,39 +64,10 @@
                     android:layout_weight="1"
                     android:gravity="center_vertical"
                     android:text="@string/config_guide" />
-
-                <CheckBox
-                    android:id="@+id/id_cb_config_guide"
-                    style="@style/CheckBox"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent" />
+          
             </LinearLayout>
             <!-- 이용안내 끝 -->
 
-
-            <!-- 위치수신 알림 설정 시작 -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:orientation="horizontal"
-                android:padding="5dp" >
-
-                <TextView
-                    style="@style/ConfigContent"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical"
-                    android:text="@string/config_alarm" />
-
-                <net.gringrid.imgoing.controller.Selector
-                    android:id="@+id/id_selector_config_alarm"
-                    android:layout_width="120sp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical" />
-            </LinearLayout>
-            <!-- 위치수신 알림 설정 끝 -->
 
 
             <!-- 받은메시지 최대보관수 시작 -->
@@ -171,6 +142,97 @@
                     android:layout_gravity="center_vertical" />
             </LinearLayout>
             <!-- 전체삭제 끝 -->
+            
+            <!-- 알림 설정 시작 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:padding="5dp" >
+                
+			    <TextView
+			        style="@style/ConfigContent"
+			        android:layout_width="match_parent"
+			        android:layout_height="wrap_content"				        
+			        android:gravity="center_vertical"
+			        android:text="@string/config_alarm" />
+			
+			    
+                <LinearLayout 
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="5dp" >
+                    
+                	<TextView
+	                    style="@style/ConfigContent"
+	                    android:layout_width="0dp"
+	                    android:layout_height="match_parent"
+	                    android:layout_weight="1"
+	                    android:gravity="center_vertical"
+	                    android:text="@string/config_alarm_vibrate" />
+	
+					<CheckBox
+	                    android:id="@+id/id_cb_alarm_vibrate_yn"
+	                    style="@style/CheckBox"
+	                    android:layout_width="wrap_content"
+	                    android:layout_height="wrap_content" />    
+                </LinearLayout>
+
+                <LinearLayout 
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="5dp" >
+                    
+                	<TextView
+	                    style="@style/ConfigContent"
+	                    android:layout_width="0dp"
+	                    android:layout_height="match_parent"
+	                    android:layout_weight="1"
+	                    android:gravity="center_vertical"
+	                    android:text="@string/config_alarm_sound" />
+	
+					<CheckBox
+	                    android:id="@+id/id_cb_alarm_sound_yn"
+	                    style="@style/CheckBox"
+	                    android:layout_width="wrap_content"
+	                    android:layout_height="wrap_content" />    
+                </LinearLayout>
+                
+                <LinearLayout 
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="5dp" >
+                    
+                	<TextView
+	                    style="@style/ConfigContent"
+	                    android:layout_width="0dp"
+	                    android:layout_height="match_parent"
+	                    android:layout_weight="1"
+	                    android:gravity="center_vertical"
+	                    android:text="@string/config_alarm_light" />
+	
+					<CheckBox
+	                    android:id="@+id/id_cb_alarm_light_yn"
+	                    style="@style/CheckBox"
+	                    android:layout_width="wrap_content"
+	                    android:layout_height="wrap_content" />    
+                </LinearLayout>
+                
+            </LinearLayout>
+            <!-- 알림 설정 끝 -->
 
         </LinearLayout>
     </LinearLayout>

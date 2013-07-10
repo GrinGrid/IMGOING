@@ -40,6 +40,9 @@
 	<string name="config_max_send">보낸메시지 최대보관수</string>
 	<string name="config_max_receive">받은메시지 최대보관수</string>
 	<string name="config_delete">메시지 삭제</string>
+	<string name="config_alarm_light">LED 알림</string>
+	<string name="config_alarm_sound">소리 알림</string>
+	<string name="config_alarm_vibrate">진동 알림</string>
 	
 	
 	

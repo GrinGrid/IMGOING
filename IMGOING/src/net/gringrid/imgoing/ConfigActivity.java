@@ -1,6 +1,7 @@
 package net.gringrid.imgoing;
 
 import java.util.Vector;
+
 import net.gringrid.imgoing.controller.Selector;
 import net.gringrid.imgoing.dao.MessageDao;
 import net.gringrid.imgoing.util.Util;
@@ -10,11 +11,15 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.TextView;
 
 /**
@@ -22,9 +27,9 @@ import android.widget.TextView;
  * @author Evangelist
  *
  */
-public class ConfigActivity extends Base implements OnClickListener{
+public class ConfigActivity extends Base implements OnClickListener, OnCheckedChangeListener{
 	
-	private Selector mAlarmMethod= null;
+	
 	private Selector mMaxReceiveCount = null;
 	private Selector mMaxSendCount = null;
 	private Selector mDelete = null;
@@ -86,10 +91,17 @@ public class ConfigActivity extends Base implements OnClickListener{
 	
 	
 	private void init() {
-		mAlarmMethod = (Selector)findViewById(R.id.id_selector_config_alarm);
-		if ( mAlarmMethod != null ){
-			mAlarmMethod.setText(ALARM_METHOD.elementAt(Preference.CONFIG_ALARM_METHOD).mName);
-		}
+		
+		SharedPreferences settings = getApplicationContext().getSharedPreferences(Constants.PREFS_NAME, 0);
+		CheckBox id_cb_alarm_vibrate_yn = (CheckBox)findViewById(R.id.id_cb_alarm_vibrate_yn);
+		CheckBox id_cb_alarm_sound_yn = (CheckBox)findViewById(R.id.id_cb_alarm_sound_yn);
+		CheckBox id_cb_alarm_light_yn = (CheckBox)findViewById(R.id.id_cb_alarm_light_yn);
+		
+		id_cb_alarm_vibrate_yn.setChecked( settings.getBoolean("CONFIG_ALARM_VIBRATE_YN", true));
+		id_cb_alarm_sound_yn.setChecked( settings.getBoolean("CONFIG_ALARM_SOUND_YN", false));
+		id_cb_alarm_light_yn.setChecked( settings.getBoolean("CONFIG_ALARM_LIGHT_YN", false));
+		
+		
 		mMaxReceiveCount = (Selector)findViewById(R.id.id_selector_config_max_receive);
 		if ( mMaxReceiveCount != null ){
 			mMaxReceiveCount.setText(MAX_RECEIVE_COUNT.elementAt(Preference.CONFIG_MAX_RECEIVE_COUNT).mName);
@@ -106,11 +118,7 @@ public class ConfigActivity extends Base implements OnClickListener{
 
 
 	private void regEvent() {
-		View view = findViewById(R.id.id_selector_config_alarm);
-		if ( view != null ){
-			view.setOnClickListener(this);
-		}
-		view = findViewById(R.id.id_selector_config_max_receive);
+		View view = findViewById(R.id.id_selector_config_max_receive);
 		if ( view != null ){
 			view.setOnClickListener(this);
 		}
@@ -130,16 +138,28 @@ public class ConfigActivity extends Base implements OnClickListener{
 		if ( view != null ){
 			view.setOnClickListener(this);
 		}
+		
+		CheckBox id_cb_alarm_vibrate_yn = (CheckBox)findViewById(R.id.id_cb_alarm_vibrate_yn);
+		CheckBox id_cb_alarm_sound_yn = (CheckBox)findViewById(R.id.id_cb_alarm_sound_yn);
+		CheckBox id_cb_alarm_light_yn = (CheckBox)findViewById(R.id.id_cb_alarm_light_yn);
+		
+		if ( id_cb_alarm_vibrate_yn != null ){
+			id_cb_alarm_vibrate_yn.setOnCheckedChangeListener(this);
+		}
+		if ( id_cb_alarm_sound_yn != null ){
+			id_cb_alarm_sound_yn.setOnCheckedChangeListener(this);
+		}
+		if ( id_cb_alarm_light_yn != null ){
+			id_cb_alarm_light_yn.setOnCheckedChangeListener(this);
+		}
+		
 	}
 	
 	@Override
 	public void onClick(View v) {
 	
 		switch( v.getId() ){
-		case R.id.id_selector_config_alarm:
-			showSpinnerPopup(ALARM_METHOD, SPINNER_TYPE_ALARM_METHOD);
-			break;
-			
+				
 		case R.id.id_selector_config_max_receive:
 			showSpinnerPopup(MAX_RECEIVE_COUNT, SPINNER_TYPE_MAX_RECEIVE_COUNT);
 			break;
@@ -177,11 +197,7 @@ public class ConfigActivity extends Base implements OnClickListener{
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				
-				if(type == SPINNER_TYPE_ALARM_METHOD) {
-					mAlarmMethod.setText(ALARM_METHOD.elementAt(which).mName);
-					Preference.CONFIG_ALARM_METHOD = Integer.parseInt( ALARM_METHOD.elementAt(which).mCode );					
-					
-				} else if(type == SPINNER_TYPE_MAX_RECEIVE_COUNT) {
+				if(type == SPINNER_TYPE_MAX_RECEIVE_COUNT) {
 					mMaxReceiveCount.setText(MAX_RECEIVE_COUNT.elementAt(which).mName);
 					Preference.CONFIG_MAX_RECEIVE_COUNT = Integer.parseInt( MAX_RECEIVE_COUNT.elementAt(which).mCode );					
 					
@@ -247,6 +263,31 @@ public class ConfigActivity extends Base implements OnClickListener{
 				});
 		builder.setNegativeButton("취소", null);
 		builder.show();
+	}
+
+
+	@Override
+	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+		
+		SharedPreferences settings = getApplicationContext().getSharedPreferences(Constants.PREFS_NAME, 0);
+		SharedPreferences.Editor editor = settings.edit();
+				
+		switch (buttonView.getId()) {
+		case R.id.id_cb_alarm_vibrate_yn :
+			editor.putBoolean("CONFIG_ALARM_VIBRATE_YN",isChecked);			
+			break;			
+		
+		case R.id.id_cb_alarm_sound_yn :
+			editor.putBoolean("CONFIG_ALARM_SOUND_YN",isChecked);			
+			break;			
+		
+		case R.id.id_cb_alarm_light_yn :
+			editor.putBoolean("CONFIG_ALARM_LIGHT_YN",isChecked);			
+			break;			
+		}
+		
+		editor.commit();
+		
 	}
 
 }

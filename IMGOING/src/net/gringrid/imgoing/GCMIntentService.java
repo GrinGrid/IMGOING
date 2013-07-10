@@ -13,10 +13,13 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+import android.widget.CheckBox;
 
 import com.google.android.gcm.GCMBaseIntentService;
 
@@ -98,14 +101,39 @@ public class GCMIntentService extends GCMBaseIntentService{
 			notiBuilder.setNumber((int)messageDAO.queryReceiveOneRouteCount(messageVO.sender, messageVO.start_time));
 			
 			Notification notification = notiBuilder.build();
-			notification.ledARGB = 1;
+
+			notification.flags = Notification.FLAG_AUTO_CANCEL;
+			
+			SharedPreferences settings = getApplicationContext().getSharedPreferences(Constants.PREFS_NAME, 0);
+			
+			boolean config_alarm_vibrate_yn = settings.getBoolean("CONFIG_ALARM_VIBRATE_YN", true);
+			boolean config_alarm_sound_yn = settings.getBoolean("CONFIG_ALARM_SOUND_YN", false);
+			boolean config_alarm_light_yn = settings.getBoolean("CONFIG_ALARM_LIGHT_YN", false);
+			
+			if ( config_alarm_vibrate_yn ){
+				notification.defaults |= Notification.DEFAULT_VIBRATE;
+				notification.vibrate = new long[] {300,400};
+			}
+			if ( config_alarm_sound_yn ){
+				notification.defaults |= Notification.DEFAULT_SOUND;
+			}
+			if ( config_alarm_light_yn ){
+				notification.flags |= Notification.FLAG_SHOW_LIGHTS;				
+				notification.defaults |= Notification.DEFAULT_LIGHTS;				
+				notification.ledARGB = Color.BLUE;
+				notification.ledOnMS = 100;
+				notification.ledOffMS = 1000;
+			}
+			
+			notification.flags = Notification.FLAG_SHOW_LIGHTS | Notification.FLAG_AUTO_CANCEL;			
+			notification.defaults = Notification.DEFAULT_LIGHTS | Notification.DEFAULT_SOUND;
 			
 			int notificationID = Integer.parseInt(messageVO.start_time.substring(messageVO.start_time.length()-8).replace(":", ""));
 			Log.d("jiho", "notificationID : "+notificationID);
 			
 			NotificationManager notificationManager = null;
 			notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-			notificationManager.notify(notificationID, notiBuilder.build());
+			notificationManager.notify(notificationID, notification);
 			
 			
 			
