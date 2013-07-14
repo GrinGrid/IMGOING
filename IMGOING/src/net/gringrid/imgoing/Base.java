@@ -1,13 +1,20 @@
 package net.gringrid.imgoing;
 
 
+import java.util.List;
+
 import com.google.analytics.tracking.android.EasyTracker;
 
 import net.gringrid.imgoing.util.MyActivityManager;
 import android.app.Activity;
+import android.app.ActivityManager;
+import android.app.ActivityManager.RunningAppProcessInfo;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -67,7 +74,54 @@ public class Base extends Activity implements OnClickListener{
 	
 	
 	public void killProcess(){
+		
+		
+		
+		List<ApplicationInfo> packages;
+		PackageManager pm;
+		pm = getPackageManager();
+		packages = pm.getInstalledApplications(0);
+
+		ActivityManager mActivityManager = (ActivityManager) this.getSystemService(getApplicationContext().ACTIVITY_SERVICE);
+		
+		List<RunningAppProcessInfo> runningProcesses = mActivityManager.getRunningAppProcesses();
+		
+		for ( RunningAppProcessInfo runningProcess : runningProcesses ){
+			
+			Log.d("jiho", "runningProcess : ["+runningProcess.pid+"] "+runningProcess.processName);
+		}
+		/*
+		for (ApplicationInfo packageInfo : packages)
+		{
+			
+			if ((packageInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 1) continue;
+			Log.d("jiho", "packageInfo name : "+packageInfo.packageName);
+			
+			if (packageInfo.packageName.equals("net.gringrid.imgoing"))
+			{
+				
+				int sdkVersion = Integer.parseInt(Build.VERSION.SDK);
+				Log.d("jiho", "sdkVersion : "+sdkVersion);
+				if(sdkVersion < 8)
+				{
+					mActivityManager.restartPackage(packageInfo.packageName);
+				}
+				else
+				{
+					mActivityManager.killBackgroundProcesses(packageInfo.packageName);
+				}
+			}
+		}
+		*/
+		
+
+		
+		
+		
 		MyActivityManager.clearHistory();
+		//android.os.Process.killProcess(android.os.Process.myPid());
+		Log.d("jiho", "PID : "+android.os.Process.myPid());
+		
 		finish();
 	}
 	
@@ -94,6 +148,8 @@ public class Base extends Activity implements OnClickListener{
 	
 	@Override
 	public void onBackPressed() {
+		
+		
 		
 		if ( MyActivityManager.historyIsEmpty() ){
 			showTerminateAlert();

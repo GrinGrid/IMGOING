@@ -310,13 +310,10 @@ public class MessageDao {
 		stmt.bindString(2, start_time);
 		
     	long count = stmt.simpleQueryForLong();
+    	stmt.close();
 		return count;
 
 	}
-	
-	
-	
-	
 	
 	
 	/**

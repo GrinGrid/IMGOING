@@ -82,7 +82,7 @@ public class GCMIntentService extends GCMBaseIntentService{
 			Intent resultIntent = new Intent(this, IntroActivity.class);
 			resultIntent.putExtra("IS_FROM_RECEIVE_LOCATION", true);
 			// 앱 실행하고 다른 메뉴로 이동후 noti 클릭하면 새로 앱을 띄움
-			resultIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			resultIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP);
 			
 			PendingIntent notifyIntent =
 			        PendingIntent.getActivity(
@@ -110,6 +110,9 @@ public class GCMIntentService extends GCMBaseIntentService{
 			boolean config_alarm_sound_yn = settings.getBoolean("CONFIG_ALARM_SOUND_YN", false);
 			boolean config_alarm_light_yn = settings.getBoolean("CONFIG_ALARM_LIGHT_YN", false);
 			
+			notification.flags = Notification.FLAG_AUTO_CANCEL;
+			notification.defaults = 0;
+			
 			if ( config_alarm_vibrate_yn ){
 				notification.defaults |= Notification.DEFAULT_VIBRATE;
 				notification.vibrate = new long[] {300,400};
@@ -124,9 +127,6 @@ public class GCMIntentService extends GCMBaseIntentService{
 				notification.ledOnMS = 100;
 				notification.ledOffMS = 1000;
 			}
-			
-			notification.flags = Notification.FLAG_SHOW_LIGHTS | Notification.FLAG_AUTO_CANCEL;			
-			notification.defaults = Notification.DEFAULT_LIGHTS | Notification.DEFAULT_SOUND;
 			
 			int notificationID = Integer.parseInt(messageVO.start_time.substring(messageVO.start_time.length()-8).replace(":", ""));
 			Log.d("jiho", "notificationID : "+notificationID);

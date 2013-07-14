@@ -17,6 +17,16 @@
     <string name="phone_number">휴대폰번호</string>
     <string name="password">비밀번호</string>
     <string name="repassword">비밀번호 확인</string>
+    <string name="email_hint">예) gringridsoft@gmail.com</string>
+    <string name="phone_number_hint">예) 01012345678</string>
+    <string name="password_hint">비밀번호 4~20자</string>
+    <string name="repassword_hint">비밀번호 확인</string>
+    
+    
+    <string name="email_input_info">ID로 사용 할 메일주소를 입력합니다.</string>
+    <string name="phone_number_input_info">위치 전송을 받기위해 상대방 주소록에 저장된 나의 전화번호를 입력합니다.</string>
+    <string name="password_input_info">4~20자 비밀번호를 입력합니다.</string>
+    <string name="repassword_input_info">비밀번호 확인을 위해 동일한 비밀번호를 입력합니다.</string>
     <!-- 가입화면 끝 -->
     
     <!-- 로그인화면 시작 -->
@@ -29,6 +39,11 @@
 	<string name="location_alert_first">분 간격으로</string>
 	<string name="location_alert_second">님에게 위치가 전송됩니다.\n 시작 하시겠습니까?</string>
 	
+	<!-- 위치전송화면 전송중일때 -->
+	<string name="location_sending_first">분 간격으로</string>
+	<string name="location_sending_second">님에게 위치를 전송 중입니다.\n전송을 중지하려면 아래 정지버튼을 눌러주세요.</string>
+	
+	
 	<!-- 위치전송화면 끝 -->
 	<string name="alert_title">알림</string>
 	<string name="alert_confirm">확인</string>
@@ -39,11 +54,11 @@
 	<string name="config_alarm">위치수신 알림설정</string>
 	<string name="config_max_send">보낸메시지 최대보관수</string>
 	<string name="config_max_receive">받은메시지 최대보관수</string>
-	<string name="config_delete">메시지 삭제</string>
+	<string name="config_delete">메시지 일괄삭제</string>
 	<string name="config_alarm_light">LED 알림</string>
 	<string name="config_alarm_sound">소리 알림</string>
 	<string name="config_alarm_vibrate">진동 알림</string>
-	
+	<string name="config_logout">로그아웃</string>
 	
 	
 	<!-- 설정화면 끝 -->

@@ -4,6 +4,7 @@ import java.util.Vector;
 
 import net.gringrid.imgoing.controller.Selector;
 import net.gringrid.imgoing.dao.MessageDao;
+import net.gringrid.imgoing.util.MyActivityManager;
 import net.gringrid.imgoing.util.Util;
 import net.gringrid.imgoing.vo.SpinnerVO;
 
@@ -21,6 +22,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * 설정 화면
@@ -138,6 +140,12 @@ public class ConfigActivity extends Base implements OnClickListener, OnCheckedCh
 		if ( view != null ){
 			view.setOnClickListener(this);
 		}
+		view = findViewById(R.id.id_ll_logout);
+		if ( view != null ){
+			view.setOnClickListener(this);
+		}
+
+	
 		
 		CheckBox id_cb_alarm_vibrate_yn = (CheckBox)findViewById(R.id.id_cb_alarm_vibrate_yn);
 		CheckBox id_cb_alarm_sound_yn = (CheckBox)findViewById(R.id.id_cb_alarm_sound_yn);
@@ -176,6 +184,37 @@ public class ConfigActivity extends Base implements OnClickListener, OnCheckedCh
 			Intent intent = new Intent(this, GuideActivity.class);
 			startActivity(intent);
 			break;
+			
+		case R.id.id_ll_logout:
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setTitle(R.string.alert_title);
+			builder.setMessage("로그아웃 하시겠습니까?");
+			builder.setPositiveButton(R.string.alert_confirm,
+					new android.content.DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							SharedPreferences settings = getSharedPreferences(Constants.PREFS_NAME, 0);
+							SharedPreferences.Editor editor = settings.edit();
+							editor.putBoolean("AUTO_LOGIN", false);
+							editor.putString("EMAIL", null);
+							editor.putString("PHONE_NUMBER", null);
+							editor.putString("GCM_REG_ID", null);
+							editor.commit();
+							MyActivityManager.clearHistory();
+							Toast.makeText(getApplicationContext(), "로그아웃 되었습니다.", Toast.LENGTH_SHORT).show();
+							Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+							intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+							startActivity(intent);
+						}
+					});
+			builder.setNegativeButton("취소", null);
+			builder.show();
+			
+			
+			break;
+				
+			
+			
 		}
 	}
 	

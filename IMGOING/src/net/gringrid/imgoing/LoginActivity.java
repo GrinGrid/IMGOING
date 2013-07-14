@@ -15,10 +15,13 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.view.View.OnClickListener;
+import android.view.WindowManager.LayoutParams;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -26,8 +29,15 @@ public class LoginActivity extends Base implements OnClickListener{
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_login);		
-		this.setTitle(R.string.login_title);
+		
+		
+		LayoutParams params = getWindow().getAttributes(); 
+		params.height = LayoutParams.WRAP_CONTENT;
+		params.width  = LayoutParams.FILL_PARENT;
+		getWindow().setAttributes((android.view.WindowManager.LayoutParams) params);
+		getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 		Log.d("jiho", "LoginActivity Oncreage : "+Preference.GCM_REGISTRATION_ID);
 		init();
 		regEvent();

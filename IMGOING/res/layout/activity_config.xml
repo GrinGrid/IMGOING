@@ -76,7 +76,8 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:orientation="horizontal"
-                android:padding="5dp" >
+                android:padding="5dp" 
+                android:visibility="gone">
 
                 <TextView
                     style="@style/ConfigContent"
@@ -101,7 +102,8 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:orientation="horizontal"
-                android:padding="5dp" >
+                android:padding="5dp" 
+                android:visibility="gone">
 
                 <TextView
                     style="@style/ConfigContent"
@@ -163,8 +165,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:paddingTop="5dp"
-                    android:paddingBottom="5dp"
                     android:paddingLeft="20dp"
                     android:paddingRight="5dp" >
                     
@@ -187,8 +187,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:paddingTop="5dp"
-                    android:paddingBottom="5dp"
                     android:paddingLeft="20dp"
                     android:paddingRight="5dp" >
                     
@@ -211,8 +209,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:paddingTop="5dp"
-                    android:paddingBottom="5dp"
                     android:paddingLeft="20dp"
                     android:paddingRight="5dp" >
                     
@@ -233,6 +229,26 @@
                 
             </LinearLayout>
             <!-- 알림 설정 끝 -->
+
+			<!-- 로그아웃 시작 -->
+            <LinearLayout
+                android:id="@+id/id_ll_logout"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:padding="5dp" >
+
+                <TextView
+                    style="@style/ConfigContent"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:text="@string/config_logout" />
+          
+            </LinearLayout>
+            <!-- 로그아웃 끝 -->
 
         </LinearLayout>
     </LinearLayout>

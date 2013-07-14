@@ -24,19 +24,31 @@ import net.gringrid.imgoing.util.Util;
 import net.gringrid.imgoing.vo.UserVO;
 import android.app.Activity;
 import android.content.SharedPreferences;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnFocusChangeListener;
+import android.view.Window;
+import android.view.WindowManager.LayoutParams;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
-public class JoinActivity extends Base implements OnClickListener{
+public class JoinActivity extends Base implements OnClickListener, OnFocusChangeListener{
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_join);		
-		this.setTitle(R.string.join_title);
+		
+		
+		LayoutParams params = getWindow().getAttributes(); 
+		params.height = LayoutParams.WRAP_CONTENT;
+		params.width  = LayoutParams.FILL_PARENT;
+		getWindow().setAttributes((android.view.WindowManager.LayoutParams) params);
+		getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 		
 		Log.d("jiho", "JoinActivity GCM RegID : "+Preference.GCM_REGISTRATION_ID);
 		
@@ -46,18 +58,6 @@ public class JoinActivity extends Base implements OnClickListener{
 	}
 
 	private void init() {
-		
-		
-		EditText id_et_email = (EditText)findViewById(R.id.id_et_email);
-		EditText id_et_phone_number = (EditText)findViewById(R.id.id_et_phone_number);
-		EditText id_et_password = (EditText)findViewById(R.id.id_et_password);
-		EditText id_et_repassword = (EditText)findViewById(R.id.id_et_repassword);
-	
-		id_et_email.setText("nisclan@hotmail.com");
-		id_et_phone_number.setText("01023420928");
-		id_et_password.setText("password");
-		id_et_repassword.setText("password");
-		
 		
 	}
 
@@ -70,12 +70,30 @@ public class JoinActivity extends Base implements OnClickListener{
 		view = findViewById(R.id.id_bt_cancel);
 		if ( view != null ){
 			view.setOnClickListener(this);
-		}
-						
+		}				
 		view = findViewById(R.id.id_et_phone_number);
 		if ( view != null ){			
 			((EditText)view).setText(Util.getMyPhoneNymber(this));
 		}
+		
+		view = findViewById(R.id.id_et_email);
+		if ( view != null ){
+			view.setOnFocusChangeListener(this);
+		}
+		view = findViewById(R.id.id_et_phone_number);
+		if ( view != null ){
+			view.setOnFocusChangeListener(this);
+		}
+		view = findViewById(R.id.id_et_password);
+		if ( view != null ){
+			view.setOnFocusChangeListener(this);
+		}
+		view = findViewById(R.id.id_et_repassword);
+		if ( view != null ){
+			view.setOnFocusChangeListener(this);
+		}
+		
+		
 	}
 
 
@@ -231,4 +249,29 @@ public class JoinActivity extends Base implements OnClickListener{
         return jsonObject;
     }
 
+	
+	
+	@Override
+	public void onFocusChange(View v, boolean hasFocus) {
+		
+		TextView id_tv_input_info = (TextView)findViewById(R.id.id_tv_input_info);
+		
+		switch ( v.getId() ) {
+		case R.id.id_et_email:
+			id_tv_input_info.setText(R.string.email_input_info);
+			break;
+		case R.id.id_et_phone_number:
+			id_tv_input_info.setText(R.string.phone_number_input_info);
+			break;
+		case R.id.id_et_password:
+			id_tv_input_info.setText(R.string.password_input_info);
+			break;
+		case R.id.id_et_repassword:
+			id_tv_input_info.setText(R.string.repassword_input_info);
+			break;
+
+		default:
+			break;
+		}
+	}
 }

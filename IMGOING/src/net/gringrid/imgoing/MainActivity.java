@@ -48,6 +48,7 @@ public class MainActivity extends Base implements OnClickListener {
 	
 	@Override
 	protected void onResume() {
+		inflateLoginInfo();
 		super.onResume();
 	}
 
@@ -59,8 +60,6 @@ public class MainActivity extends Base implements OnClickListener {
     	if ( dbHelper == null ){
     		Log.e("jiho", "DB Error!!");
     	}
-    	
-    	inflateLoginInfo();
 	}
 	
 	private void regEvent() {

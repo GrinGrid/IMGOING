@@ -1,77 +1,286 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".MainActivity" >
+<?xml version="1.0" encoding="utf-8"?>
 
-    <TextView
-        android:id="@+id/id_tv_email"
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
-	    android:text="Email : ID로 사용 할 메일주소를 입력합니다."/>
-	
+<!-- 
+	회원가입
+	date 2013/07/10
+	version 1.0.0
+	since 1.0.0
+-->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" 
+    android:background="#00000000"
+    android:padding="10dp"
+
+    >
     
-	<EditText
-	    android:id="@+id/id_et_email" 
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
-	    android:inputType="textEmailAddress"
-	    android:layout_below="@id/id_tv_email" 
-	    android:hint="예) gringridsoft@gmail.com"/>
-	
-	<TextView
-        android:id="@+id/id_tv_phone_number"
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
-	    android:layout_below="@id/id_et_email"
-	    android:text="전화번호 : 상대방이 위치를 전송할 때 주소록에 저장된 전화번호를 입력합니다. "/>
-	
-	<EditText
-	    android:id="@+id/id_et_phone_number"
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
-	    android:layout_below="@id/id_tv_phone_number"
-	    android:inputType="number" 
-	    android:hint="예) 01012345678"/>
-	
-	<EditText 
-	    android:id="@+id/id_et_password"
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
-	    android:layout_below="@id/id_et_phone_number"
-	    android:inputType="textPassword" 
-	    android:hint="비밀번호 4~8 자리"/>
-	
-	<EditText
-	    android:id="@+id/id_et_repassword"
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
-	    android:layout_below="@id/id_et_password"
-	    android:inputType="textPassword"
-	    android:hint="비밀번호 확인 4~8 자리"/>
-	
-	<LinearLayout 
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
-	    android:layout_below="@id/id_et_repassword"
-	    >
-		<Button
-		    android:id="@+id/id_bt_submit"
-		    android:layout_width="0dp"
-		    android:layout_height="wrap_content"
-		    android:layout_weight="1"
-		    android:text="@string/join" />
-		
-		<Button
-		    android:id="@+id/id_bt_cancel"
-		    android:layout_width="0dp"
-		    android:layout_height="wrap_content"
-		    android:layout_weight="1"
-		    android:text="@string/cancel" />    
+    <!-- 타이틀바 시작 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+        <ImageView
+		 	android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:background="@drawable/popup_top_left"
+			android:layout_gravity="center_vertical"
+			/>
+		<TextView
+		    android:id="@+id/id_tv_title"
+		 	android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:background="@drawable/popup_top_middle"
+			android:layout_gravity="center_vertical"
+			android:text="IMGOING 사용자등록"
+			android:textSize="16dp"
+			android:textStyle="bold"
+			android:gravity="center"
+			style="@style/PopupTitle"
+			/>
+		<ImageView
+			android:id="@+id/id_iv_deselect_right"
+		 	android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:background="@drawable/popup_top_right"
+			android:layout_gravity="center_vertical"
+			/>    	
 	</LinearLayout>
+    <!-- 타이틀바 끝 -->
+    
+    
+    <!-- Body start -->
+    <LinearLayout 
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:background="@drawable/push_popup_bg"
+        >
+	    
+	    
+	    <LinearLayout
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:orientation="horizontal" 
+	        android:paddingTop="5dp"
+	        android:focusable="true"
+        	android:focusableInTouchMode="true"
+            >
+	    	<TextView
+	    	    android:layout_width="0dp"
+	    	    android:layout_height="wrap_content"
+	    	    android:layout_weight="3"
+	    	    android:gravity="right"
+	    	    android:paddingRight="5dp"
+	    	    android:textColor="@color/color_black"
+	    	    android:text="@string/email" 
+	    	    />    
+			<EditText
+			    android:id="@+id/id_et_email" 
+			    android:layout_width="0dp"
+	    	    android:layout_height="wrap_content"
+	    	    android:layout_weight="7"
+	    	    android:inputType="textEmailAddress"
+			    style="@style/EditTextStyle"
+			    android:layout_marginRight="5dp"
+			    android:background="@drawable/editbox9_on"
+			    android:hint="@string/email_hint"/>
+	    </LinearLayout>
+	    
+	    <LinearLayout
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:orientation="horizontal" 
+	        android:paddingTop="5dp"
+	        >
+	    	<TextView
+	    	    android:layout_width="0dp"
+	    	    android:layout_height="wrap_content"
+	    	    android:layout_weight="3"
+	    	    android:gravity="right"
+	    	    android:paddingRight="5dp"
+	    	    android:textColor="@color/color_black"
+	    	    android:text="@string/phone_number" 
+	    	    />    
+			<EditText
+			    android:id="@+id/id_et_phone_number" 
+			    android:layout_width="0dp"
+	    	    android:layout_height="wrap_content"
+	    	    android:layout_weight="7"
+	    	    android:inputType="number"
+			    style="@style/EditTextStyle"
+			    android:layout_marginRight="5dp"
+			    android:background="@drawable/editbox9_on"
+			    android:hint="@string/phone_number_hint"/>
+	    </LinearLayout>
+	    
+	    
+	    <LinearLayout
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:orientation="horizontal" 
+	        android:paddingTop="5dp"
+	        >
+	    	<TextView
+	    	    android:layout_width="0dp"
+	    	    android:layout_height="wrap_content"
+	    	    android:layout_weight="3"
+	    	    android:gravity="right"
+	    	    android:paddingRight="5dp"
+	    	    android:textColor="@color/color_black"
+	    	    android:text="@string/password" 
+	    	    />    
+			<EditText
+			    android:id="@+id/id_et_password" 
+			    android:layout_width="0dp"
+	    	    android:layout_height="wrap_content"
+	    	    android:layout_weight="7"
+	    	    android:inputType="textPassword"
+			    style="@style/EditTextStyle"
+			    android:layout_marginRight="5dp"
+			    android:background="@drawable/editbox9_on"
+			    android:hint="@string/password_hint"/>
+	    </LinearLayout>
+	    
+	    
+	    <LinearLayout
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:orientation="horizontal" 
+	        android:paddingTop="5dp"
+	        >
+	    	<TextView
+	    	    android:layout_width="0dp"
+	    	    android:layout_height="wrap_content"
+	    	    android:layout_weight="3"
+	    	    android:gravity="right"
+	    	    android:paddingRight="5dp"
+	    	    android:textColor="@color/color_black"
+	    	    android:text="@string/repassword"
+	    	    />    
+			<EditText
+			    android:id="@+id/id_et_repassword" 
+			    android:layout_width="0dp"
+	    	    android:layout_height="wrap_content"
+	    	    android:layout_weight="7"
+	    	    android:inputType="textPassword"
+			    style="@style/EditTextStyle"
+			    android:layout_marginRight="5dp"
+			    android:background="@drawable/editbox9_on"
+			    android:hint="@string/repassword_hint"/>
+	    </LinearLayout>
+	    
+	    <TextView
+	        android:id="@+id/id_tv_input_info"
+		    android:layout_width="match_parent"
+		    android:layout_height="wrap_content"
+		    android:padding="10dp"
+		    android:gravity="center"
+		    style="@style/EditTextInfoStyle"/>
+	    
+		
+		<!-- Bottom button start -->
+		<LinearLayout 
+		    android:layout_width="match_parent"
+		    android:layout_height="wrap_content"
+		
+		    >
+			
+		    <ImageView
+				android:id="@+id/id_iv_deselect_left"
+			 	android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:background="@drawable/btn_deselect_left"
+				android:layout_gravity="center_vertical"
+				android:layout_marginLeft="10px"
+				/>
+			<TextView
+				android:id="@+id/id_bt_submit"
+			 	android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:layout_weight="1"
+				android:background="@drawable/btn_deselect_middle"
+				android:layout_gravity="center_vertical"
+				android:text="@string/join"
+				android:gravity="center"
+				style="@style/PopupTitle"
+				/>
+			<ImageView
+				android:id="@+id/id_iv_deselect_right"
+			 	android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:background="@drawable/btn_deselect_right"
+				android:layout_marginRight="10px"
+				android:layout_gravity="center_vertical"
+				/>
+			
+			<ImageView
+				android:id="@+id/id_iv_deselect_left"
+			 	android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:background="@drawable/btn_deselect_left"
+				android:layout_gravity="center_vertical"
+				/>
+			<TextView
+				android:id="@+id/id_bt_cancel"
+			 	android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:layout_weight="1"
+				android:background="@drawable/btn_deselect_middle"
+				android:layout_gravity="center_vertical"
+				android:text="@string/cancel"
+				android:gravity="center"
+				style="@style/PopupTitle"
+				/>
+			<ImageView
+				android:id="@+id/id_iv_deselect_right"
+			 	android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:background="@drawable/btn_deselect_right"
+				android:layout_marginRight="10px"
+				android:layout_gravity="center_vertical"
+				/>
+					    
+		</LinearLayout>
+		<!-- Bottom button end -->
+		
+		
+	</LinearLayout>
+    <!-- Body end -->
+    
+    
 	
-</RelativeLayout>
+	<!-- 하단 테두리 시작 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+        <ImageView
+		 	android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:background="@drawable/popup_bottom_left"
+			android:layout_gravity="center_vertical"
+			/>
+		<ImageView		    
+		 	android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:background="@drawable/popup_bottom_middle"
+			android:layout_gravity="center_vertical"
+			android:gravity="center"			
+			/>
+		<ImageView
+			android:id="@+id/id_iv_deselect_right"
+		 	android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:background="@drawable/popup_bottom_right"
+			android:layout_gravity="center_vertical"
+			/>         
+    </LinearLayout>
+    <!-- 하단 테두리 끝 -->
+
+		
+</LinearLayout>

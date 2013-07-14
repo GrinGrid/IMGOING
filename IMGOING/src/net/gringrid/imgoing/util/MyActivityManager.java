@@ -44,7 +44,7 @@ public class MyActivityManager {
 	
 	public static boolean historyIsEmpty(){
 		boolean result = false;
-		if ( ACTIVITY_HISTORY.size() == 0 ){
+		if ( ACTIVITY_HISTORY.size() == 0 || ACTIVITY_HISTORY.isEmpty() ){
 			result = true;
 		}
 		return result;

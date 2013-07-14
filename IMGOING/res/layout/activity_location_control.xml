@@ -99,7 +99,10 @@
 					    android:layout_width="match_parent"
 					    android:layout_height="match_parent"
 					    android:layout_marginLeft="5dp"
+					    android:textSize="12sp"
+					    android:textColor="#333333"
 					    android:background="#00000000"
+					    android:hint="초성검색"
 					    android:text="" />
                     
                     <ImageView
@@ -409,6 +412,7 @@
          	android:gravity="center"
             >
             <TextView
+                android:id="@+id/id_tv_sending_message"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"

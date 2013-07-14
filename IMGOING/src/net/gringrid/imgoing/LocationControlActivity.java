@@ -38,6 +38,7 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.provider.ContactsContract.PhoneLookup;
+import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.CursorLoader;
@@ -230,6 +231,7 @@ public class LocationControlActivity extends Base implements 	OnClickListener,
 			id_lv_contacts.setEnabled(false);
 			findViewById(R.id.id_iv_number_up).setEnabled(false);
 			findViewById(R.id.id_iv_number_down).setEnabled(false);
+			setSendingMessage();
 			playAnimation();
 		}else{
 			beforeView.setVisibility(View.VISIBLE);
@@ -285,49 +287,62 @@ public class LocationControlActivity extends Base implements 	OnClickListener,
 		mViewList.add(foot11);
 		mViewList.add(foot12);
 		mCurrentFootPrintIndex = 0;
-		playFootPrintAnimation();
+		//playFootPrintAnimation();
+		playFootAnimation();
 		
 	}
 	
-	private void playFootPrintAnimation(){
-
-		if ( mCurrentFootPrintIndex > mViewList.size()-1 ){
-			mCurrentFootPrintIndex = 0;
+	private void setFootInvisivle(){
+		for ( View view : mViewList ){
+			view.setVisibility(View.INVISIBLE);
 		}
+	}
+	
+	
+	private void playFootAnimation(){
+		int footCount = mViewList.size();
 		
-		final View finalView = mViewList.get(mCurrentFootPrintIndex++); 
-		
-		Animation alphaHideAnimation = new AlphaAnimation(1, 0);
-		alphaHideAnimation.setDuration(600);
-		
-		alphaHideAnimation.setAnimationListener(new AnimationListener() {
+		for ( int i=0; i<footCount; i++ ){
+			AnimationSet animationSet = new AnimationSet(true);
 			
-			@Override
-			public void onAnimationStart(Animation animation) {
-				// TODO Auto-generated method stub
-				finalView.setVisibility(View.VISIBLE);
-			}
+			Animation alphaFadeInAnimation = new AlphaAnimation(0, 1);
+			alphaFadeInAnimation.setDuration(600);
+			alphaFadeInAnimation.setStartOffset((i+1)*600);
 			
-			@Override
-			public void onAnimationRepeat(Animation animation) {
-				// TODO Auto-generated method stub
+			Animation alphaFadeOutAnimation = new AlphaAnimation(1, 0);
+			alphaFadeOutAnimation.setDuration(3000);
+			alphaFadeOutAnimation.setStartOffset((i+1)*600+600);
+			
+			animationSet.addAnimation(alphaFadeInAnimation);
+			animationSet.addAnimation(alphaFadeOutAnimation);
+			
+			final View foot = mViewList.get(i);
+			final int finalIndex = i;
+			animationSet.setAnimationListener(new AnimationListener() {
 				
-			}
-			
-			@Override
-			public void onAnimationEnd(Animation animation) {
-				// TODO Auto-generated method stub
-				finalView.setVisibility(View.INVISIBLE);
-				if ( mIsStarted == true ){
-					playFootPrintAnimation();
+				@Override
+				public void onAnimationStart(Animation animation) {
+					foot.setVisibility(View.VISIBLE);
 				}
 				
-			}
-		});
-		
-		finalView.startAnimation(alphaHideAnimation);
-		
+				@Override
+				public void onAnimationRepeat(Animation animation) {
+					
+				}
+				
+				@Override
+				public void onAnimationEnd(Animation animation) {
+					foot.setVisibility(View.INVISIBLE);
+					if ( finalIndex == mViewList.size()-1 ){
+						setFootInvisivle();
+						playFootAnimation();
+					}
+				}
+			});
+			foot.startAnimation(animationSet);
+		}
 	}
+	
 	
 	private void clearAllAnimation(){
 		Log.d("jiho", "clearAllAnimation");
@@ -375,10 +390,10 @@ public class LocationControlActivity extends Base implements 	OnClickListener,
 			}
 			
 			// GPS체크
-			LocationManager locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+			String provider = Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
 			
-			if( locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) == false ) {
-				AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		    if(!provider.contains("gps")){
+		    	AlertDialog.Builder builder = new AlertDialog.Builder(this);
 				builder.setTitle(R.string.alert_title);
 				builder.setMessage("GPS 기능을 활성화 시키면 보다 정확한 위치정보를 얻을 수 있습니다. GPS기능을 설정 하시겠습니까?");
 				builder.setPositiveButton(R.string.alert_confirm,
@@ -391,8 +406,8 @@ public class LocationControlActivity extends Base implements 	OnClickListener,
 						});
 				builder.setNegativeButton("취소", null);
 				builder.show();
-			}
-			
+		    }
+
 			// 네트워크 체크
 			ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 	        NetworkInfo ni = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
@@ -443,7 +458,7 @@ public class LocationControlActivity extends Base implements 	OnClickListener,
 			resultIntent.putExtra("IS_FROM_NOTIFICATION", true);
 			// 앱 실행하고 다른 메뉴로 이동후 noti 클릭하면 새로 앱을 띄움
 			//resultIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-			resultIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			resultIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP);
 			
 			PendingIntent notifyIntent =
 			        PendingIntent.getActivity(
@@ -590,6 +605,7 @@ public class LocationControlActivity extends Base implements 	OnClickListener,
 	    		receiverNumberId = numberId;
 	    		Log.d("jiho", "receiverPhoneNumber : "+receiverPhoneNumber);
 	    		receiverName = contact.name;
+	    		break;
 	    	}
 	    }
 	    phoneCursor.close();
@@ -609,22 +625,27 @@ public class LocationControlActivity extends Base implements 	OnClickListener,
 	        if ( resultData == null ){
 	        	showAlert(getResources().getString(R.string.alert_network_disable));
 	        	receiverPhoneNumber = null;
+	        	receiverName = null;
+	        	id_tv_send_message.setText( makeLocationAlertMessage() );
 	        	return;
 	        }
 			// result_cd 가 0000 이 아니면 에러처리
 			try {
 				if ( resultData.getString("result_cd").equals(Constants.SUCCESS) == false ){
 					receiverPhoneNumber = null;
+					receiverName = null;
 					Toast.makeText(this, resultData.getString("result_msg"), Toast.LENGTH_SHORT).show();
 				}else{
 					// 안내메시지 세팅
-			    	id_tv_send_message.setText( makeLocationAlertMessage() );
+			    	//id_tv_send_message.setText( makeLocationAlertMessage() );
+					
 				}
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 	    }
+	    id_tv_send_message.setText( makeLocationAlertMessage() );
 	}
 	
 	private boolean matchString(String value, String search) {
@@ -708,6 +729,22 @@ public class LocationControlActivity extends Base implements 	OnClickListener,
 		message += receiver+" "+getResources().getString(R.string.location_alert_second);
 		
 		return message;
+	}
+	
+	/**
+	 * 
+	 */
+	private void setSendingMessage(){
+		SharedPreferences settings = getSharedPreferences(Constants.PREFS_NAME, 0);
+		TextView id_tv_sendign_message = (TextView)findViewById(R.id.id_tv_sending_message);
+		String message = "";
+		String interval = Integer.toString( settings.getInt("INTERVAL", 0) );
+		String receiver = settings.getString("RECEIVER", null);
+		
+		message += interval+" "+getResources().getString(R.string.location_sending_first);
+		message += " "+receiver+" "+getResources().getString(R.string.location_sending_second);
+		
+		id_tv_sendign_message.setText(message);
 	}
 
 

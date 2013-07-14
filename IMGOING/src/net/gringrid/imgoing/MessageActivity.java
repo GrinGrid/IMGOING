@@ -65,7 +65,7 @@ public class MessageActivity extends Base implements OnClickListener, OnItemClic
 		messageList = (ListView)findViewById(R.id.id_lv_message);
 		
 		if ( messageList != null ){
-			messageList.setOnItemClickListener(this);
+			//messageList.setOnItemClickListener(this);
 			messageListAdapter = new MessageListAdapter(this);
 			messageList.setAdapter(messageListAdapter);
 		}

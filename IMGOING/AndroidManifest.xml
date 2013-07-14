@@ -43,6 +43,7 @@
 	<!-- 네트워크 상태 접근 권한. -->
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 	<uses-permission android:name="android.permission.WAKE_LOCK"/>
+	<uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES"/>
     
     
     <application
@@ -93,11 +94,19 @@
 			android:theme="@android:style/Theme.Dialog">
 		</activity> 
 		    
-		<activity android:name="MessageActivity"></activity>
+		<activity 
+		    android:name="MessageActivity"
+		    android:launchMode="singleTop"
+		    >
+		    
+		</activity>
 		<activity android:name="ConfigActivity"></activity>
 		
 		<!-- 위치전송 화면 -->
-		<activity android:name="LocationControlActivity">
+		<activity 
+		    android:name="LocationControlActivity"
+		    android:windowSoftInputMode="adjustPan">
+		    >
 		</activity>
 		
         <meta-data

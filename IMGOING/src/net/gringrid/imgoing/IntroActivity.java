@@ -1,5 +1,6 @@
 package net.gringrid.imgoing;
 
+import java.util.List;
 import java.util.Vector;
 
 import com.google.android.gcm.GCMRegistrar;
@@ -10,9 +11,13 @@ import net.gringrid.imgoing.util.Util;
 import net.gringrid.imgoing.vo.ContactsVO;
 import net.gringrid.imgoing.vo.MessageVO;
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -36,10 +41,13 @@ public class IntroActivity extends Activity{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_intro);		
 
+		
 		mProgress = (ProgressBar) findViewById(R.id.id_pb_loading);
 		mProgressText = (TextView) findViewById(R.id.id_tv_pb_text);
 		
+		// 상대방에게 위치전송 시작 후 notification을 통해 실행되었을때
 		boolean isFromNotification = getIntent().getBooleanExtra("IS_FROM_NOTIFICATION", false);
+		// 상대방으로부터 위치가 전송되어  notification을 통해 실행되었을때
 		boolean isFromReceiveLocation = getIntent().getBooleanExtra("IS_FROM_RECEIVE_LOCATION", false);
 		
 		Log.d("jiho", "isFromNotification : "+isFromNotification);
