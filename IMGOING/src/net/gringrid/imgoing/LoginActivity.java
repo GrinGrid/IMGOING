@@ -10,14 +10,12 @@ import org.json.JSONObject;
 
 import net.gringrid.imgoing.util.Util;
 import net.gringrid.imgoing.vo.UserVO;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.View.OnClickListener;
@@ -38,19 +36,12 @@ public class LoginActivity extends Base implements OnClickListener{
 		params.width  = LayoutParams.FILL_PARENT;
 		getWindow().setAttributes((android.view.WindowManager.LayoutParams) params);
 		getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-		Log.d("jiho", "LoginActivity Oncreage : "+Preference.GCM_REGISTRATION_ID);
 		init();
 		regEvent();
 		
 	}
 
 	private void init() {
-		
-		EditText id_et_email = (EditText)findViewById(R.id.id_et_email);
-		EditText id_et_password = (EditText)findViewById(R.id.id_et_password);
-		
-		id_et_email.setText("nisclan@hotmail.com");
-		id_et_password.setText("password");
 	}
 
 	
@@ -103,14 +94,6 @@ public class LoginActivity extends Base implements OnClickListener{
 				return;
 			}
 			
-        	
-			Log.d("jiho", "email : "+user.email);
-			Log.d("jiho", "password : "+user.password);
-			Log.d("jiho", "GCM id : "+Preference.GCM_REGISTRATION_ID);
-			
-			String sharedEmail = settings.getString("EMAIL", "EMAIL EMPTY");
-			Log.d("jiho", "sharedEmail : "+sharedEmail);
-			
 			String url = "http://choijiho.com/gringrid/imgoing/imgoing.php";
 	        List < NameValuePair > inputData = new ArrayList < NameValuePair > (4);
 	        inputData.add(new BasicNameValuePair("mode","LOGIN"));
@@ -143,10 +126,6 @@ public class LoginActivity extends Base implements OnClickListener{
 						user.phone_number = serverPhoneNumber;
 						Preference.PHONE_NUMBER = serverPhoneNumber;
 					}
-					
-					Log.d("jiho", "LOCAL GCM ID : "+user.gcm_reg_id);
-					Log.d("jiho", "serverGcmRegId : "+serverGcmRegId);
-					Log.d("jiho", "user.phone_number : "+user.phone_number);
 					
 					// 스마트폰 GCM ID 와 서버 GCM ID 가 다른경우
 					if ( user.gcm_reg_id != null && user.gcm_reg_id.equals(serverGcmRegId) == false ){
@@ -201,8 +180,6 @@ public class LoginActivity extends Base implements OnClickListener{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
-			//String result_cd = resultData.getString("result_cd");
 			
 			break;
 		

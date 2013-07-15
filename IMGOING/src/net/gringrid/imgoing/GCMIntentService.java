@@ -25,6 +25,8 @@ import com.google.android.gcm.GCMBaseIntentService;
 
 public class GCMIntentService extends GCMBaseIntentService{
 	
+	private static final boolean DEBUG = false;
+	
 	String[] mSenderIds = null;
 	
 	public GCMIntentService() {
@@ -34,29 +36,21 @@ public class GCMIntentService extends GCMBaseIntentService{
 	// registration or unregistration 에러가 날 경우 호출
 	@Override
 	protected void onError(Context context, String errorId) {
-		Log.d("jiho", "errorId : "+errorId);
+
 	}
 
 	@Override
 	protected void onMessage(Context context, Intent intent) {
 		
-		//Vibrator vi = (Vibrator)getSystemService(Context.VIBRATOR_SERVICE);
-	    //vi.vibrate(500);
-		
 	    Bundle bundle = intent.getExtras();
-		 
-		Iterator <String> iterator = bundle.keySet().iterator();
-		while ( iterator.hasNext() ){
-			String key = iterator.next();
-			String value = bundle.get(key).toString();
-			Log.d("jiho", "key : "+key+", value : "+value);
-		}
 		
-		// 장소명을 가져오기 위해
-		double latitude = Double.parseDouble(bundle.get("latitude").toString());
-		double longitude = Double.parseDouble(bundle.get("longitude").toString());
-		LocationUtil locationUtil = LocationUtil.getInstance(context);
-		
+	    if ( DEBUG ){
+			Iterator <String> iterator = bundle.keySet().iterator();
+			while ( iterator.hasNext() ){
+				String key = iterator.next();
+				String value = bundle.get(key).toString();
+			}
+	    }
 		
 		// DB에 저장
 		MessageDao messageDAO = new MessageDao(context);
@@ -76,8 +70,6 @@ public class GCMIntentService extends GCMBaseIntentService{
 		resultCd = messageDAO.insert(messageVO);
 		
 		if ( resultCd == 0 ){
-			Log.d("jiho", "insert success!");
-			// TODO Notification
 			
 			Intent resultIntent = new Intent(this, IntroActivity.class);
 			resultIntent.putExtra("IS_FROM_RECEIVE_LOCATION", true);
@@ -129,16 +121,13 @@ public class GCMIntentService extends GCMBaseIntentService{
 			}
 			
 			int notificationID = Integer.parseInt(messageVO.start_time.substring(messageVO.start_time.length()-8).replace(":", ""));
-			Log.d("jiho", "notificationID : "+notificationID);
 			
 			NotificationManager notificationManager = null;
 			notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 			notificationManager.notify(notificationID, notification);
-			
-			
-			
+
 		}else{
-			Log.d("jiho", "[ERROR] insert fail!");
+			
 		}
 		
 		
@@ -147,9 +136,7 @@ public class GCMIntentService extends GCMBaseIntentService{
 
 	@Override
 	protected void onRegistered(Context arg0, String regId) {
-		Preference.GCM_REGISTRATION_ID = regId;
-		Log.d("jiho", "onRegistered - regId : "+regId);
-		
+		Preference.GCM_REGISTRATION_ID = regId;		
 	}
 
 	@Override

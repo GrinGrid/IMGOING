@@ -22,7 +22,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.location.Location;
@@ -74,8 +73,7 @@ public class MapActivity extends FragmentActivity implements
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_map);		
-		Log.d("jiho", "MapActivity onCreate");
+		setContentView(R.layout.activity_map);
 		init();
 		regEvent();
 		
@@ -216,7 +214,6 @@ public class MapActivity extends FragmentActivity implements
     			latitude = data.latitude;
     			longitude = data.longitude;    			
     			LatLng latLng = new LatLng(Double.parseDouble(latitude), Double.parseDouble(longitude));
-    			//Log.d("jiho", "["+data.provider+"] ["+latitude+"] ["+longitude+"]");
     			rectOptions.add( latLng );
     			rectOptions.color(R.color.imgoing_sky);
     			
@@ -322,8 +319,6 @@ public class MapActivity extends FragmentActivity implements
 			    mLastMarker.showInfoWindow();
 			}
 			
-		}else{
-			Log.d("jiho", "onLocationChanged location is null");
 		}
 	}
 
@@ -336,13 +331,6 @@ public class MapActivity extends FragmentActivity implements
 	@Override
 	public void onConnected(Bundle arg0) {
 		mLocation = mLocationClient.getLastLocation();
-		if ( mLocation !=null ){
-			//Log.d("jiho", "Latitude : "+mLocation.getLatitude());
-			//Log.d("jiho", "Longitude : "+mLocation.getLongitude());
-		}else{
-			Log.d("jiho", "onConnected location is null");
-			
-		}
 		mLocationClient.requestLocationUpdates(mLocationRequest, this);
 		
 		
@@ -351,7 +339,6 @@ public class MapActivity extends FragmentActivity implements
 	@Override
 	public void onDisconnected() {
 		// TODO Auto-generated method stub
-		
 	}
 
 }

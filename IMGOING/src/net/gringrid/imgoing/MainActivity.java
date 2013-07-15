@@ -1,24 +1,17 @@
 package net.gringrid.imgoing;
 
 import net.gringrid.imgoing.location.ResponseLocationServiceReceiver;
-import net.gringrid.imgoing.location.SendCurrentLocationService;
 import net.gringrid.imgoing.util.DBHelper;
 
-import com.google.android.gcm.GCMRegistrar;
 
 import android.os.Bundle;
-import android.app.Activity;
-import android.app.ActivityManager;
-import android.app.ActivityManager.RunningServiceInfo;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.TextView;
 
 public class MainActivity extends Base implements OnClickListener {
@@ -26,7 +19,6 @@ public class MainActivity extends Base implements OnClickListener {
 	private final int REQUEST_LOGIN = 0;
 	private final int REQUEST_JOIN = 1;
 	
-	private Intent mCurrentLocationServiceIntent = null;
 	// 앱 실행시 DB instance 생성
 	private DBHelper dbHelper = null;
 	
@@ -35,7 +27,6 @@ public class MainActivity extends Base implements OnClickListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		Log.d("jiho", "MainActivity Oncreage : "+Preference.GCM_REGISTRATION_ID);
 		init();
 		regEvent();
 		setBroadCastReceiver();
@@ -54,12 +45,8 @@ public class MainActivity extends Base implements OnClickListener {
 
 	// 초기화
 	public void init(){
-		
     	// DB확인
     	dbHelper = DBHelper.getInstance(this);
-    	if ( dbHelper == null ){
-    		Log.e("jiho", "DB Error!!");
-    	}
 	}
 	
 	private void regEvent() {
@@ -163,8 +150,6 @@ public class MainActivity extends Base implements OnClickListener {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		
-		Log.d("jiho", "requestCode : "+requestCode+", resultCode : "+resultCode);
-		
 		switch (requestCode) {
 		case REQUEST_JOIN:
 			inflateLoginInfo();
@@ -221,21 +206,7 @@ public class MainActivity extends Base implements OnClickListener {
 			intent = new Intent(this, LoginActivity.class);
 			startActivityForResult(intent, REQUEST_LOGIN);
 			break;
-		
-		/*	
-		case R.id.id_bt_logout:
-			SharedPreferences settings = getSharedPreferences(Constants.PREFS_NAME, 0);
-			SharedPreferences.Editor editor = settings.edit();
-			editor.putBoolean("AUTO_LOGIN", false);
-			editor.putString("EMAIL", null);
-			editor.putString("PHONE_NUMBER", null);
-			editor.putString("GCM_REG_ID", null);
-			editor.commit();
-			showAlert("로그아웃 되었습니다.");
-			inflateLoginInfo();
-			break;
-		*/
-			
+	
 		}
 	}
 }

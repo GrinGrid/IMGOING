@@ -6,7 +6,6 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -22,11 +21,9 @@ import org.json.JSONObject;
 
 import net.gringrid.imgoing.util.Util;
 import net.gringrid.imgoing.vo.UserVO;
-import android.app.Activity;
 import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
@@ -49,8 +46,6 @@ public class JoinActivity extends Base implements OnClickListener, OnFocusChange
 		params.width  = LayoutParams.FILL_PARENT;
 		getWindow().setAttributes((android.view.WindowManager.LayoutParams) params);
 		getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-		
-		Log.d("jiho", "JoinActivity GCM RegID : "+Preference.GCM_REGISTRATION_ID);
 		
 		init();
 		regEvent();
@@ -147,13 +142,6 @@ public class JoinActivity extends Base implements OnClickListener, OnFocusChange
 				return;
 			}
 			
-			Log.d("jiho", "email : "+user.email);
-			Log.d("jiho", "phone_number : "+user.phone_number);
-			Log.d("jiho", "password : "+user.password);
-			Log.d("jiho", "repassword : "+user.repassword);
-			
-			String sharedEmail = settings.getString("EMAIL", "EMAIL EMPTY");
-			Log.d("jiho", "sharedEmail : "+sharedEmail);
 			
 			String url = "http://choijiho.com/gringrid/imgoing/imgoing.php";
 	        List < NameValuePair > inputData = new ArrayList < NameValuePair > (4);
@@ -231,7 +219,7 @@ public class JoinActivity extends Base implements OnClickListener, OnFocusChange
             while ((b = reader.read()) != -1) {
                 stringBuilder.append((char) b);
             }
-            Log.d("jiho", "stringBuilder : "+stringBuilder);
+            
         } catch (ClientProtocolException e) {
             } catch (IOException e) {
         }
@@ -240,9 +228,7 @@ public class JoinActivity extends Base implements OnClickListener, OnFocusChange
         
         try {
         	jsonObject = new JSONObject(stringBuilder.toString());
-        	Log.d("jiho", "result_cd : "+jsonObject.getString("result_cd"));
-        	Log.d("jiho", "result_msg : "+jsonObject.getString("result_msg"));
-
+        	
         } catch (JSONException e) {
             e.printStackTrace();
         }

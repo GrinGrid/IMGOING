@@ -109,7 +109,7 @@
 			    	android:layout_height="wrap_content"
 			    	style="@style/GuideContent"
 			    	android:paddingLeft="13dp"
-			    	android:text="* 기능은 최대한 심플하게 만들려고 노력했습니다. 위치를 전송하고 위치를 수신하여 확인하고 그 과정에서 편의성을 위한 몇가지 설정이 끝입니다. "
+			    	android:text="* 기능은 최대한 심플하게 만들려고 노력했습니다. 위치를 전송하고 위치를 수신하여 확인하고 그 과정에서 편의성을 위한 몇가지 설정이 전부 입니다. "
 			        />
 			    <TextView
 			        android:layout_width="match_parent"

@@ -17,11 +17,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.TextView;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 /**
@@ -95,14 +94,13 @@ public class ConfigActivity extends Base implements OnClickListener, OnCheckedCh
 	private void init() {
 		
 		SharedPreferences settings = getApplicationContext().getSharedPreferences(Constants.PREFS_NAME, 0);
-		CheckBox id_cb_alarm_vibrate_yn = (CheckBox)findViewById(R.id.id_cb_alarm_vibrate_yn);
-		CheckBox id_cb_alarm_sound_yn = (CheckBox)findViewById(R.id.id_cb_alarm_sound_yn);
-		CheckBox id_cb_alarm_light_yn = (CheckBox)findViewById(R.id.id_cb_alarm_light_yn);
+		ImageView id_iv_alarm_vibrate_yn = (ImageView)findViewById(R.id.id_iv_alarm_vibrate_yn);
+		ImageView id_iv_alarm_sound_yn = (ImageView)findViewById(R.id.id_iv_alarm_sound_yn);
+		ImageView id_iv_alarm_light_yn = (ImageView)findViewById(R.id.id_iv_alarm_light_yn);
 		
-		id_cb_alarm_vibrate_yn.setChecked( settings.getBoolean("CONFIG_ALARM_VIBRATE_YN", true));
-		id_cb_alarm_sound_yn.setChecked( settings.getBoolean("CONFIG_ALARM_SOUND_YN", false));
-		id_cb_alarm_light_yn.setChecked( settings.getBoolean("CONFIG_ALARM_LIGHT_YN", false));
-		
+		switchButton(id_iv_alarm_vibrate_yn, settings.getBoolean("CONFIG_ALARM_VIBRATE_YN", true));
+		switchButton(id_iv_alarm_sound_yn, settings.getBoolean("CONFIG_ALARM_SOUND_YN", false));
+		switchButton(id_iv_alarm_light_yn, settings.getBoolean("CONFIG_ALARM_LIGHT_YN", false));
 		
 		mMaxReceiveCount = (Selector)findViewById(R.id.id_selector_config_max_receive);
 		if ( mMaxReceiveCount != null ){
@@ -118,6 +116,13 @@ public class ConfigActivity extends Base implements OnClickListener, OnCheckedCh
 		}
 	}
 
+	private void switchButton(ImageView image, boolean flag){
+		if ( flag == true ){
+			image.setImageDrawable(getResources().getDrawable(R.drawable.switch_on));
+		}else{
+			image.setImageDrawable(getResources().getDrawable(R.drawable.switch_off));
+		}
+	}
 
 	private void regEvent() {
 		View view = findViewById(R.id.id_selector_config_max_receive);
@@ -144,28 +149,31 @@ public class ConfigActivity extends Base implements OnClickListener, OnCheckedCh
 		if ( view != null ){
 			view.setOnClickListener(this);
 		}
+		view = findViewById(R.id.id_iv_alarm_vibrate_yn);
+		if ( view != null ){
+			view.setOnClickListener(this);
+		}
+		view = findViewById(R.id.id_iv_alarm_sound_yn);
+		if ( view != null ){
+			view.setOnClickListener(this);
+		}
+		view = findViewById(R.id.id_iv_alarm_light_yn);
+		if ( view != null ){
+			view.setOnClickListener(this);
+		}
 
 	
 		
-		CheckBox id_cb_alarm_vibrate_yn = (CheckBox)findViewById(R.id.id_cb_alarm_vibrate_yn);
-		CheckBox id_cb_alarm_sound_yn = (CheckBox)findViewById(R.id.id_cb_alarm_sound_yn);
-		CheckBox id_cb_alarm_light_yn = (CheckBox)findViewById(R.id.id_cb_alarm_light_yn);
-		
-		if ( id_cb_alarm_vibrate_yn != null ){
-			id_cb_alarm_vibrate_yn.setOnCheckedChangeListener(this);
-		}
-		if ( id_cb_alarm_sound_yn != null ){
-			id_cb_alarm_sound_yn.setOnCheckedChangeListener(this);
-		}
-		if ( id_cb_alarm_light_yn != null ){
-			id_cb_alarm_light_yn.setOnCheckedChangeListener(this);
-		}
-		
+			
 	}
 	
 	@Override
 	public void onClick(View v) {
-	
+		SharedPreferences settings = getApplicationContext().getSharedPreferences(Constants.PREFS_NAME, 0);
+		SharedPreferences.Editor editor = settings.edit();
+		boolean isOn = false;
+		
+		
 		switch( v.getId() ){
 				
 		case R.id.id_selector_config_max_receive:
@@ -212,7 +220,28 @@ public class ConfigActivity extends Base implements OnClickListener, OnCheckedCh
 			
 			
 			break;
-				
+			
+		case R.id.id_iv_alarm_vibrate_yn:
+			isOn = settings.getBoolean("CONFIG_ALARM_VIBRATE_YN", true);
+			editor.putBoolean("CONFIG_ALARM_VIBRATE_YN", !isOn);
+			switchButton((ImageView)v, !isOn);
+			editor.commit();
+			break;
+			
+		case R.id.id_iv_alarm_sound_yn:
+			isOn = settings.getBoolean("CONFIG_ALARM_SOUND_YN", false);
+			editor.putBoolean("CONFIG_ALARM_SOUND_YN", !isOn);
+			switchButton((ImageView)v, !isOn);
+			editor.commit();
+			break;
+			
+		case R.id.id_iv_alarm_light_yn:
+			isOn = settings.getBoolean("CONFIG_ALARM_LIGHT_YN", false);
+			editor.putBoolean("CONFIG_ALARM_LIGHT_YN", !isOn);
+			switchButton((ImageView)v, !isOn);
+			editor.commit();
+			break;
+			
 			
 			
 		}
@@ -307,7 +336,7 @@ public class ConfigActivity extends Base implements OnClickListener, OnCheckedCh
 
 	@Override
 	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-		
+		/*
 		SharedPreferences settings = getApplicationContext().getSharedPreferences(Constants.PREFS_NAME, 0);
 		SharedPreferences.Editor editor = settings.edit();
 				
@@ -326,7 +355,7 @@ public class ConfigActivity extends Base implements OnClickListener, OnCheckedCh
 		}
 		
 		editor.commit();
-		
+		*/
 	}
 
 }

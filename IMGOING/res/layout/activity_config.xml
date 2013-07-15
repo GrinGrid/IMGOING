@@ -166,21 +166,23 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:paddingLeft="20dp"
+                    android:paddingTop="10dp"
                     android:paddingRight="5dp" >
                     
                 	<TextView
 	                    style="@style/ConfigContent"
 	                    android:layout_width="0dp"
-	                    android:layout_height="match_parent"
+	                    android:layout_height="wrap_content"
 	                    android:layout_weight="1"
 	                    android:gravity="center_vertical"
 	                    android:text="@string/config_alarm_vibrate" />
 	
-					<CheckBox
-	                    android:id="@+id/id_cb_alarm_vibrate_yn"
-	                    style="@style/CheckBox"
-	                    android:layout_width="wrap_content"
-	                    android:layout_height="wrap_content" />    
+                	<ImageView
+                	    android:id="@+id/id_iv_alarm_vibrate_yn"
+                	    android:layout_width="wrap_content"
+                	    android:layout_height="wrap_content"
+                	    android:src="@drawable/switch_on" 
+                	    />    
                 </LinearLayout>
 
                 <LinearLayout 
@@ -188,21 +190,24 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:paddingLeft="20dp"
+                    android:paddingTop="10dp"
                     android:paddingRight="5dp" >
                     
                 	<TextView
 	                    style="@style/ConfigContent"
 	                    android:layout_width="0dp"
-	                    android:layout_height="match_parent"
+	                    android:layout_height="wrap_content"
 	                    android:layout_weight="1"
 	                    android:gravity="center_vertical"
 	                    android:text="@string/config_alarm_sound" />
-	
-					<CheckBox
-	                    android:id="@+id/id_cb_alarm_sound_yn"
-	                    style="@style/CheckBox"
-	                    android:layout_width="wrap_content"
-	                    android:layout_height="wrap_content" />    
+					
+                	<ImageView
+                	    android:id="@+id/id_iv_alarm_sound_yn"
+                	    android:layout_width="wrap_content"
+                	    android:layout_height="wrap_content"
+                	    android:src="@drawable/switch_on" 
+                	    />
+					    
                 </LinearLayout>
                 
                 <LinearLayout 
@@ -210,21 +215,24 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:paddingLeft="20dp"
+                    android:paddingTop="10dp"
                     android:paddingRight="5dp" >
                     
                 	<TextView
 	                    style="@style/ConfigContent"
 	                    android:layout_width="0dp"
-	                    android:layout_height="match_parent"
+	                    android:layout_height="wrap_content"
 	                    android:layout_weight="1"
 	                    android:gravity="center_vertical"
 	                    android:text="@string/config_alarm_light" />
 	
-					<CheckBox
-	                    android:id="@+id/id_cb_alarm_light_yn"
-	                    style="@style/CheckBox"
-	                    android:layout_width="wrap_content"
-	                    android:layout_height="wrap_content" />    
+					<ImageView
+                	    android:id="@+id/id_iv_alarm_light_yn"
+                	    android:layout_width="wrap_content"
+                	    android:layout_height="wrap_content"
+                	    android:src="@drawable/switch_on" 
+                	    />
+					    
                 </LinearLayout>
                 
             </LinearLayout>

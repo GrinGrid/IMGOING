@@ -1,32 +1,22 @@
 
 package net.gringrid.imgoing;
 
-import java.util.ArrayList;
 import java.util.Vector;
 
-import com.google.android.gcm.GCMRegistrar;
 
 import net.gringrid.imgoing.adapter.MessageListAdapter;
 import net.gringrid.imgoing.dao.MessageDao;
-import net.gringrid.imgoing.util.DBHelper;
 import net.gringrid.imgoing.util.Util;
 import net.gringrid.imgoing.vo.ContactsVO;
 import net.gringrid.imgoing.vo.MessageVO;
 
 import android.os.Bundle;
-import android.app.Activity;
-import android.content.Intent;
 import android.database.Cursor;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
 
 public class MessageActivity extends Base implements OnClickListener, OnItemClickListener{
 
@@ -65,7 +55,6 @@ public class MessageActivity extends Base implements OnClickListener, OnItemClic
 		messageList = (ListView)findViewById(R.id.id_lv_message);
 		
 		if ( messageList != null ){
-			//messageList.setOnItemClickListener(this);
 			messageListAdapter = new MessageListAdapter(this);
 			messageList.setAdapter(messageListAdapter);
 		}
@@ -121,10 +110,7 @@ public class MessageActivity extends Base implements OnClickListener, OnItemClic
 				messageVO.receiver_name = receiver_name;
 				messageVO.receiver = cursor.getString(index_receiver);
 				messageVO.start_time = cursor.getString(index_start_time);
-				messageVO.wrk_time = cursor.getString(index_last_send_time);
-				
-				Log.d("jiho", "last_send_time : "+messageVO.wrk_time);
-				
+				messageVO.wrk_time = cursor.getString(index_last_send_time);				
 				message_data.add(messageVO);
 			}while(cursor.moveToNext());
 		}
@@ -149,7 +135,6 @@ public class MessageActivity extends Base implements OnClickListener, OnItemClic
 		message_data.clear();
 		if ( cursor.moveToFirst() ) {
 			do{
-				Log.d("jiho", "cursor.getString(index_sender) : "+cursor.getString(index_sender));
 				ContactsVO contactsVO = Util.getContactsVOByPhoneNumber(getApplication(), cursor.getString(index_sender));
 				String sender_name = contactsVO==null?cursor.getString(index_sender):contactsVO.name;
 								
@@ -172,9 +157,7 @@ public class MessageActivity extends Base implements OnClickListener, OnItemClic
 	
 	@Override
 	public void onClick(View v) {
-		
-		Intent intent = null;
-		
+
 		switch(v.getId()){
 		case R.id.id_bt_send:
 			viewSendMessage();
@@ -190,7 +173,6 @@ public class MessageActivity extends Base implements OnClickListener, OnItemClic
 	
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-		Log.d("jiho", "onlcick.");
 		String receiver = message_data.get(position).receiver;
 		String start_time = message_data.get(position).start_time;
 		

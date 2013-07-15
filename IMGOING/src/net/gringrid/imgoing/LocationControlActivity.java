@@ -1,7 +1,6 @@
 package net.gringrid.imgoing;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
@@ -11,13 +10,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import net.gringrid.imgoing.adapter.ContactsListAdapter;
-import net.gringrid.imgoing.dao.MessageDao;
 import net.gringrid.imgoing.location.AlarmReceiver;
 import net.gringrid.imgoing.location.SendCurrentLocationService;
 import net.gringrid.imgoing.util.Util;
 import net.gringrid.imgoing.vo.ContactsVO;
 import net.gringrid.imgoing.vo.MessageVO;
-import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.app.ActivityManager.RunningServiceInfo;
@@ -30,17 +27,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
-import android.provider.ContactsContract.PhoneLookup;
 import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.CursorLoader;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -52,15 +45,10 @@ import android.view.View.OnFocusChangeListener;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
-import android.view.animation.RotateAnimation;
-import android.view.animation.TranslateAnimation;
 import android.view.animation.Animation.AnimationListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.TextView.OnEditorActionListener;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -84,7 +72,6 @@ public class LocationControlActivity extends Base implements 	OnClickListener,
 	private int currentTime;
 	private TextView id_tv_send_message;
 	private String receiverPhoneNumber;
-	private String receiverNumberId;
 	private String receiverName;
 	
 	// 초성검색 , 중간검색
@@ -95,9 +82,9 @@ public class LocationControlActivity extends Base implements 	OnClickListener,
 	
 	// Notification ID 
 	private static final int NOTIFICATION_ID_MAIN = 7575;
+	private static final boolean DEBUG = false;
 	
 	private ArrayList<View> mViewList;
-	private int mCurrentFootPrintIndex;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -217,7 +204,6 @@ public class LocationControlActivity extends Base implements 	OnClickListener,
 		int interval = settings.getInt("INTERVAL", Preference.DEFAULT_INTERVAL);
 		receiverName = settings.getString("RECEIVER", null);
 
-		Button id_bt_control = (Button)findViewById(R.id.id_bt_control);
 		TextView id_tv_min = (TextView)findViewById(R.id.id_tv_min);
 		
 		View beforeView = findViewById(R.id.id_ll_before_start);
@@ -286,8 +272,6 @@ public class LocationControlActivity extends Base implements 	OnClickListener,
 		mViewList.add(foot10);
 		mViewList.add(foot11);
 		mViewList.add(foot12);
-		mCurrentFootPrintIndex = 0;
-		//playFootPrintAnimation();
 		playFootAnimation();
 		
 	}
@@ -345,7 +329,7 @@ public class LocationControlActivity extends Base implements 	OnClickListener,
 	
 	
 	private void clearAllAnimation(){
-		Log.d("jiho", "clearAllAnimation");
+		
 		for ( View view : mViewList ){
 			view.clearAnimation();
 		}
@@ -421,8 +405,11 @@ public class LocationControlActivity extends Base implements 	OnClickListener,
 		        isMobileAvail = ni.isAvailable();
 		        isMobileConn = ni.isConnected();
 	        }
-	        Log.d("jiho", "isWifiAvail : "+isWifiAvail);
-	        Log.d("jiho", "isMobileAvail : "+isMobileAvail);
+	        
+	        if ( DEBUG ){
+		        Log.d("jiho", "isWifiAvail : "+isWifiAvail);
+		        Log.d("jiho", "isMobileAvail : "+isMobileAvail);
+	        }
 	        
 	        if (!isWifiConn && !isMobileConn) {
 	        	showAlert("Wifi 혹은 3G망이 연결되지 않았거나 원활하지 않습니다.네트워크 확인후 다시 접속해 주세요!");
@@ -439,16 +426,11 @@ public class LocationControlActivity extends Base implements 	OnClickListener,
 			intent = new Intent(getApplicationContext(), AlarmReceiver.class);
 			intent.putExtra(AlarmReceiver.ACTION_ALARM, AlarmReceiver.ACTION_ALARM);
 			intent.putExtra("MESSAGEVO", messageVO);
-			/*
-			intent.putExtra("RECEIVER", receiverPhoneNumber);
-			intent.putExtra("RECEIVER_ID", receiverNumberId);
-			intent.putExtra("INTERVAL", currentTime);
-			intent.putExtra("START_TIME", Util.getCurrentTime());
-			*/
+			
 			pIntent = PendingIntent.getBroadcast(this, 1234567, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-			int term = currentTime * 60 * 1000;
+			
 			// 설정한 시간 간격으로 알람 호출
-			alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), currentTime * 30 * 1000, pIntent);
+			alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), currentTime * 60 * 1000, pIntent);
 			
 			editor.putInt("INTERVAL", userSelectInterval);
 			
@@ -489,7 +471,6 @@ public class LocationControlActivity extends Base implements 	OnClickListener,
 			
 			setStartStopMode();
 			
-			//toggleControlButton();
 			break;
 			
 		case R.id.id_iv_stop:
@@ -574,11 +555,14 @@ public class LocationControlActivity extends Base implements 	OnClickListener,
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		ContactsVO contact = (ContactsVO)contactsListAdapter.getItem(position);
-		Log.d("jiho", "parent : "+parent.getClass().getSimpleName());
-		Log.d("jiho", "view : "+view.getClass().getSimpleName());
-		Log.d("jiho", "position : "+position);
-		Log.d("jiho", "id : "+id);
-		Log.d("jiho", "position phone_name : "+contact.name);
+		
+		if ( DEBUG ){
+			Log.d("jiho", "parent : "+parent.getClass().getSimpleName());
+			Log.d("jiho", "view : "+view.getClass().getSimpleName());
+			Log.d("jiho", "position : "+position);
+			Log.d("jiho", "id : "+id);
+			Log.d("jiho", "position phone_name : "+contact.name);
+		}
 		
 		receiverPhoneNumber = null;
 		receiverName = null;
@@ -597,13 +581,10 @@ public class LocationControlActivity extends Base implements 	OnClickListener,
 	    	
 	    	String number = phoneCursor.getString(phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
 	    	String numberType = phoneCursor.getString(phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.TYPE));
-	    	String numberId = phoneCursor.getString(phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.CONTACT_ID));
 	    	
 	    	//01로 시작하는지 체크 해야함
 	    	if ( Integer.parseInt(numberType) == Phone.TYPE_MOBILE && number.substring(0, 2).equals("01") ){
 	    		receiverPhoneNumber = number.replace("-", "");
-	    		receiverNumberId = numberId;
-	    		Log.d("jiho", "receiverPhoneNumber : "+receiverPhoneNumber);
 	    		receiverName = contact.name;
 	    		break;
 	    	}
