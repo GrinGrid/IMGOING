@@ -24,7 +24,7 @@ public class DBHelper extends SQLiteOpenHelper{
 	 * 다를경우 : onCreate -> onUpgrade 실행
 	 * 같을경우 : onOpen 실행
 	 */
-	private static final int DATABASE_VERSION = 7;
+	private static final int DATABASE_VERSION = 1;
 	
 	
 	/**
@@ -98,12 +98,6 @@ public class DBHelper extends SQLiteOpenHelper{
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		
-		Log.d("jiho", "===================================");
-		Log.d("jiho", "DB onUpgrade");
-		Log.d("jiho", "TABLE_USER SCHEMA : "+TABLE_USER);
-		Log.d("jiho", "TABLE_MESSAGE SCHEMA : "+TABLE_MESSAGE);
-		Log.d("jiho", "===================================");
-		 
 		db.execSQL("DROP TABLE IF EXISTS USER");
 		db.execSQL("DROP TABLE IF EXISTS MESSAGE");
 		onCreate(db);	

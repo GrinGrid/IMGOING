@@ -57,11 +57,11 @@ public class SendCurrentLocationService extends Service implements
 	// Milliseconds per second
     private static final int MILLISECONDS_PER_SECOND = 1000;
     // Update frequency in seconds
-    public static final int UPDATE_INTERVAL_IN_SECONDS = 10;
+    public static final int UPDATE_INTERVAL_IN_SECONDS = 30;
     // Update frequency in milliseconds
     private static final long UPDATE_INTERVAL = MILLISECONDS_PER_SECOND * UPDATE_INTERVAL_IN_SECONDS;
     // The fastest update frequency, in seconds
-    private static final int FASTEST_INTERVAL_IN_SECONDS = 5;
+    private static final int FASTEST_INTERVAL_IN_SECONDS = 10;
     // A fast frequency ceiling in milliseconds
     private static final long FASTEST_INTERVAL =
             MILLISECONDS_PER_SECOND * FASTEST_INTERVAL_IN_SECONDS;
@@ -96,7 +96,7 @@ public class SendCurrentLocationService extends Service implements
 	
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-		Log.d("jiho", "call onStartCommand");
+		
 		Bundle bundle = new Bundle();
 		bundle = intent.getExtras();
 		mMessageVO = (MessageVO)bundle.getParcelable("MESSAGEVO");
@@ -126,8 +126,6 @@ public class SendCurrentLocationService extends Service implements
 	}
 	@Override
 	public void onDestroy() {
-		Log.d("jiho", "onDestroy");
-		Log.d("jiho", "****************************************/");
 		SharedPreferences settings = getSharedPreferences(Constants.PREFS_NAME, 0);
 		SharedPreferences.Editor editor = settings.edit();
 		editor.putString("LATITUDE", null);
@@ -152,10 +150,10 @@ public class SendCurrentLocationService extends Service implements
 		@Override
 	    public void onReceive(Context context, Intent intent) {
 	        if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
-	            Log.d("jiho", "ACTION_SCREEN_OFF");
+	            
 	            abortBroadcast();
 	        } else if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
-	        	Log.d("jiho", "ACTION_SCREEN_ON");
+	        	
 	        }
 	        
 	    }
@@ -163,19 +161,12 @@ public class SendCurrentLocationService extends Service implements
 
 	@Override
 	public void onConnectionFailed(ConnectionResult arg0) {
-		Log.d("jiho", "onConnectionFailed");	
+			
 	}
 
 	@Override
 	public void onConnected(Bundle arg0) {
 		mLocation = mLocationClient.getLastLocation();
-		if ( mLocation !=null ){
-			//Log.d("jiho", "Latitude : "+mLocation.getLatitude());
-			//Log.d("jiho", "Longitude : "+mLocation.getLongitude());
-		}else{
-			Log.d("jiho", "onConnected location is null");
-			
-		}
 		mLocationClient.requestLocationUpdates(mLocationRequest, this);
 		
 		
@@ -185,7 +176,7 @@ public class SendCurrentLocationService extends Service implements
 	public void onLocationChanged(Location location) {
 		
 		if ( location != null ){
-			Log.d("jiho", "onLocationChanged Location is not null. ["+location.getLatitude()+"] ["+location.getLongitude()+"]");
+			
 			// 배터리 절약 모드일경우 : update 2번하고 insert
 			if ( Preference.SETTING_LOCATION_SEARCH == Preference.SETTING_LOCATION_SEARCH_BATTERY ){
 				mUpdateCount++;
@@ -205,10 +196,10 @@ public class SendCurrentLocationService extends Service implements
 				editor.putString("LONGITUDE", Double.toString(location.getLongitude()));
 				editor.putString("PROVIDER", location.getProvider());
 				editor.commit();
-				Log.d("jiho", "SharedPreferences saved : ["+location.getLatitude()+"] ["+location.getLongitude()+"]");
+				
 			}
 		}else{
-			Log.d("jiho", "onLocationChanged location null ):");
+			
 		}
 	}
 	
@@ -234,10 +225,10 @@ public class SendCurrentLocationService extends Service implements
 		resultCd = messageDAO.insert(messageVO);
 		
 		if ( resultCd == 0 ){
-			Log.d("jiho", "insert success! provider : "+location.getProvider());
+			
 			result = true;
 		}else{
-			Log.d("jiho", "[ERROR] insert fail!");
+			
 			result = false;
 		}
 		return result;
@@ -246,7 +237,7 @@ public class SendCurrentLocationService extends Service implements
 	private boolean sendServer(){
 		boolean result = false;
 		result = true;
-		Log.d("jiho", "sendServer Success!!");
+		
 		return result;
 	}
 	
@@ -268,7 +259,7 @@ public class SendCurrentLocationService extends Service implements
 	
 	@Override
 	public void onDisconnected() {
-		Log.d("jiho", "onDisconnected");
+		
 	}
 
 	@Override

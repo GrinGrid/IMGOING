@@ -172,9 +172,9 @@ public class LoginActivity extends Base implements OnClickListener{
 					builder.show();
 					
 					
-					Toast.makeText(this, resultData.getString("result_msg"), Toast.LENGTH_SHORT).show();
+					//Toast.makeText(this, resultData.getString("result_msg"), Toast.LENGTH_SHORT).show();
 				}else{
-					Toast.makeText(this, resultData.getString("result_msg"), Toast.LENGTH_SHORT).show();
+					//Toast.makeText(this, resultData.getString("result_msg"), Toast.LENGTH_SHORT).show();
 				}
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block

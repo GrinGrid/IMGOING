@@ -58,6 +58,8 @@
         android:layout_weight="1"
         android:orientation="vertical"
         android:background="@drawable/push_popup_bg"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
         >
 	    
 	    

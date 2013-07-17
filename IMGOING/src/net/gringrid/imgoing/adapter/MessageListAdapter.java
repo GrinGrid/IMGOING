@@ -166,11 +166,9 @@ public class MessageListAdapter extends BaseAdapter{
 										MessageDao dao = new MessageDao(mContext);
 										
 										if ( MESSAGE_MODE == MESSAGE_MODE_RECEIVE ){
-											Log.d("jiho", "sender : "+item.sender+", item.start_time : "+item.start_time);
 											dao.deleteSendOne(item.sender, item.start_time);
 											
 										}else if (  MESSAGE_MODE == MESSAGE_MODE_SEND ){
-											Log.d("jiho", "receiver : "+item.receiver+", item.start_time : "+item.start_time);
 											dao.deleteReceiveOne(item.receiver, item.start_time);
 										}
 										((Base)mContext).showAlert("정상적으로 삭제 되었습니다.");

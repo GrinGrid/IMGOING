@@ -25,23 +25,28 @@ import android.util.Log;
 
 public class AlarmReceiver extends BroadcastReceiver {
 
+	private static final boolean DEBUG = false;
 	public static String ACTION_ALARM = "com.alarammanager.alaram";
 	private Context mContext;
 	
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		mContext = context;
-		Log.d("jiho", "/**************************************");
-		Log.d("jiho", "AlarmReceiver onReceive");
+		if ( DEBUG ){
+			Log.d("jiho", "/**************************************");
+			Log.d("jiho", "AlarmReceiver onReceive");
+		}
 		Bundle bundle = intent.getExtras();
 		MessageVO messageVO = (MessageVO)bundle.getParcelable("MESSAGEVO");
 		
 		// 서비스가 실행중이면 마지막위치 가져와서 DB Insert
 		if ( isLocationServiceRunning() ){
-			Log.d("jiho", "Service is running..");
-			Log.d("jiho", "RECEIVER : "+messageVO.receiver);			
-			Log.d("jiho", "INTERVAL : "+messageVO.interval);
-			Log.d("jiho", "START_TIME : "+messageVO.start_time);
+			if ( DEBUG ){
+				Log.d("jiho", "Service is running..");
+				Log.d("jiho", "RECEIVER : "+messageVO.receiver);			
+				Log.d("jiho", "INTERVAL : "+messageVO.interval);
+				Log.d("jiho", "START_TIME : "+messageVO.start_time);
+			}
 			
 			// 실행중일 경우 마지막 location 받아와서 처리
 			MessageDao messageDAO = new MessageDao(mContext);
@@ -65,9 +70,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 				resultCd = messageDAO.insert(messageVO);		
 				
 				if ( resultCd == 0 ){
-					Log.d("jiho", "AlarmReceiver insert success! ["+latitude+"] ["+longitude+"]");
-					
-					
+
 					// 서버로 전송
 					String url = "http://choijiho.com/gringrid/imgoing/imgoing.php";
 			        List < NameValuePair > inputData = new ArrayList < NameValuePair > (9);
@@ -85,7 +88,9 @@ public class AlarmReceiver extends BroadcastReceiver {
 					
 			        try {
 			        	if ( resultData != null ){
-			        		Log.d("jiho", "success : "+resultData.getString("success"));
+			        		if ( DEBUG ){
+			        			Log.d("jiho", "success : "+resultData.getString("success"));
+			        		}
 			        	}
 						
 					} catch (JSONException e) {
@@ -100,16 +105,16 @@ public class AlarmReceiver extends BroadcastReceiver {
 					editor.commit();
 					
 				}else{
-					Log.d("jiho", "[ERROR] insert fail!");
 				}
 				
 			}else{
-				Log.d("jiho", "AlarmReceiver location is null");
 			}
 			
 		// 실행중이 아닐경우 서비스 호출	
 		}else{
-			Log.d("jiho", "Service is not running..");
+			if ( DEBUG ){
+				Log.d("jiho", "Service is not running..");
+			}
 			Intent intentService = new Intent(context, SendCurrentLocationService.class);
 			intentService.putExtras(bundle);
 			context.startService(intentService);

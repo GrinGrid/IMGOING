@@ -46,6 +46,7 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.Animation.AnimationListener;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.TextView.OnEditorActionListener;
@@ -430,7 +431,7 @@ public class LocationControlActivity extends Base implements 	OnClickListener,
 			pIntent = PendingIntent.getBroadcast(this, 1234567, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 			
 			// 설정한 시간 간격으로 알람 호출
-			alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), currentTime * 30 * 1000, pIntent);
+			alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), currentTime * 60 * 1000, pIntent);
 			
 			editor.putInt("INTERVAL", userSelectInterval);
 			
@@ -617,6 +618,13 @@ public class LocationControlActivity extends Base implements 	OnClickListener,
 					receiverName = null;
 					Toast.makeText(this, resultData.getString("result_msg"), Toast.LENGTH_SHORT).show();
 				}else{
+					
+					EditText autocomplete_country = (EditText)findViewById(R.id.autocomplete_country);
+					InputMethodManager imm = (InputMethodManager)getSystemService(
+						      Context.INPUT_METHOD_SERVICE);
+						imm.hideSoftInputFromWindow(autocomplete_country.getWindowToken(), 0);
+						
+						
 					// 안내메시지 세팅
 			    	//id_tv_send_message.setText( makeLocationAlertMessage() );
 					

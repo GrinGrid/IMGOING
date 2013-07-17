@@ -66,7 +66,9 @@ public class IntroActivity extends Activity{
 	                	
 	                	// 버전을 얻어온다.
 	                	if ( mProgressStatus == 6 ){
-	                		Log.d("jiho", "Version Name : "+Util.getVersionName(mContext));
+	                		if ( DEBUG ){
+	                			Log.d("jiho", "Version Name : "+Util.getVersionName(mContext));
+	                		}
 	                	}
 	                	
 	                	// setting 정보를 로딩한다.

@@ -116,7 +116,7 @@ public class LocationUtil implements LocationListener, GpsStatus.Listener{
 		Criteria criteria = new Criteria();
 		
 		provider = locationManager.getBestProvider(criteria, false);
-		Log.d("jiho", "init provider : "+provider);
+		
 		
 		locationManager.requestLocationUpdates(provider, properInterval, propertMeters, this);
 	}
@@ -165,12 +165,6 @@ public class LocationUtil implements LocationListener, GpsStatus.Listener{
 					
 			resultCd = messageDAO.insert(messageVO);
 			
-			if ( resultCd == 0 ){
-				Log.d("jiho", "insert success!");
-			}else{
-				Log.d("jiho", "[ERROR] insert fail!");
-			}
-			
 			// 서버로 전송
 			String url = "http://choijiho.com/gringrid/imgoing/imgoing.php";
 	        List < NameValuePair > inputData = new ArrayList < NameValuePair > (9);
@@ -188,14 +182,16 @@ public class LocationUtil implements LocationListener, GpsStatus.Listener{
 	        JSONObject resultData = Util.requestHttp(url, inputData);
 			
 	        try {
-	        	Log.d("jiho", "success : "+resultData.getString("success"));
+	        	if ( DEBUG ){
+	        		Log.d("jiho", "success : "+resultData.getString("success"));
+	        	}
 				
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}else{
-			Log.d("jiho", "!!!!!!!!!! Location is null !!!!!!!!!!!");
+			
 			setLocationUpdater();
 		}
 		
@@ -237,7 +233,7 @@ public class LocationUtil implements LocationListener, GpsStatus.Listener{
             while ((b = reader.read()) != -1) {
                 stringBuilder.append((char) b);
             }
-            Log.d("jiho", "stringBuilder : "+stringBuilder);
+            
         } catch (ClientProtocolException e) {
             } catch (IOException e) {
         }
@@ -255,19 +251,17 @@ public class LocationUtil implements LocationListener, GpsStatus.Listener{
 	 * 장소 업데이트터를 세팅한다.
 	 */
 	private void setLocationUpdater(){
-		Log.d("jiho", "setLocationUpdater");
+		
 		if ( locationManager == null ){
 			return;
 		}
 		
 		if ( locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER ) ){
-			Log.d("jiho", "GPS Enabled");
 			//criteria.setAccuracy(Criteria.ACCURACY_FINE);
 			//location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 			locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, properInterval, propertMeters, this);
 		}
 		if ( locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER) ){
-			Log.d("jiho", "NETWORK Enabled");
 			//criteria.setAccuracy(Criteria.ACCURACY_COARSE);
 			//location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 			locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, properInterval, propertMeters, this);
@@ -320,7 +314,7 @@ public class LocationUtil implements LocationListener, GpsStatus.Listener{
 				Toast.makeText(mContext, "Adr not null, "+adr.getAddressLine(0),Toast.LENGTH_SHORT).show();
 			}
 		}else{
-			Log.d("jiho", ">>> addresses is null");
+			
 		}
 		
 		if ( addresses == null ){
@@ -332,7 +326,7 @@ public class LocationUtil implements LocationListener, GpsStatus.Listener{
 			    location_string = retLocation.getString("formatted_address");
 			    locationName = location_string;
 			    Toast.makeText(mContext, "Adr null : "+location_string,Toast.LENGTH_SHORT).show();
-			    Log.d("jiho", "Adr null, "+"formattted address:" + location_string);
+			    
 			} catch (JSONException e1) {
 			    e1.printStackTrace();
 
@@ -389,8 +383,6 @@ public class LocationUtil implements LocationListener, GpsStatus.Listener{
 	@Override
 	public void onLocationChanged(Location newLocation) {
 		
-		Log.d("jiho", "["+newLocation.getProvider()+"] onLocationChanged");
-		
 		mLastLocationMillis = SystemClock.elapsedRealtime();
 		
 		if ( isBetterLocation(newLocation, location)){
@@ -402,21 +394,21 @@ public class LocationUtil implements LocationListener, GpsStatus.Listener{
 
 	@Override
 	public void onStatusChanged(String provider, int status, Bundle extras) {
-		Log.d("jiho", provider+"onStatusChanged");
+		
 	}
 
 	@Override
 	public void onProviderEnabled(String provider) {
 		locationManager.removeUpdates(this);
 		setLocationUpdater();		
-		Log.d("jiho", provider+" onProviderEnabled");
+		
 	}
 
 	@Override
 	public void onProviderDisabled(String provider) {
 		locationManager.removeUpdates(this);
 		setLocationUpdater();
-		Log.d("jiho", provider+" onProviderDisabled");		
+				
 	}
 	
 	public void stopLocationUpdate(){
@@ -482,25 +474,18 @@ public class LocationUtil implements LocationListener, GpsStatus.Listener{
 	public void onGpsStatusChanged(int event) {
 		switch ( event ){
 		case GpsStatus.GPS_EVENT_FIRST_FIX:
-			Log.d("jiho", "GPS_EVENT_FIRST_FIX");
+			
 			isGpsFix = true;
 			break;
 		case GpsStatus.GPS_EVENT_SATELLITE_STATUS:
-			Log.d("jiho", "GPS_EVENT_SATELLITE_STATUS");
+			
 			
 			// 위성수를 세는것보다 이 방법이 좋음. SpeedView
 			if ( location != null ){
 				isGpsFix = (SystemClock.elapsedRealtime() - mLastLocationMillis) < 3000;
-				Log.d("jiho", "isGpsFix is : "+isGpsFix);
+				
 			}
 			
-			if ( isGpsFix ){
-				//TODO
-				Log.d("jiho", "provider를 GPS로 사용해야지 ");
-			}else{
-				//TODO
-				Log.d("jiho", "provider를 Network 로 사용해야지 ");
-			}
 			GpsStatus gpsStatus = locationManager.getGpsStatus(null);
 			Iterator<GpsSatellite> iterator = gpsStatus.getSatellites().iterator();
 			int satCnt = 0;
@@ -508,17 +493,15 @@ public class LocationUtil implements LocationListener, GpsStatus.Listener{
 				GpsSatellite satellite = iterator.next();
 				if ( satellite.usedInFix() ){
 					satCnt++;
-					Log.d("jiho", "satCnt : "+satCnt);
+					
 				}
 			}
 			
-			Log.d("jiho", "Satellites number : "+gpsStatus.getMaxSatellites());
+			
 			break;
 		case GpsStatus.GPS_EVENT_STARTED:
-			Log.d("jiho", "GPS_EVENT_STARTED");
 			break;
 		case GpsStatus.GPS_EVENT_STOPPED:
-			Log.d("jiho", "GPS_EVENT_STOPPED");
 			break;
 		}
 		

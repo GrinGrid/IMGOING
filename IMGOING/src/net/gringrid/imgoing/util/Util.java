@@ -104,12 +104,12 @@ public class Util {
 			if ( Util.isEmpty(phone_number) != true ){
 				// KT일경우 +8210xxxxxxx 형식으로 리턴되므로 처리
 				phone_number = phone_number.replace("+82", "0");
-				Log.d("jiho", "phone_number is not null "+phone_number);
+				
 			}else{
 				
 				SharedPreferences settings = context.getSharedPreferences(Constants.PREFS_NAME, 0);
 				phone_number = settings.getString("PHONE_NUMBER", "");
-				Log.d("jiho", "phone_number : "+phone_number);
+				
 			}
 			Preference.PHONE_NUMBER = phone_number;
 		}else{
@@ -176,13 +176,7 @@ public class Util {
 	    }
 	    
 	    cursor.close();
-	    /*
-	    for ( ContactsVO vo : Preference.CONTACTS_LIST ){
-	    	Log.d("jiho", "id : "+vo.id);
-	    	Log.d("jiho", "name : "+vo.name);
-	    	Log.d("jiho", "phoneNumber : "+vo.phoneNumber);
-	    }
-	    */
+	    
 	}
 	
 	/**
@@ -272,12 +266,12 @@ public class Util {
             while ((b = reader.read()) != -1) {
                 stringBuilder.append((char) b);
             }
-            Log.d("jiho", "stringBuilder : "+stringBuilder);
+            
         } catch (ClientProtocolException e) {
-        	Log.d("jiho", "ClientProtocolException : "+e.getStackTrace());
+        
         	return null;
         } catch (IOException e) {
-        	Log.d("jiho", "IOException : "+e.getStackTrace());
+        	
         	return null;
         }
 
@@ -340,8 +334,6 @@ public class Util {
 	        isMobileAvail = ni.isAvailable();
 	        isMobileConn = ni.isConnected();
         }
-        Log.d("jiho", "isWifiAvail : "+isWifiAvail);
-        Log.d("jiho", "isMobileAvail : "+isMobileAvail);
         
         if (!isWifiConn && !isMobileConn) {
         	return false;

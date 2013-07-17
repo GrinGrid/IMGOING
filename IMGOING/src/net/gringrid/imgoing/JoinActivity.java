@@ -142,6 +142,11 @@ public class JoinActivity extends Base implements OnClickListener, OnFocusChange
 				return;
 			}
 			
+			if ( Util.isEmpty(Preference.GCM_REGISTRATION_ID) ){
+				showAlert("PUSH전송을 위한 아이디를 발급중입니다. 잠시 후 다시 실행하여 주시기 바랍니다.");
+				return;
+			}
+			
 			
 			String url = "http://choijiho.com/gringrid/imgoing/imgoing.php";
 	        List < NameValuePair > inputData = new ArrayList < NameValuePair > (4);

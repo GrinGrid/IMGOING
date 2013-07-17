@@ -97,7 +97,7 @@ public class MainMenu extends LinearLayout  implements OnClickListener, Animatio
 			//mBtMenu = (ImageView) view;
 			//mBtMenuParams = (RelativeLayout.LayoutParams) mBtMenu.getLayoutParams();
 		}
-		Log.d("jiho", "mCurrentMenuIndex : "+mCurrentMenuIndex);
+		
 		
 		switch (mCurrentMenuIndex) {
 		case 0:
@@ -209,20 +209,18 @@ public class MainMenu extends LinearLayout  implements OnClickListener, Animatio
 
 	@Override
 	public void onAnimationStart(Animation animation) {
-		Log.d("jiho", "onAnimationStart");
+		
 	}
 
 	@Override
 	public void onAnimationEnd(Animation animation) {
-		Log.d("jiho", "onAnimationEnd");
-		//findViewById(R.id.id_iv_hide_menu1).setVisibility(View.VISIBLE);
-		//findViewById(R.id.id_iv_hide_menu2).setVisibility(View.VISIBLE);
+		
 		
 	}
 
 	@Override
 	public void onAnimationRepeat(Animation animation) {
-		Log.d("jiho", "onAnimationRepeat");
+		
 		
 	}
 
