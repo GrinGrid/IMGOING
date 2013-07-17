@@ -430,7 +430,7 @@ public class LocationControlActivity extends Base implements 	OnClickListener,
 			pIntent = PendingIntent.getBroadcast(this, 1234567, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 			
 			// 설정한 시간 간격으로 알람 호출
-			alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), currentTime * 60 * 1000, pIntent);
+			alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), currentTime * 30 * 1000, pIntent);
 			
 			editor.putInt("INTERVAL", userSelectInterval);
 			

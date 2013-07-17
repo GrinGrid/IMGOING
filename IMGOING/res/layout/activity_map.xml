@@ -43,7 +43,8 @@
         style="@style/PopupTitle"/>
 	</LinearLayout>
 	
-	<LinearLayout 
+	<RelativeLayout 
+	    android:id="@+id/root"
 	    android:layout_width="match_parent"
 	    android:layout_height="match_parent">
 	<fragment 
@@ -51,5 +52,5 @@
 	  android:layout_width="match_parent"
 	  android:layout_height="match_parent"
 	  class="com.google.android.gms.maps.SupportMapFragment"/>
-    </LinearLayout>
+    </RelativeLayout>
 </LinearLayout>

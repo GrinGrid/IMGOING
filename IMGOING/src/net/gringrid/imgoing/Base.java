@@ -97,7 +97,7 @@ public class Base extends Activity implements OnClickListener{
 	public void onBackPressed() {
 		
 		
-		
+		/*
 		if ( MyActivityManager.historyIsEmpty() ){
 			showTerminateAlert();
 			
@@ -112,6 +112,8 @@ public class Base extends Activity implements OnClickListener{
 			MyActivityManager.removeLastHistory();
 			super.onBackPressed();
 		}
+		*/
+		super.onBackPressed();
 	}
 	
 

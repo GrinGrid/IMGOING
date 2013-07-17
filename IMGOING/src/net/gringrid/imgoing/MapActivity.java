@@ -13,6 +13,7 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -21,6 +22,8 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.maps.GeoPoint;
+import com.google.android.maps.MapView;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -29,6 +32,8 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class MapActivity extends FragmentActivity implements 
@@ -39,6 +44,8 @@ public class MapActivity extends FragmentActivity implements
 	private int MESSAGE_MODE;
 	private final int MESSAGE_MODE_RECEIVE = 0;		// 받은메시지
 	private final int MESSAGE_MODE_SEND = 1;		// 보낸메시지 
+	private ImageView mCurrentPointer;
+	
 	
 	private String mPerson = null;
 	private String mStart_time = null;
@@ -52,6 +59,9 @@ public class MapActivity extends FragmentActivity implements
 	double mLastLatitude;
 	double mLastLongitude;
 	Marker mLastMarker;
+	
+	// 현재위치
+	private Marker mCurrentLocationMaker;
 	
 	//current location
 	Location mLocation;
@@ -216,6 +226,7 @@ public class MapActivity extends FragmentActivity implements
     			LatLng latLng = new LatLng(Double.parseDouble(latitude), Double.parseDouble(longitude));
     			rectOptions.add( latLng );
     			rectOptions.color(R.color.imgoing_sky);
+    			rectOptions.geodesic(true);
     			
     			String snippet = null;
     			
@@ -244,6 +255,7 @@ public class MapActivity extends FragmentActivity implements
     	 
     	// Get back the mutable Polyline
     	Polyline polyline = mMap.addPolyline(rectOptions);
+    	
     	moveThere(mLastLatitude, mLastLongitude, location_name);
 	}
 
@@ -318,6 +330,43 @@ public class MapActivity extends FragmentActivity implements
 			    mLastMarker.setTitle("내 위치와의 거리 : "+String.format("%.2f", distance)+unit);
 			    mLastMarker.showInfoWindow();
 			}
+			
+			LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+			if ( mCurrentLocationMaker == null ){
+				mCurrentLocationMaker = mMap.addMarker(new MarkerOptions()
+				.position(latLng)
+				.title("현재위치")    			
+				.snippet("")
+				.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_maps_indicator_current_position))			    			
+				);
+			}else{
+				mCurrentLocationMaker.setPosition(latLng);
+			}
+			mCurrentLocationMaker.showInfoWindow();
+			//ic_maps_indicator_current_position
+			/*
+			int latitude = (int) (location.getLatitude() * 1e6);
+		    int longitude = (int) (location.getLongitude() * 1e6);
+		    
+		    MapView.LayoutParams lp = new MapView.LayoutParams(MapView.LayoutParams.WRAP_CONTENT, 
+		            MapView.LayoutParams.WRAP_CONTENT, new GeoPoint(latitude, longitude),
+		            MapView.LayoutParams.CENTER);
+		    
+		    RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,RelativeLayout.LayoutParams.WRAP_CONTENT);
+		    
+		    if (mCurrentPointer == null) {
+		        // If "current location" pin is null, we haven't added it
+		        // to MapView yet. So instantiate it and add it to MapView:
+		        mCurrentPointer = new ImageView(this); 
+		        mCurrentPointer.setImageResource(R.drawable.friend_icon);
+		        RelativeLayout root = (RelativeLayout)findViewById(R.id.root);
+		        root.addView(mCurrentPointer, lp);
+		    } else {
+		        // If it's already added, just update its location
+		        mCurrentPointer.setLayoutParams(lp);
+		    }
+		    */
+		    
 			
 		}
 	}
